@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, build, test
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: pursuit
+          POSTGRES_PASSWORD: pursuit
+          POSTGRES_DB: pursuit
+        ports:
+          - 54329:5432
+        options: >-
+          --health-cmd "pg_isready -U pursuit -d pursuit"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      DATABASE_URL: postgresql://pursuit:pursuit@127.0.0.1:54329/pursuit?schema=public
+      AGENT_RUNTIME: dev
+      ENABLE_DEV_LOGIN: 'true'
+      NEXT_PUBLIC_API_URL: http://127.0.0.1:4000/api/v1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply database migrations
+        run: pnpm db:migrate
+
+      - name: Build (packages, API, web)
+        run: pnpm build
+
+      - name: Typecheck (all workspaces incl. mobile)
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Format check
+        run: pnpm format:check

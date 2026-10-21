@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+@import '@pursuit/ui/tokens.css';
+
+/*
+ * Custom CSS must live in a cascade layer: Tailwind v4 emits its utilities in
+ * @layer utilities, and unlayered author styles would always win the cascade.
+ */
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+/* The rest is class-scoped and composed with utilities — still layered. */
+@layer components {
+  /* Landing typography per BRAND_AND_LANDING geometry */
+  .hero-h1 {
+    font-size: clamp(42px, 8.2vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    font-weight: 700;
+  }
+
+  .hero-subhead {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+  }
+
+  .container-pursuit {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 32px;
+  }
+
+  @media (max-width: 767px) {
+    .container-pursuit {
+      padding-inline: 20px;
+    }
+  }
+
+  .browser-frame {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-panel);
+    overflow: hidden;
+    background: var(--surface-raised);
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .rise-in {
+    animation: rise-in 400ms ease-out both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise-in {
+      animation: none;
+    }
+  }
+}

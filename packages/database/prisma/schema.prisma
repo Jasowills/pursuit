@@ -1,0 +1,763 @@
+// Pursuit logical data model — implements docs/specifications/DATA_MODEL.md
+// Conventions: tenant-scoped records carry tenant_id + created_at/updated_at;
+// UUIDs; no email primary keys; object keys random; never plaintext PII keys.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Identity & tenancy
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  plan      String   @default("private_beta")
+  status    String   @default("ACTIVE")
+  isSeed    Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  memberships    Membership[]
+  careerProfiles CareerProfile[]
+  companies      CompanyPreference[]
+  jobMatches     JobMatch[]
+  resumeMasters  ResumeMaster[]
+  resumeVersions ResumeVersion[]
+  applications   Application[]
+  contacts       Contact[]
+  outreachThread OutreachThread[]
+  watchers       Watcher[]
+  agentRuns      AgentRun[]
+  approvals      Approval[]
+  toolGrants     ToolGrant[]
+  connectedAccs  ConnectedAccount[]
+  notifications  Notification[]
+  auditLogs      AuditLog[]
+  outboxEvents   OutboxEvent[]
+
+  @@map("tenants")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  displayName String   @map("display_name")
+  isSeedUser  Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  memberships   Membership[]
+  sessions      Session[]
+  devices       Device[]
+  profiles      CareerProfile[]
+  resumes       ResumeMaster[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Membership {
+  id        String   @id @default(uuid())
+  tenantId  String   @map("tenant_id")
+  userId    String   @map("user_id")
+  role      String   @default("OWNER")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId])
+  @@index([userId])
+  @@map("memberships")
+}
+
+model Session {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  device    String?
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Device {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  label      String
+  platform   String
+  lastSeenAt DateTime @default(now()) @map("last_seen_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("devices")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Career profile + evidence
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model CareerProfile {
+  id                  String    @id @default(uuid())
+  tenantId            String    @map("tenant_id")
+  userId              String    @map("user_id")
+  location            String?
+  workAuthorization   Json      @default("[]") @map("work_authorization")
+  desiredCompensation Json?     @map("desired_compensation")
+  roleFamilies        Json      @default("[]") @map("role_families")
+  seniority           Json      @default("[]")
+  workArrangements    Json      @default("[]") @map("work_arrangements")
+  hardExclusions      Json      @default("[]") @map("hard_exclusions")
+  preferences         Json      @default("[]")
+  verifiedAt          DateTime? @map("verified_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  experiences Experience[]
+  education   Education[]
+  skills      Skill[]
+  projects    Project[]
+
+  @@unique([tenantId, userId])
+  @@map("career_profiles")
+}
+
+model Experience {
+  id           String   @id @default(uuid())
+  profileId    String   @map("profile_id")
+  employer     String
+  title        String
+  start        String
+  end          String?
+  workLocation String?  @map("work_location")
+  summary      String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  profile  CareerProfile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  evidence EvidenceClaim[]
+
+  @@index([profileId])
+  @@map("experiences")
+}
+
+model Education {
+  id          String   @id @default(uuid())
+  profileId   String   @map("profile_id")
+  institution String
+  credential  String
+  field       String?
+  year        String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  profile CareerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@map("education")
+}
+
+model Skill {
+  id        String   @id @default(uuid())
+  profileId String   @map("profile_id")
+  name      String
+  level     String   @default("PROFICIENT")
+  evidence  Json     @default("[]")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  profile CareerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@map("skills")
+}
+
+model Project {
+  id        String   @id @default(uuid())
+  profileId String   @map("profile_id")
+  name      String
+  summary   String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  profile CareerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@map("projects")
+}
+
+model EvidenceClaim {
+  id                String   @id @default(uuid())
+  experienceId      String?  @map("experience_id")
+  source            String
+  claim             String
+  verificationState String   @default("UNVERIFIED") @map("verification_state")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  experience Experience? @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+
+  @@map("evidence_claims")
+}
+
+model WritingSample {
+  id        String   @id @default(uuid())
+  tenantId  String   @map("tenant_id")
+  channel   String
+  approved  Boolean  @default(false)
+  text      String
+  source    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@map("writing_samples")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Companies, sources, jobs
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model Company {
+  id              String   @id @default(uuid())
+  canonicalDomain String?  @map("canonical_domain")
+  name            String
+  aliases         Json     @default("[]")
+  // fictional seed marker keeps demo data separable from real intake
+  isSeed          Boolean  @default(false)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  jobs     Job[]
+  contacts Contact[]
+  prefs    CompanyPreference[]
+
+  @@unique([name])
+  @@index([canonicalDomain])
+  @@map("companies")
+}
+
+model CompanyPreference {
+  id        String   @id @default(uuid())
+  tenantId  String   @map("tenant_id")
+  companyId String   @map("company_id")
+  excluded  Boolean  @default(false)
+  reason    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, companyId])
+  @@map("company_preferences")
+}
+
+model JobSource {
+  id          String   @id @default(uuid())
+  kind        String
+  baseUrl     String   @map("base_url")
+  termsStatus String   @default("UNKNOWN") @map("terms_status")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  jobs Job[]
+
+  @@unique([kind, baseUrl])
+  @@map("job_sources")
+}
+
+model Job {
+  id                 String    @id @default(uuid())
+  companyId          String    @map("company_id")
+  sourceId           String?   @map("source_id")
+  externalId         String?   @map("external_id")
+  canonicalUrl       String    @map("canonical_url")
+  title              String
+  location           String?
+  remoteRestrictions String?   @map("remote_restrictions")
+  descriptionHash    String?   @map("description_hash")
+  compensation       String?
+  status             String    @default("OPEN")
+  postedAt           DateTime? @map("posted_at")
+  firstSeenAt        DateTime  @default(now()) @map("first_seen_at")
+  lastSeenAt         DateTime  @default(now()) @map("last_seen_at")
+  isSeed             Boolean   @default(false)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  company       Company         @relation(fields: [companyId], references: [id])
+  source        JobSource?      @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  snapshots     JobSnapshot[]
+  matches       JobMatch[]
+  versions      ResumeVersion[]
+  applications  Application[]
+  watcherEvents WatcherEvent[]
+
+  @@unique([sourceId, externalId])
+  @@unique([canonicalUrl])
+  @@index([companyId])
+  @@index([status])
+  @@map("jobs")
+}
+
+model JobSnapshot {
+  id          String   @id @default(uuid())
+  jobId       String   @map("job_id")
+  description String?
+  metadata    Json     @default("{}")
+  observedAt  DateTime @default(now()) @map("observed_at")
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@map("job_snapshots")
+}
+
+model JobMatch {
+  id                  String   @id @default(uuid())
+  tenantId            String   @map("tenant_id")
+  jobId               String   @map("job_id")
+  eligibility         String
+  eligibilityEvidence Json     @default("[]") @map("eligibility_evidence")
+  fitScore            Int      @default(0) @map("fit_score")
+  fitRationale        String   @default("") @map("fit_rationale")
+  hardFailures        Json     @default("[]") @map("hard_failures")
+  modelVersion        String   @default("m1-baseline") @map("model_version")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  job    Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, jobId])
+  @@map("job_matches")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Resumes
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model ResumeMaster {
+  id                 String   @id @default(uuid())
+  tenantId           String   @map("tenant_id")
+  ownerId            String   @map("owner_id")
+  fileName           String   @map("file_name")
+  objectKey          String   @unique @map("object_key")
+  contentType        String   @default("application/pdf") @map("content_type")
+  bytes              Int      @default(0)
+  parsedFactsVersion String?  @map("parsed_facts_version")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  tenant   Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  owner    User            @relation(fields: [ownerId], references: [id])
+  versions ResumeVersion[]
+
+  @@index([tenantId])
+  @@map("resume_masters")
+}
+
+model ResumeVersion {
+  id              String    @id @default(uuid())
+  tenantId        String    @map("tenant_id")
+  masterId        String    @map("master_id")
+  jobId           String?   @map("job_id")
+  label           String
+  templateVersion String    @default("v1") @map("template_version")
+  contentHash     String?   @map("content_hash")
+  docxKey         String?   @map("docx_key")
+  pdfKey          String?   @map("pdf_key")
+  diffJson        Json?     @map("diff_json")
+  status          String    @default("DRAFT")
+  approvedAt      DateTime? @map("approved_at")
+  isSubmitted     Boolean   @default(false) @map("is_submitted")
+  isSeed          Boolean   @default(false)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  tenant       Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  master       ResumeMaster        @relation(fields: [masterId], references: [id], onDelete: Cascade)
+  job          Job?                @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  applications Application[]
+  answers      ApplicationAnswer[]
+
+  @@index([tenantId])
+  @@index([masterId])
+  @@map("resume_versions")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Applications
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model Application {
+  id              String    @id @default(uuid())
+  tenantId        String    @map("tenant_id")
+  jobId           String    @map("job_id")
+  resumeVersionId String?   @map("resume_version_id")
+  status          String    @default("DISCOVERED")
+  submittedAt     DateTime? @map("submitted_at")
+  confirmationRef String?   @map("confirmation_ref")
+  sourceUrl       String?   @map("source_url")
+  version         Int       @default(1)
+  isSeed          Boolean   @default(false)
+  notes           Json      @default("[]")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  tenant        Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  job           Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  resumeVersion ResumeVersion?      @relation(fields: [resumeVersionId], references: [id])
+  answers       ApplicationAnswer[]
+  events        ApplicationEvent[]
+
+  @@unique([tenantId, jobId])
+  @@index([tenantId, status])
+  @@map("applications")
+}
+
+model ApplicationAnswer {
+  id              String   @id @default(uuid())
+  applicationId   String   @map("application_id")
+  fieldKey        String   @map("field_key")
+  value           String
+  provenance      String   @default("USER")
+  verification    String   @default("UNVERIFIED")
+  resumeVersionId String?  @map("resume_version_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  application   Application    @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  resumeVersion ResumeVersion? @relation(fields: [resumeVersionId], references: [id])
+
+  @@unique([applicationId, fieldKey])
+  @@map("application_answers")
+}
+
+model ApplicationEvent {
+  id            String   @id @default(uuid())
+  applicationId String   @map("application_id")
+  fromStatus    String?  @map("from_status")
+  toStatus      String   @map("to_status")
+  actor         String   @default("USER")
+  reason        String?
+  evidenceKey   String?  @map("evidence_key")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@map("application_events")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Outreach
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model Contact {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  companyId    String?  @map("company_id")
+  name         String
+  role         String?
+  email        String?
+  profileUrl   String?  @map("profile_url")
+  sourceUrl    String?  @map("source_url")
+  confidence   String   @default("LOW")
+  doNotContact Boolean  @default(false) @map("do_not_contact")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant  Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  company Company?         @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  threads OutreachThread[]
+
+  @@index([tenantId])
+  @@map("contacts")
+}
+
+model OutreachThread {
+  id        String   @id @default(uuid())
+  tenantId  String   @map("tenant_id")
+  contactId String   @map("contact_id")
+  companyId String?  @map("company_id")
+  jobId     String?  @map("job_id")
+  channel   String   @default("draft_local")
+  status    String   @default("DRAFT")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  contact  Contact           @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  messages OutreachMessage[]
+
+  @@index([tenantId])
+  @@map("outreach_threads")
+}
+
+model OutreachMessage {
+  id                String    @id @default(uuid())
+  threadId          String    @map("thread_id")
+  direction         String
+  bodyHash          String    @map("body_hash")
+  bodyEncrypted     String    @map("body_encrypted")
+  providerMessageId String?   @map("provider_message_id")
+  sentAt            DateTime? @map("sent_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+
+  thread OutreachThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@unique([threadId, providerMessageId])
+  @@index([threadId])
+  @@map("outreach_messages")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Watchers
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model Watcher {
+  id               String    @id @default(uuid())
+  tenantId         String    @map("tenant_id")
+  kind             String
+  sourceUrl        String    @map("source_url")
+  frequencyMinutes Int       @default(60) @map("frequency_minutes")
+  filters          Json      @default("{}")
+  keywords         Json      @default("[]")
+  enabled          Boolean   @default(true)
+  lastCheckedAt    DateTime? @map("last_checked_at")
+  nextCheckAt      DateTime? @map("next_check_at")
+  errorStreak      Int       @default(0) @map("error_streak")
+  isSeed           Boolean   @default(false)
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  tenant Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  events WatcherEvent[]
+
+  @@index([tenantId])
+  @@map("watchers")
+}
+
+model WatcherEvent {
+  id         String   @id @default(uuid())
+  watcherId  String   @map("watcher_id")
+  jobId      String?  @map("job_id")
+  eventType  String   @map("event_type")
+  dedupeKey  String   @map("dedupe_key")
+  detectedAt DateTime @default(now()) @map("detected_at")
+
+  watcher Watcher @relation(fields: [watcherId], references: [id], onDelete: Cascade)
+  job     Job?    @relation(fields: [jobId], references: [id], onDelete: SetNull)
+
+  @@unique([dedupeKey])
+  @@index([watcherId])
+  @@map("watcher_events")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Agent runs, steps, approvals
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model AgentRun {
+  id            String    @id @default(uuid())
+  tenantId      String    @map("tenant_id")
+  initiator     String    @default("USER")
+  goal          String
+  status        String    @default("QUEUED")
+  runtime       String    @default("dev")
+  modelProvider String?   @map("model_provider")
+  budgetTokens  Int?      @map("budget_tokens")
+  startedAt     DateTime? @map("started_at")
+  finishedAt    DateTime? @map("finished_at")
+  isSeed        Boolean   @default(false)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  steps     AgentStep[]
+  approvals Approval[]
+
+  @@index([tenantId, status])
+  @@map("agent_runs")
+}
+
+model AgentStep {
+  id                String   @id @default(uuid())
+  runId             String   @map("run_id")
+  tool              String
+  argumentsRedacted String   @default("{}") @map("arguments_redacted")
+  status            String   @default("PENDING")
+  resultRef         String?  @map("result_ref")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  run AgentRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@map("agent_steps")
+}
+
+model Approval {
+  id       String @id @default(uuid())
+  tenantId String @map("tenant_id")
+
+  actionType  String    @map("action_type")
+  entityId    String    @map("entity_id")
+  payloadHash String    @map("payload_hash")
+  previewJson Json      @map("preview_json")
+  status      String    @default("PENDING")
+  expiresAt   DateTime  @map("expires_at")
+  approvedBy  String?   @map("approved_by")
+  usedAt      DateTime? @map("used_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  tenant Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  run    AgentRun? @relation(fields: [entityId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, status])
+  @@index([payloadHash])
+  @@map("approvals")
+}
+
+model ToolGrant {
+  id        String    @id @default(uuid())
+  tenantId  String    @map("tenant_id")
+  tool      String
+  scope     String    @default("AUTO_OK")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, tool])
+  @@map("tool_grants")
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+/**
+ * Accounts, notifications, audit, outbox
+ */
+/**
+ * ------------------------------------------------------------------
+ */
+
+model ConnectedAccount {
+  id              String    @id @default(uuid())
+  tenantId        String    @map("tenant_id")
+  provider        String
+  scopes          Json      @default("[]")
+  tokenCiphertext String?   @map("token_ciphertext")
+  expiresAt       DateTime? @map("expires_at")
+  revokedAt       DateTime? @map("revoked_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, provider])
+  @@map("connected_accounts")
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  tenantId  String    @map("tenant_id")
+  userId    String    @map("user_id")
+  type      String
+  entityRef String?   @map("entity_ref")
+  title     String
+  body      String
+  readAt    DateTime? @map("read_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, userId, readAt])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id               String   @id @default(uuid())
+  tenantId         String   @map("tenant_id")
+  actor            String
+  action           String
+  target           String
+  metadataRedacted Json     @default("{}") @map("metadata_redacted")
+  at               DateTime @default(now()) @map("at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("audit_logs")
+}
+
+model OutboxEvent {
+  id          String    @id @default(uuid())
+  tenantId    String    @map("tenant_id")
+  topic       String
+  entityRef   String?   @map("entity_ref")
+  payload     Json      @default("{}")
+  deliveredAt DateTime? @map("delivered_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, createdAt])
+  @@map("outbox_events")
+}

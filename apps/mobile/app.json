@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Pursuit",
+    "slug": "pursuit",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.pursuit.mobile"
+    },
+    "android": {
+      "package": "app.pursuit.mobile",
+      "edgeToEdgeEnabled": true
+    },
+    "extra": {
+      "apiUrl": "http://127.0.0.1:4000/api/v1"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+/* Pursuit design tokens — exact values from docs/specifications/DESIGN_SYSTEM.md */
+:root {
+  --background: #ffffff;
+  --foreground: #111111;
+  --primary: #111111;
+  --primary-foreground: #ffffff;
+  --surface: #fafafa;
+  --surface-raised: #ffffff;
+  --muted: #71717a;
+  --muted-foreground: #52525b;
+  --border: #e4e4e7;
+  --hover: #f4f4f5;
+  --focus: #52525b;
+  --success: #15803d;
+  --warning: #a16207;
+  --danger: #b91c1c;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --shadow-panel: 0 18px 60px rgba(17, 17, 17, 0.08);
+  --font-sans: 'Geist', Inter, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+*,
+*::before,
+*::after {
+  border-color: var(--border);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

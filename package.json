@@ -1,0 +1,30 @@
+{
+  "name": "pursuit",
+  "private": true,
+  "packageManager": "pnpm@11.12.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:api": "turbo run dev --filter=@pursuit/api",
+    "dev:web": "turbo run dev --filter=@pursuit/web",
+    "dev:mobile": "turbo run dev --filter=@pursuit/mobile",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:up": "docker compose -f infrastructure/docker-compose.yml up -d",
+    "db:down": "docker compose -f infrastructure/docker-compose.yml down",
+    "db:migrate": "pnpm --filter @pursuit/database migrate",
+    "db:seed": "pnpm --filter @pursuit/database seed",
+    "db:push": "pnpm --filter @pursuit/database db:push",
+    "agent:smoke": "pnpm --filter @pursuit/agent-core smoke"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.0",
+    "turbo": "^2.5.0",
+    "typescript": "^5.9.2"
+  }
+}
