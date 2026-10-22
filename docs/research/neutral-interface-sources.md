@@ -25,7 +25,14 @@ These brand marks are not subject to the UI grayscale conversion. The watcher li
 Downloaded stock images are used as illustration, not testimonials, real contacts, candidate identity verification or recordings:
 
 - Contact illustration: Antoni Shkraba, [Portrait Shot of an Employee Using a Laptop](https://www.pexels.com/photo/portrait-shot-of-an-employee-using-a-laptop-7163383/), image 7163383, served at 200px width. The corresponding outreach contact is explicitly fictional.
-- Recording setup: [Woman Working in Office with Laptop](https://www.pexels.com/photo/woman-working-in-office-with-laptop-6077067/), image 6077067, served at 900px width. This is a stock workspace photo, not a video of Alex.
+- Recording illustration (replacement): Kampus Production, [Portrait of Smiling Woman in an Office](https://www.pexels.com/photo/portrait-of-smiling-woman-in-an-office-8463168/), image 8463168, served at 1200px width in `recording-professional.jpg`. This is a stock portrait, not a Pursuit user or a recording of Alex. It replaces image 6077067 at the user’s request.
 - [Pexels license](https://www.pexels.com/license/). Local files live in `apps/web/public/photos/`.
 
 First-party website requests and public assets only; no authenticated application or social messaging was used.
+
+## Semantic status and annotation follow-up
+
+- T3 Code navigation inspected on 2026-10-22: its GitHub count uses a small, low-contrast outlined pill (14px horizontal padding, full radius). Pursuit adapts that restrained treatment with its own repository link and live count; no source or metrics were copied.
+- Cloudflare: `https://www.cloudflare.com/favicon.ico`, served by Cloudflare as a 99×96 PNG, saved as `cloudflare.png`. This identifies the fourth example watcher; it is not a claim of endorsement or live polling.
+- Footer: original SVG pen trajectories replace the spring/fade letters. The paths trace each glyph rather than revealing typed text. Reduced motion renders the completed mark.
+- Green, amber and red identify readiness/completion, review/unknown information and exclusion. They are confined to labeled status badges; neutral black surfaces remain the visual foundation.

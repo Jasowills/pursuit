@@ -10,6 +10,7 @@ import {
   TableCaption,
 } from './ui/table';
 import { Icon } from './icons';
+import { StatusBadge } from '@pursuit/ui/status';
 const tasks = [
   {
     time: '09:14',
@@ -55,8 +56,8 @@ export function ActivityLedger() {
         <span>09:14 – 09:26</span>
       </header>
       <div className="activity-overview">
-        <h3>Progress you can inspect.</h3>
-        <p>Source checks, prepared material and the decisions that need you.</p>
+        <h3>What happened while you were away</h3>
+        <p>Review completed tasks, prepared documents and requests for your input.</p>
       </div>
       <div className="activity-toolbar">
         <div role="group" aria-label="Activity filter">
@@ -101,9 +102,9 @@ export function ActivityLedger() {
                 </button>
               </TableCell>
               <TableCell>
-                <span className="activity-status">
-                  {t.status === 'Complete' && <Icon name="check" size={12} />} {t.status}
-                </span>
+                <StatusBadge tone={t.status === 'Complete' ? 'positive' : 'attention'}>
+                  {t.status}
+                </StatusBadge>
               </TableCell>
               <TableCell className="activity-time">{t.time}</TableCell>
             </TableRow>

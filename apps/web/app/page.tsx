@@ -34,7 +34,7 @@ const questions = [
   ],
   [
     'Can I choose when Pursuit applies?',
-    'The product supports two intended workflows: review individual applications or set explicit limits for autopilot. Your preferences and exclusions define the boundaries. Cold outreach always requires your approval.',
+    'The planned autopilot offers individual review or automatic applications within limits you set. The current desktop does not submit applications. Approved Gmail outreach is available in the retained web workflow.',
   ],
   [
     'Which models can I use?',
@@ -46,7 +46,7 @@ const questions = [
   ],
   [
     'What happens when a role asks for a video?',
-    'The product journey brings that requirement to your attention, connects it to a relevant career story, and prepares a timed script and recording checklist. You record and review the video yourself.',
+    'The tour shows a script and recording checklist for a sample role. You record the video yourself. Automatic detection of video requirements is not connected in the desktop alpha.',
   ],
   [
     'What is available in the current alpha?',
@@ -58,7 +58,7 @@ const questions = [
   ],
   [
     'Can I contribute?',
-    'Pursuit is open source. The repository includes the source, build instructions and contribution guide. Help shape a career assistant that people can inspect and make their own.',
+    'Yes. Read the contribution guide, open an issue or submit a pull request. The repository includes build instructions and a checklist of the features that still need work.',
   ],
 ];
 export default function HomePage() {
@@ -76,8 +76,8 @@ export default function HomePage() {
               <span>In forward motion.</span>
             </h1>
             <p>
-              An open source career harness for the work between
-              <br className="desktop-break" /> where you are and where you want to be.
+              Find roles, prepare applications and keep track of your search.
+              <br className="desktop-break" /> An open-source workspace for your own AI model.
             </p>
             <div className="dark-actions">
               <HeroDownload />
@@ -96,21 +96,23 @@ export default function HomePage() {
                 See it in motion
               </a>
             </div>
-            <p className="hero-alpha-note">Desktop alpha. Your models. Your direction.</p>
+            <p className="hero-alpha-note">
+              Desktop alpha · local workspace · bring your own model
+            </p>
           </div>
           <div className="hero-path-labels" aria-hidden="true">
             <span>
-              <Icon name="search" size={14} /> Find your fit
+              <Icon name="search" size={14} /> Find roles
             </span>
             <span>
-              <Icon name="file" size={14} /> Make your case
+              <Icon name="file" size={14} /> Tailor your resume
             </span>
             <span>
-              <Icon name="arrowUpRight" size={14} /> Move forward
+              <Icon name="arrowUpRight" size={14} /> Review applications
             </span>
           </div>
           <div className="hero-models dark-frame">
-            <span>Made for your model.</span>
+            <span>Use your own model</span>
             <div>
               {providers.map(([name, logo]) => (
                 <a key={name} href="#models" aria-label={`Explore ${name} connection`}>
@@ -131,13 +133,13 @@ export default function HomePage() {
         <section className="dark-section dark-frame models-section" id="models">
           <div className="section-heading-pair">
             <h2>
-              Bring your model.
+              Choose the model
               <br />
-              <span>Keep your freedom.</span>
+              <span>you want to work with.</span>
             </h2>
             <p>
-              Use the intelligence you already pay for, or run local models through Ollama. No
-              single-provider lock-in.
+              Connect your provider account or run a local model with Ollama. Choose a model you
+              have access to, then test the connection.
             </p>
           </div>
           <div className="provider-grid">
@@ -168,19 +170,19 @@ export default function HomePage() {
           <div>
             <Icon name="user" size={32} />
             <h2>
-              An assistant that
+              Give Pursuit
               <br />
-              <span>starts with you.</span>
+              <span>the right context.</span>
             </h2>
           </div>
           <div>
             <p>
-              Your history is more than a list of employers. It’s what you’re proud of, the work you
-              want more of, and the things you won’t compromise on.
+              Save your experience, work authorization and preferences in Career Identity. Review
+              the source of a fact before adding it to your profile.
             </p>
             <p>
-              Keep your career facts, preferences and writing voice close to the work. Review the
-              context. Correct it. Make the next application feel more like you.
+              Choose which confirmed facts to include in a model request. Update your profile when
+              your experience or search requirements change.
             </p>
             <a className="text-link" href="/product-tour">
               Explore Career Identity <Icon name="arrowUpRight" size={15} />
@@ -191,14 +193,14 @@ export default function HomePage() {
           <div>
             <PursuitMark size={48} />
             <h2>
-              Your next move,
+              Try Pursuit
               <br />
-              <span>already in motion.</span>
+              <span>on your computer.</span>
             </h2>
             <p>
-              Bring your model. Bring your experience.
+              Build the desktop alpha from source.
               <br />
-              Make room for what comes next.
+              Connect your model to start a conversation.
             </p>
           </div>
           <DownloadOptions />
@@ -206,11 +208,11 @@ export default function HomePage() {
         <section className="dark-section dark-frame faq-section" id="faq">
           <div>
             <h2>
-              A little more
+              Before
               <br />
-              <span>clarity.</span>
+              <span>you start.</span>
             </h2>
-            <p>Your questions, answered.</p>
+            <p>Setup, privacy and current availability.</p>
             <a className="text-link" href={`${REPO}/issues`} target="_blank" rel="noreferrer">
               Ask on GitHub <Icon name="arrowUpRight" size={16} />
             </a>
@@ -238,9 +240,9 @@ export default function HomePage() {
                 <Wordmark />
               </a>
               <p>
-                Your career, in forward motion.
+                A local-first career workspace.
                 <br />
-                Open source. Local-first. Yours.
+                Open source, with your own model.
               </p>
             </div>
             <nav aria-label="Footer product">
@@ -248,7 +250,7 @@ export default function HomePage() {
               <a href="#product">The harness</a>
               <a href="#features">Resume tailoring</a>
               <a href="#autopilot">Career autopilot</a>
-              <a href="#connect">Pursuit Connect</a>
+              <a href="#companion">Pursuit Connect</a>
               <a href="#download">Download</a>
             </nav>
             <nav aria-label="Footer resources">
@@ -287,7 +289,7 @@ export default function HomePage() {
           <div className="footer-colophon">
             <span>© {new Date().getFullYear()} Pursuit</span>
             <span>
-              <i /> Built for what’s next.
+              <i /> Open source on GitHub.
             </span>
             <a href="#main">
               Back to top <Icon name="arrowUpRight" size={13} />

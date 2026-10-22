@@ -30,3 +30,7 @@ The 2026-10-22 refinement passed production build, TypeScript and formatting che
 ## Executed functional audit
 
 See [the 2026-10-22 audit](qa/REPORT.md) for verified versus missing capabilities. Real Ollama wiring and retained Greenhouse sourcing/research were exercised; native unattended applications and companion transport remain absent. The product-level verdict is NOT_READY.
+
+## Sourcing and status annotation follow-up
+
+The landing walkthrough now has six chapters, shared green/amber/red status labels, four example watcher companies and an original SVG pen-writing footer. The product tour and desktop renderer share sourcing indicators: sample mode labels the search as simulated; the personal alpha reports that sourcing is not connected. Updated harness imagery comes from the actual renderer, without native IPC mocks. Browser checks cover five widths (1440/1263/973/390/320), all six manual and scroll-driven steps, responsive navigation, approval simulation, pen/reduced-motion behavior and 44px chapter controls. Production web and desktop renderer builds pass. This UI work does not change the functional audit verdict above.

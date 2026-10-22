@@ -1,4 +1,4 @@
-/* A scroll-linked career story: one centered workspace, three meaningful stages. */
+/* A scroll-linked career story: one centered workspace, six meaningful stages. */
 .dark-landing .site-header-inner {
   background: linear-gradient(115deg, #ffffff12, #ffffff04 45%, #ffffff0a), #08090cb8;
   border-color: #ffffff24;
@@ -17,15 +17,12 @@
   background-color: #08090ce8;
   border-color: #ffffff30;
 }
-.dark-landing .nav-product > div,
 .dark-landing .mobile-site-menu {
   background: #121212f5;
   border-color: #ffffff29;
   backdrop-filter: blur(28px);
 }
-.dark-landing .nav-product > div > a:hover {
-  background: #ffffff09;
-}
+
 .dark-landing .repo-link .github-live-count {
   background: #ffffff0a;
   border-color: #ffffff24;

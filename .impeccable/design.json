@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-22T19:43:02.795295+00:00",
+  "generatedAt": "2026-10-22T20:22:58.433867+00:00",
   "title": "Design System: Pursuit",
   "extensions": {
     "typographyMeta": {
@@ -18,11 +18,6 @@
         "name": "floating-dock",
         "value": "inset 0 1px 0 #ffffff20, inset 0 -1px 0 #ffffff05, 0 14px 40px #0008",
         "purpose": "Floating landing navigation."
-      },
-      {
-        "name": "product-disclosure",
-        "value": "0 20px 70px #0009",
-        "purpose": "Product menu overlay."
       },
       {
         "name": "resume-paper",
@@ -62,9 +57,9 @@
         "purpose": "Chapter entrance from translateX(20px), opacity .5 and blur(3px); reduced motion disables animation. Scroll arrival separately maps translateY(70px) and scale(.94) to settled content."
       },
       {
-        "name": "footer-letter-rise",
-        "value": "1050ms cubic-bezier(0.16, 1, 0.3, 1); 65ms per-letter stagger",
-        "purpose": "25% viewport entry; pointer-entry replay; static reduced-motion letters. Off-white word with lime dot."
+        "name": "footer-pen-draw",
+        "value": "3900ms overall; cubic-bezier(0.3, 0.05, 0.45, 1)",
+        "purpose": "Ten original monoline SVG strokes with pen lifts for t crossbar, i dot and terminal dot. Starts at 35% viewport visibility; pointer entry replays; reduced motion renders fully drawn static paths."
       },
       {
         "name": "companion-stage-cycle",
@@ -136,7 +131,7 @@
     {
       "name": "Floating dock",
       "kind": "nav",
-      "description": "Dock material and frame; Product disclosure and live GitHub behavior belong to the application.",
+      "description": "Neutral glass dock with a direct Product section link; full-radius live GitHub count pill hides at widths up to 700px, while mobile menu retains the repository link.",
       "html": "<nav class=\"ds-nav\" aria-label=\"Product\"><a href=\"#product\">Product</a><a href=\"#models\">Models</a></nav>",
       "css": ".ds-nav {display:flex;align-items:center;gap:4px;padding:10px 16px;border:1px solid #ffffff24;border-radius:20px;background:linear-gradient(115deg,#ffffff12,#ffffff04 45%,#ffffff0a),#08090cb8;backdrop-filter:blur(28px) saturate(140%);box-shadow:inset 0 1px 0 #ffffff20,inset 0 -1px 0 #ffffff05,0 14px 40px #0008;transition:background 250ms,border-color 250ms;min-height:66px}.ds-nav a {color:#b7b7b7;font:12px Geist,sans-serif;text-decoration:none;padding-inline:12px}.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav a:focus-visible {outline:2px solid #d5f578;outline-offset:3px;}.ds-nav a:hover {color:#f3f3f3}"
     },
@@ -146,22 +141,35 @@
       "description": "Pressed document-view button from the landing workshop.",
       "html": "<button class=\"ds-view\" aria-pressed=\"true\">Resume</button>",
       "css": ".ds-view {display:inline-flex;align-items:center;gap:7px;border:1px solid transparent;background:none;color:#bdbdbd;min-height:42px;padding:0 12px;border-radius:5px;font:10px Geist,sans-serif;cursor:pointer}.ds-view[aria-pressed=\"true\"] {border-color:#747474;color:#e5e5e5;background:#303030}.ds-view:focus-visible {outline:2px solid #d5f578;outline-offset:5px}"
+    },
+    {
+      "name": "Semantic status badge",
+      "kind": "chip",
+      "description": "Shared positive status with explicit label and dot; attention and negative variants retain neutral surrounding panels.",
+      "html": "<span class=\"ds-status\" data-tone=\"positive\"><i aria-hidden=\"true\"></i>Ready</span>",
+      "css": ".ds-status {display:inline-flex;align-items:center;justify-content:center;gap:6px;width:fit-content;padding:4px 8px;border:1px solid #284a36;border-radius:5px;color:#85dfad;background:#11251a;font:500 10px/1.5 Geist,sans-serif;white-space:nowrap}.ds-status i {width:5px;height:5px;border-radius:50%;background:currentColor}.ds-status[data-tone=\"attention\"] {color:#f0c675;background:#2a2113;border-color:#554123}.ds-status[data-tone=\"negative\"] {color:#f29999;background:#2d1717;border-color:#552a2a}"
     }
   ],
   "narrative": {
     "northStar": "Forward motion",
-    "overview": "Neutral black and gray materials, off-white typography and primary lime actions extend the accepted trajectory hero into the shared conversational career workspace. Companion is dark neutral; closing is light neutral; footer letters are off-white with a lime dot. Fictional sample journeys stay visibly separate from native personal records and explicit model requests.",
+    "overview": "Neutral black and gray materials, off-white typography and primary lime actions extend the accepted trajectory hero into the shared conversational career workspace. Companion is dark neutral; closing is light neutral; footer handwriting uses original off-white SVG pen strokes with a lime dot. Fictional sample journeys stay visibly separate from native personal records and explicit model requests.",
     "keyCharacteristics": [
       "Geist interface with Arial resumes and Georgia letters",
       "Neutral border-separated conversation and contextual inspector",
       "Dark neutral companion and light neutral closing band",
       "Compact 660px phone with a notification-focused first state, seven sample states, visible-only four-stage autoplay and manual/pause controls",
       "Licensed semantic activity table with local filters and details",
-      "Scroll-linked sourcing with application timeline and approval preview",
+      "Six scroll-linked chapters: discovery, requirements, resume, supporting material, review/apply and updates",
       "First-party brand marks and documented illustrative stock photos",
-      "Per-letter footer spring/fade with static reduced-motion rendering",
+      "Ten-stroke original handwritten SVG footer, 3.9-second drawing, pointer replay and static reduced motion",
       "Explicit sample provenance and execution boundaries",
-      "Three desktop OS selector cards with source ZIP/build instructions and explicit unpublished installer/mobile release states"
+      "Three desktop OS selector cards with source ZIP/build instructions and explicit unpublished installer/mobile release states",
+      "Labeled semantic status badges: green ready/completed, amber review/unknown, red exclusion; no colored panels",
+      "Black main workspace, #070707 sidebar and #080808 inspector; simulated demo sourcing and truthful unconnected personal mode",
+      "Direct Product link, live outlined GitHub-count pill with unavailable em dash and 700px mobile hiding",
+      "Four simulated company watchers: PostHog, Stripe, Linear and Cloudflare; first-party marks",
+      "Pexels 8463168 professional introduction portrait with documented provenance",
+      "Six chapter controls meet 44px minimum targets; refreshed actual shared-workspace harness capture"
     ],
     "rules": [],
     "dos": [

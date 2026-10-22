@@ -44,3 +44,15 @@ Preserve the accepted hero and palette. Replace the old timed morning-run panel 
 ## Annotation-led neutral refinement
 
 User screenshots reject green/blue panel tints, excessive colored borders, sparse phone content and the activity list. Retain black and primary lime only for key actions; neutralize secondary UI materials in landing and shared desktop workspace and recapture the real renderer. Replace activity with a licensed shadcn table, add official Gmail/Composio/PostHog/Stripe/Linear marks and Pexels stock illustrations. Expand companion work, assistant and application screens; autoplay the four-stage journey only while visible, with pause/manual override and reduced-motion protection. Align hero action centers, replace application-mode tabs with a prepared-material/policy/decision timeline, and stagger the footer's individual letter springs/fades. Company watcher examples are simulations, not live vacancies. User screenshot evidence takes precedence over prior review approval.
+
+## Status, sourcing and copy annotations — 2026-10-22
+
+The user requests restrained semantic colors despite the previous removal of decorative green/blue tints. Keep black/neutral surfaces and primary lime. Green (#85dfad) means ready/completed, amber (#f0c675) means review or unknown information, red (#f29999) means exclusion. A shared StatusBadge retains explicit text and a dot, with contrast on dark tinted badge backgrounds; do not tint whole panels.
+
+Expand the scroll narrative to six chapters: source, check requirements, tailor resume, prepare supporting material, review/apply, get updates. Every fictional source, role and receipt remains labeled. The native workspace and tour share the sourcing status UI: the tour may show a simulated search; personal native mode must report no connection until the executor exists.
+
+Remove the Product dropdown. Use a direct Product link and a compact outlined GitHub-count pill inspired by the public T3 Code navigation. Hide the desktop GitHub pill on phone widths; the mobile menu retains the link. Keep the live repository count without fabricated fallback numbers.
+
+Replace the video-preparation photo with Pexels 8463168 (Kampus Production), a professional portrait facing the camera. Add Cloudflare as the fourth watcher with its first-party icon. Replace the footer bounce/fade with original SVG pen trajectories, including pen lifts/dot/crossbar, static under reduced motion. The header logo remains the established sans wordmark.
+
+Rewrite landing copy around concrete tasks and user decisions; keep the accepted hero composition, factual availability and privacy disclosures. Remove generic "next chapter", "not another dashboard", "keep your freedom" and similar slogans. The actual harness capture must reflect the darker shared workspace and visible demo sourcing status.

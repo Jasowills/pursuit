@@ -42,13 +42,13 @@ export function HarnessFeature() {
     <section className="dark-frame new-harness-section" id="product">
       <div className="section-heading-pair">
         <h2>
-          Not another dashboard.
+          Your search,
           <br />
-          <span>Your career assistant.</span>
+          <span>in one workspace.</span>
         </h2>
         <p>
-          Paste a job posting. Ask what’s moved forward. Work through your next application, with
-          the context already beside you.
+          Paste a posting, ask for a resume draft or check your application records. Choose which
+          career facts to include as you work.
         </p>
       </div>
       <Enter>
@@ -68,7 +68,7 @@ export function HarnessFeature() {
             aria-label="Explore the Pursuit sample workspace"
           >
             <img
-              src="/product/harness-dark.png"
+              src="/product/harness-dark.png?v=20261022-status"
               alt="Pursuit’s redesigned conversation workspace showing a product designer’s search, a tailored application and a job review notification. Fictional sample career in the actual desktop renderer."
               width={1536}
               height={1050}
@@ -97,13 +97,13 @@ export function DocumentWorkshop() {
     <section className="document-section dark-frame" id="features">
       <div className="section-heading-pair">
         <h2>
-          Same experience.
+          Make your resume
           <br />
-          <span>A stronger application.</span>
+          <span>relevant to the role.</span>
         </h2>
         <p>
-          Your resume should read like you—and make it obvious why you belong in this role. Review
-          every change before it goes anywhere.
+          Show the experience the employer is asking for. Compare the tailored draft with your
+          original and check each claim.
         </p>
       </div>
       <div className="document-workbench">
@@ -171,13 +171,13 @@ export function DocumentWorkshop() {
             <Enter className="letter-context">
               <Icon name="file" size={31} />
               <h3>
-                A reason to meet.
+                Explain why
                 <br />
-                In your own voice.
+                this role fits.
               </h3>
               <p>
-                Specific to the role. Grounded in your work. Written to open a conversation, not
-                repeat your entire resume.
+                Connect one or two relevant projects to the employer’s needs. Keep the draft short,
+                then edit it in your own words.
               </p>
               <ul>
                 <li>
@@ -210,23 +210,20 @@ export function DocumentWorkshop() {
                   <span className="camera-corners" />
                   <img
                     className="recording-photo"
-                    src="/photos/recording-workspace.jpg"
-                    alt="Stock example of a professional workspace for video preparation"
-                    width={900}
-                    height={600}
+                    src="/photos/recording-professional.jpg"
+                    alt="Stock portrait illustrating a professional introduction video; not a Pursuit user"
+                    width={1200}
+                    height={675}
                     loading="lazy"
                   />
-                  <span className="recording-label">Your space. Your story.</span>
+                  <span className="recording-label">Introduction video · example frame</span>
                   <span className="video-length">01:30</span>
                 </div>
                 <div className="video-request">
                   <Icon name="bell" size={18} />
                   <div>
                     <strong>Morrow asks for an introduction video.</strong>
-                    <p>
-                      Pursuit brings the requirement forward and helps you prepare before you
-                      record.
-                    </p>
+                    <p>Review the script and choose a project to talk about before recording.</p>
                   </div>
                 </div>
                 <div className="video-checklist">
@@ -247,9 +244,9 @@ export function DocumentWorkshop() {
             </Enter>
             <Enter side="right" className="script-sheet">
               <h3>
-                A 90-second introduction.
+                Prepare a clear
                 <br />
-                Already thought through.
+                90-second introduction.
               </h3>
               {VIDEO_SCRIPT.map(([time, title, copy]) => (
                 <div key={time}>
@@ -306,30 +303,30 @@ export function CompanionShowcase() {
     setStage(next);
   }
   const titles = [
-    'A role that fits you.',
-    'Everything you need to decide.',
-    'A clear yes, on your terms.',
-    'One less loose end.',
-    'Your introduction, prepared.',
-    'Your assistant, close by.',
-    'Every application, together.',
+    'A new role to review.',
+    'Review this role.',
+    'Approve the next step.',
+    'Application recorded.',
+    'Prepare your introduction.',
+    'Ask about your search.',
+    'Your applications.',
   ];
   return (
     <section className="companion-band" id="companion" ref={section}>
       <div className="dark-frame companion-layout">
         <div className="companion-copy">
           <h2>
-            Your next move.
+            Review applications
             <br />
-            In your pocket.
+            from your phone.
           </h2>
           <p>
-            Your desktop does the work. Pursuit Connect brings the moments that need you to your
-            phone.
+            Check a role and its documents without returning to your desk. The companion preview
+            shows the decisions you can review on your phone.
           </p>
           <p>
-            Review a new role on the train. Check your tailored resume. Approve the next step, then
-            get on with your day.
+            Read the tailored resume, approve the next step and see the result. Pairing and mobile
+            releases are not available in this alpha.
           </p>
           <div className="companion-steps" role="group" aria-label="Companion workflow">
             {['Get the match', 'Review the role', 'Approve the next step', 'Get the update'].map(
@@ -574,20 +571,20 @@ export function OutreachShowcase() {
     <section className="outreach-section dark-frame" id="outreach">
       <div className="section-heading-pair">
         <h2>
-          Find the right person.
+          Reach out
           <br />
-          <span>Say something worth reading.</span>
+          <span>with a reason to talk.</span>
         </h2>
         <p>
-          Cold outreach, with context. A relevant contact, a reason to reach out, and an
-          introduction that sounds like you.
+          Start with a relevant person and work you can discuss. Review the source, recipient and
+          exact message before sending through Gmail.
         </p>
       </div>
       <div className="outreach-story">
         <Enter className="sourcing-pipeline">
           <div className="sourcing-title">
             <Icon name="search" size={18} />
-            <strong>From company to conversation.</strong>
+            <strong>Research the contact before writing</strong>
           </div>
           <div className="source-record">
             <span>Target company</span>
@@ -617,8 +614,8 @@ export function OutreachShowcase() {
             <div>
               <strong>A reason to reach out</strong>
               <p>
-                Priya’s team is simplifying complex workflows. Your Meridian project gives you a
-                specific, relevant starting point.
+                The sample team page mentions B2B reporting. Alex’s Meridian project gives this
+                introduction a relevant example.
               </p>
             </div>
           </div>
@@ -630,7 +627,7 @@ export function OutreachShowcase() {
         <Enter side="right" className="outreach-draft">
           <div className="outreach-mailbar">
             <img src="/brands/gmail.svg" width={24} height={20} alt="Gmail" />
-            <span>Your Gmail. Your introduction.</span>
+            <span>Gmail draft</span>
             <small>Draft</small>
           </div>
           <div className="outreach-field">
@@ -642,13 +639,13 @@ export function OutreachShowcase() {
           <div className="outreach-body">
             Hi Priya,
             <br />
-            <br />I noticed Northstar is looking for a designer who can bring research and systems
-            thinking together. At Meridian, I’ve been working on exactly that—simplifying B2B
-            workflows while building a component library alongside engineering.
+            <br />
+            Your B2B reporting role caught my eye. At Meridian, I work with customers and engineers
+            to simplify reporting workflows, and I’ve helped build the team’s component library.
             <br />
             <br />
-            I’d love to hear what your team is working to make simpler. Would you be open to a short
-            conversation?
+            I’d be interested to hear how your team approaches that work. Would you have time for a
+            short conversation?
             <br />
             <br />
             Alex
@@ -709,30 +706,30 @@ export function BackgroundShowcase() {
     <section className="background-section dark-frame" id="autopilot">
       <div className="background-copy">
         <h2>
-          Close the laptop.
+          Let the search run.
           <br />
-          <span>Keep your momentum.</span>
+          <span>Review what needs you.</span>
         </h2>
         <p>
-          Your search has a rhythm. Research, preparation, approvals and follow-ups shouldn’t depend
-          on keeping every tab open.
+          Set your target roles and limits. Use the activity log to review source checks, prepared
+          drafts and decisions waiting for you.
         </p>
         <ul>
           {[
             [
               'search',
-              'Research with your preferences',
+              'Search with your requirements',
               'Target roles, location, compensation and exclusions.',
             ],
             [
               'file',
-              'Prepare before you return',
-              'Tailored material, relevant contacts and clear next steps.',
+              'Review prepared documents',
+              'Keep each resume draft and cover letter with its role.',
             ],
             [
               'bell',
-              'Bring the important moments to you',
-              'A promising role. An approval. A video request. A completed application.',
+              'See what needs attention',
+              'Approval requests, video requirements and application outcomes.',
             ],
           ].map(([icon, title, copy]) => (
             <li key={title}>
@@ -760,11 +757,10 @@ export function ClosingInvitation() {
       <div className="dark-frame">
         <div className="closing-copy">
           <h2>
-            There’s a next chapter
-            <br />
-            with your name on it.
+            Start with
+            <br />a role you want.
           </h2>
-          <p>Your experience. Your direction. A little less searching alone.</p>
+          <p>Try a question or a job posting in the product tour.</p>
           <form action="/product-tour">
             <label htmlFor="closing-prompt">Your next move</label>
             <div>
@@ -788,21 +784,21 @@ export function ClosingInvitation() {
         <div className="closing-art" aria-hidden="true">
           <div className="closing-orbit" />
           <div className="closing-letter">
-            <span>YOUR NEXT CHAPTER</span>
+            <span>APPLICATION DRAFT</span>
             <strong>Alex Morgan</strong>
             <p>Product Designer</p>
             <div />
             <div />
             <div />
-            <small>Experience that speaks for itself.</small>
+            <small>Resume and cover letter for review.</small>
           </div>
           <div className="closing-ping">
             <span>
               <Icon name="check" size={16} />
             </span>
             <div>
-              <strong>A little closer.</strong>
-              <p>Your next move starts with a conversation.</p>
+              <strong>Ready for review</strong>
+              <p>Check the documents before the next step.</p>
             </div>
           </div>
         </div>

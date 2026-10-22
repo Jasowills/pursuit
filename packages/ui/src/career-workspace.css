@@ -1,6 +1,6 @@
 .career-workspace {
-  --cw-bg: #080808;
-  --cw-panel: #101010;
+  --cw-bg: #000000;
+  --cw-panel: #080808;
   --cw-line: #282828;
   --cw-text: #ececec;
   --cw-muted: #989898;
@@ -1549,4 +1549,76 @@
 .career-workspace .cw-sidebar-lower > button {
   background: transparent;
   border: 0;
+}
+
+/* Near-black work surfaces; semantic color belongs to status, not whole panels. */
+.cw-main,
+.cw-body {
+  background: #000000;
+}
+.cw-sidebar {
+  background: #070707;
+}
+.cw-inspector {
+  background: #080808;
+}
+.cw-sourcing-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0 20px;
+  border-bottom: 1px solid var(--cw-line);
+  margin-bottom: 22px;
+}
+.cw-sourcing-status > div {
+  flex: 1;
+}
+.cw-sourcing-status strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.cw-sourcing-status p {
+  font-size: 11px;
+  margin-top: 3px;
+}
+.cw-search-indicator {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--cw-line);
+  border-radius: 50%;
+  color: var(--cw-muted);
+  flex-shrink: 0;
+}
+.cw-sourcing-status[data-demo='true'] .cw-search-indicator {
+  color: #85dfad;
+}
+.cw-opportunity-list .status-badge {
+  margin-left: auto;
+}
+@media (max-width: 600px) {
+  .cw-sourcing-status {
+    flex-wrap: wrap;
+  }
+  .cw-sourcing-status > div {
+    flex-basis: calc(100% - 50px);
+  }
+  .cw-sourcing-status > .status-badge {
+    margin-left: 46px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cw-sourcing-status[data-demo='true'] .cw-search-indicator svg {
+    animation: sourcing-scan 2.4s ease-in-out infinite;
+  }
+}
+@keyframes sourcing-scan {
+  0%,
+  100% {
+    transform: translate(-1px, 1px);
+  }
+  50% {
+    transform: translate(2px, -2px);
+  }
 }

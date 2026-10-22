@@ -20,8 +20,8 @@ export default function ProductTour() {
     <>
       <div
         style={{
-          background: '#1c2710',
-          color: '#d5f578',
+          background: '#101010',
+          color: '#c0c0c0',
           fontSize: 11,
           padding: '8px 20px',
           display: 'flex',
@@ -59,7 +59,7 @@ export default function ProductTour() {
           <button onClick={() => dialog.current?.close()}>Return to the tour</button>
         </dialog>
       )}
-      <style>{`.tour-settings-dialog{position:fixed;inset:20%;z-index:80;background:#141d0e;border:1px solid #6b8248;border-radius:12px;color:#e8f0dc;padding:35px;box-shadow:0 30px 100px #000b;max-width:600px;height:fit-content}.tour-settings-dialog h2{font-size:26px;color:#e8f0dc}.tour-settings-dialog p{font-size:14px;line-height:1.9;color:#b9cba4;margin:20px 0}.tour-settings-dialog button{border:1px solid #8da467;background:#d5f578;color:#18220c;padding:12px 18px;border-radius:6px}`}</style>
+      <style>{`.tour-settings-dialog{position:fixed;inset:20%;z-index:80;background:#090909;border:1px solid #3b3b3b;border-radius:12px;color:#eeeeee;padding:35px;box-shadow:0 30px 100px #000b;max-width:600px;height:fit-content}.tour-settings-dialog h2{font-size:26px;color:#eeeeee}.tour-settings-dialog p{font-size:14px;line-height:1.9;color:#b6b6b6;margin:20px 0}.tour-settings-dialog button{border:1px solid #d5f578;background:#d5f578;color:#18220c;padding:12px 18px;border-radius:6px}`}</style>
     </>
   );
 }

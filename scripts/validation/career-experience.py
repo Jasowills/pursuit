@@ -11,7 +11,7 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Dismiss notification',exact=True).click()
  page.get_by_label('Ask Pursuit or paste a job posting').fill('How many applications so far?');page.get_by_role('button',name='Send message',exact=True).click()
  expect(page.locator('.cw-thread')).to_contain_text('1 recorded application')
- page.get_by_role('button',name='Opportunities',exact=True).click();expect(page.get_by_role('heading',name='Your next opportunity is here.')).to_be_visible()
+ page.get_by_role('button',name='Opportunities',exact=True).click();expect(page.get_by_role('heading',name='Your opportunities')).to_be_visible()
  page.get_by_role('button',name='Add job posting',exact=True).click()
  page.get_by_label('Company',exact=True).fill('ExampleCo');page.get_by_label('Job title',exact=True).fill('Designer');page.get_by_label('Job posting',exact=True).fill('Design accessible tools for teams.')
  page.get_by_role('button',name='Save opportunity',exact=True).click();expect(page.locator('.cw-jobs')).to_contain_text('ExampleCo')
@@ -46,7 +46,7 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Review approval',exact=True).click();page.get_by_role('button',name='Approve sample application',exact=True).click();expect(page.locator('.phone-complete')).to_contain_text('Your application is in.')
  page.get_by_role('button',name='Composio',exact=True).click();expect(page.locator('.gmail-consent')).to_contain_text('Composio project')
  page.get_by_role('button',name='Review draft',exact=True).click();expect(page.get_by_role('status').filter(has_text='No email')).to_be_visible()
- page.get_by_role('button',name='Apply and keep track',exact=True).click();expect(page.locator('.source-delivery')).to_contain_text('A role worth your attention')
+ page.get_by_role('button',name='Apply and keep track',exact=True).click();expect(page.locator('.source-delivery')).to_contain_text('Northstar is ready for review')
  page.locator('.source-approve').click();expect(page.locator('.source-delivery')).to_contain_text('Your application is in.')
  page.get_by_role('button',name='Preview a new-role alert',exact=True).click();expect(page.locator('.watcher-found')).to_contain_text('not a live PostHog vacancy')
  assert not errors,errors

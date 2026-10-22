@@ -22,7 +22,7 @@ export function GitHubStars() {
       aria-label={stars === null ? 'GitHub star count unavailable' : `${stars} GitHub stars`}
     >
       {stars === null
-        ? 'GitHub'
+        ? '—'
         : new Intl.NumberFormat('en', {
             notation: stars >= 1000 ? 'compact' : 'standard',
             maximumFractionDigits: 1,

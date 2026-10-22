@@ -1,0 +1,42 @@
+.status-badge {
+  --status-ink: #bcbcbc;
+  --status-ground: #1c1c1c;
+  --status-line: #383838;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 8px;
+  border: 1px solid var(--status-line);
+  border-radius: 5px;
+  color: var(--status-ink);
+  background: var(--status-ground);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  font-style: normal;
+}
+.status-badge[data-tone='positive'] {
+  --status-ink: #85dfad;
+  --status-ground: #11251a;
+  --status-line: #284a36;
+}
+.status-badge[data-tone='attention'] {
+  --status-ink: #f0c675;
+  --status-ground: #2a2113;
+  --status-line: #554123;
+}
+.status-badge[data-tone='negative'] {
+  --status-ink: #f29999;
+  --status-ground: #2d1717;
+  --status-line: #552a2a;
+}
+.status-badge > i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: 0 0 auto;
+}

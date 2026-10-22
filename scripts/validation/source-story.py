@@ -13,18 +13,20 @@ with sync_playwright() as p:
  start=track.evaluate('(el)=>scrollY+el.getBoundingClientRect().top')
  distance=track.evaluate('(el)=>el.offsetHeight-innerHeight')
  assert stage.evaluate('(el)=>getComputedStyle(el).position')=='sticky'
- for i in range(3):
-  page.evaluate('(y)=>scrollTo(0,y)',start+distance*((i+.2)/3))
+ for i in range(6):
+  page.evaluate('(y)=>scrollTo(0,y)',start+distance*((i+.2)/6))
   expect(stage).to_have_attribute('data-chapter',str(i))
   page.wait_for_timeout(650)
   assert abs(stage.bounding_box()['y'])<2
   page.screenshot(path=str(OUT/f'scroll-{i}.png'))
+ page.get_by_role('button',name='Apply and keep track',exact=True).click()
  page.locator('.source-approve').click()
  expect(page.locator('.source-delivery')).to_contain_text('Your application is in.')
  page.locator('#watchers').scroll_into_view_if_needed();page.get_by_role('button',name='Preview a new-role alert',exact=True).click()
  expect(page.locator('.watcher-found')).to_contain_text('Simulated change')
  page.locator('#watchers').screenshot(path=str(OUT/'watcher-alert.png'),style='.site-header {visibility:hidden!important;}')
- page.evaluate('scrollTo(0,0)');page.locator('.nav-product summary').click();expect(page.get_by_role('link',name='Company watchers Be there when a role opens.')).to_be_visible();page.keyboard.press('Escape');assert page.locator('.nav-product').get_attribute('open') is None
+ expect(page.locator('.nav-product')).to_have_count(0)
+ expect(page.get_by_role('navigation',name='Primary').get_by_role('link',name='Product',exact=True)).to_have_attribute('href','#product')
  for platform,ua,touch,expected in [('macOS','Macintosh',0,'macOS'),('Windows','Windows NT',0,'Windows'),('Linux','X11; Linux',0,'Linux'),('macOS','iPad',5,None),('macOS','Macintosh',5,None),('Linux','Android',5,None)]:
   ctx=b.new_context(viewport={'width':1440,'height':1000},user_agent='Mozilla/5.0 '+ua,reduced_motion='reduce')
   ctx.add_init_script('Object.defineProperty(navigator,"userAgentData",{value:'+json.dumps({'platform':platform})+'});Object.defineProperty(navigator,"maxTouchPoints",{value:'+str(touch)+'})')
@@ -39,7 +41,7 @@ with sync_playwright() as p:
  assert stage.evaluate('(el)=>getComputedStyle(el).position')=='relative'
  for width in [1440,973,390,320]:
   page.set_viewport_size({'width':width,'height':1000 if width>400 else 844})
-  for i,label in enumerate(['Find the opportunities','Prepare your application','Apply and keep track']):
+  for i,label in enumerate(['Find the opportunities','Check the requirements','Tailor your resume','Prepare your application','Apply and keep track','Get the update']):
    page.get_by_role('button',name=label,exact=True).click();expect(stage).to_have_attribute('data-chapter',str(i))
    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
    page.locator('#how-it-works').screenshot(path=str(OUT/f'{width}-chapter-{i}.png'),style='.site-header {visibility:hidden!important;}')

@@ -68,62 +68,6 @@
 .dark-landing .dark-hero > .opportunity-field {
   top: 72px;
 }
-.nav-product {
-  position: relative;
-}
-.nav-product > summary {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  list-style: none;
-  font-size: 12px;
-  color: #b6b6b6;
-  min-height: 44px;
-  padding: 0 12px;
-  cursor: pointer;
-}
-.nav-product > summary::-webkit-details-marker {
-  display: none;
-}
-.nav-product[open] > summary {
-  color: #d5f578;
-}
-.nav-product > div {
-  position: absolute;
-  top: calc(100% + 17px);
-  left: -50px;
-  width: 350px;
-  background: #121212;
-  border: 1px solid #494949;
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 20px 70px #0009;
-}
-.dark-landing .nav-product > div > a {
-  display: grid;
-  grid-template-columns: 27px 1fr;
-  gap: 4px 8px;
-  align-items: center;
-  padding: 13px;
-  min-height: 70px;
-  border-radius: 7px;
-}
-.nav-product a > svg {
-  grid-row: 1/3;
-  color: #d5f578;
-}
-.nav-product strong {
-  font-size: 12px;
-  font-weight: 500;
-  color: #e2e2e2;
-}
-.nav-product a > span {
-  font-size: 10px;
-  color: #929292;
-}
-.dark-landing .nav-product > div > a:hover {
-  background: #252525;
-}
 .journey-enter {
   transition:
     transform 900ms cubic-bezier(0.16, 1, 0.3, 1),

@@ -1,4 +1,5 @@
 'use client';
+import { StatusBadge } from './status';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   CareerBook,
@@ -478,7 +479,11 @@ export function CareerWorkspace({
               <div className="cw-conversation-heading">
                 <span className="cw-state-dot" />
                 <h1>{sample ? 'Finding your next design role' : 'What’s your next move?'}</h1>
-                <span>{sample ? 'Today' : 'Your assistant'}</span>
+                {sample ? (
+                  <StatusBadge tone="positive">Sourcing · demo</StatusBadge>
+                ) : (
+                  <span>Your assistant</span>
+                )}
               </div>
               <div className="cw-thread" aria-live="polite">
                 {visibleMessages.length ? (
@@ -598,21 +603,35 @@ export function CareerWorkspace({
             <>
               <div className="cw-page-title">
                 <div>
-                  <h1>
-                    {screen === 'applications'
-                      ? 'Every application, in view.'
-                      : 'Your next opportunity is here.'}
-                  </h1>
+                  <h1>{screen === 'applications' ? 'Your applications' : 'Your opportunities'}</h1>
                   <p>
                     {screen === 'applications'
                       ? 'Keep the record, the material and the next step together.'
-                      : 'Review the role, understand the fit, decide what happens next.'}
+                      : 'Review matches and check what each application needs.'}
                   </p>
                 </div>
                 <button disabled={busy} onClick={() => setAdding(true)}>
                   <DeskIcon name="plus" size={15} /> Add job posting
                 </button>
               </div>
+              {screen === 'opportunities' && (
+                <div className="cw-sourcing-status" data-demo={sample}>
+                  <span className="cw-search-indicator">
+                    <DeskIcon name="search" size={17} />
+                  </span>
+                  <div>
+                    <strong>{sample ? 'Sourcing roles across the web' : 'Job sourcing'}</strong>
+                    <p>
+                      {sample
+                        ? 'Demo search · checking career pages and watched companies for product design roles.'
+                        : 'Web sourcing is not connected in this desktop alpha. Add a posting to review it here.'}
+                    </p>
+                  </div>
+                  <StatusBadge tone={sample ? 'positive' : 'neutral'}>
+                    {sample ? 'Simulated search' : 'Not connected'}
+                  </StatusBadge>
+                </div>
+              )}
               <div className="cw-record-summary">
                 {[
                   ['Shortlisted', book.opportunities.length],
@@ -677,9 +696,17 @@ export function CareerWorkspace({
                       </span>
                       <p>{j.reason}</p>
                     </div>
-                    <span className={`cw-badge cw-badge-${j.status.replace(' ', '-')}`}>
+                    <StatusBadge
+                      tone={
+                        j.status === 'Review' || j.status === 'Video needed'
+                          ? 'attention'
+                          : j.status === 'Applied' || j.status === 'Prepared'
+                            ? 'positive'
+                            : 'neutral'
+                      }
+                    >
                       {j.status}
-                    </span>
+                    </StatusBadge>
                   </button>
                 ))}
                 {!book.opportunities.length && (
@@ -895,7 +922,9 @@ export function CareerWorkspace({
                         <strong>{title}</strong>
                         <span>{detail}</span>
                       </div>
-                      <em>{state}</em>
+                      <StatusBadge tone={state === 'Completed' ? 'positive' : 'attention'}>
+                        {state}
+                      </StatusBadge>
                     </div>
                   ))}
                   <div className="cw-policy-note">

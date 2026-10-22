@@ -1,27 +1,361 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from './icons';
+import { StatusBadge } from '@pursuit/ui/status';
 
 const chapters = [
   {
-    title: 'A wider search. A clearer shortlist.',
-    copy: 'Company career pages, job sources and the teams you watch. Bring the opportunities together before deciding where your experience belongs.',
     label: 'Find the opportunities',
-    icon: 'search',
+    title: 'Search beyond the job board.',
+    copy: 'Bring career pages, job boards and company watchers into one search. Keep the roles that match your work and where you can do it.',
   },
   {
-    title: 'Your experience. Made relevant.',
-    copy: 'The role changes. The facts don’t. Shape your resume and cover letter around the experience that matters, with every change there to review.',
+    label: 'Check the requirements',
+    title: 'Check the details before applying.',
+    copy: 'Compare location, pay and required experience. Flag missing information instead of treating it as a match.',
+  },
+  {
+    label: 'Tailor your resume',
+    title: 'Put the relevant work first.',
+    copy: 'Use the projects and skills that answer this posting. Compare the changes with your original resume before you approve them.',
+  },
+  {
     label: 'Prepare your application',
-    icon: 'file',
+    title: 'Prepare what the employer asks for.',
+    copy: 'Review a cover letter for the role. If the application needs a video, work from a short script and a recording checklist.',
   },
   {
-    title: 'Your next move, within your rules.',
-    copy: 'Review a promising role, or let autopilot proceed within your limits. Follow the outcome without keeping another spreadsheet.',
     label: 'Apply and keep track',
-    icon: 'shield',
+    title: 'Choose how each application proceeds.',
+    copy: 'Review a prepared application or use autopilot within limits you set. Keep the documents and the outcome with the role.',
+  },
+  {
+    label: 'Get the update',
+    title: 'Know what needs your attention.',
+    copy: 'See the receipt, the next step or a request for your input. Pick up the review on your phone when you are away from your desk.',
   },
 ] as const;
+
+function SourceScene({
+  active,
+  submitted,
+  onApprove,
+}: {
+  active: number;
+  submitted: boolean;
+  onApprove: () => void;
+}) {
+  if (active === 0)
+    return (
+      <>
+        <div className="source-window-title">
+          <Icon name="search" size={20} />
+          <h4>Sourcing product design roles</h4>
+        </div>
+        <div className="source-sourcing-line">
+          <span className="source-search-dot" />
+          <span>Demo search: career pages, job boards and company watchers</span>
+        </div>
+        <div className="source-filter">
+          <span>Product design</span>
+          <span>London / Remote</span>
+          <span>£80k+</span>
+        </div>
+        <div className="source-job-head">
+          <span>Opportunity</span>
+          <span>Review status</span>
+        </div>
+        {[
+          [
+            'Northstar',
+            'Senior Product Designer',
+            'B2B workflows · Research',
+            'Strong fit',
+            'positive',
+          ],
+          [
+            'Morrow',
+            'Lead Product Designer',
+            'Systems · Team leadership',
+            'Video requested',
+            'attention',
+          ],
+          [
+            'Fieldstone',
+            'Product Designer',
+            'Accessible product design',
+            'Ready to prepare',
+            'positive',
+          ],
+          [
+            'Harbor',
+            'Design Director',
+            'On-site in New York · Outside your location',
+            'Not a fit',
+            'negative',
+          ],
+        ].map(([company, title, reason, status, tone]) => (
+          <div className="source-job" key={company}>
+            <span className="source-company">{company![0]}</span>
+            <div>
+              <strong>{title}</strong>
+              <p>
+                {company} · {reason}
+              </p>
+            </div>
+            <StatusBadge tone={tone as 'positive' | 'attention' | 'negative'}>{status}</StatusBadge>
+          </div>
+        ))}
+        <div className="source-check">
+          <Icon name="check" size={16} />
+          <span>Group repeated listings. Keep your exclusions.</span>
+        </div>
+      </>
+    );
+  if (active === 1)
+    return (
+      <>
+        <div className="source-window-title">
+          <Icon name="shield" size={20} />
+          <h4>Check Northstar against your requirements</h4>
+        </div>
+        <div className="source-fit-heading">
+          <div>
+            <strong>Senior Product Designer</strong>
+            <p>Northstar · London / Hybrid</p>
+          </div>
+          <StatusBadge tone="attention">One detail to verify</StatusBadge>
+        </div>
+        <div className="source-fit-list">
+          {[
+            ['Role', 'Senior product design', 'Matches', 'positive'],
+            ['Location', 'London with hybrid working', 'Matches', 'positive'],
+            ['Salary', '£85k–£105k · your minimum is £80k', 'Matches', 'positive'],
+            ['Experience', 'Research, B2B workflows and design systems', 'Relevant', 'positive'],
+            [
+              'Work authorization',
+              'The posting does not confirm sponsorship',
+              'Check required',
+              'attention',
+            ],
+          ].map(([label, detail, status, tone]) => (
+            <div key={label}>
+              <span>{label}</span>
+              <div>{detail}</div>
+              <StatusBadge tone={tone as 'positive' | 'attention'}>{status}</StatusBadge>
+            </div>
+          ))}
+        </div>
+        <p className="source-scene-note">
+          Keep the role for review. An unknown requirement is not confirmed eligibility.
+        </p>
+      </>
+    );
+  if (active === 2)
+    return (
+      <>
+        <div className="source-window-title">
+          <Icon name="file" size={20} />
+          <h4>Tailor Alex’s resume for Northstar</h4>
+        </div>
+        <div className="source-tailoring">
+          <div className="source-mini-resume">
+            <h5>Alex Morgan</h5>
+            <span>Product Designer</span>
+            <hr />
+            <small>PROFILE</small>
+            <p>
+              Product designer with six years of experience in B2B workflows, research and
+              accessible interfaces.
+            </p>
+            <small>EXPERIENCE</small>
+            <strong>Senior Product Designer</strong>
+            <span>Meridian Studio · 2022–Present</span>
+            <p className="source-highlight">
+              Led discovery and interaction design for B2B reporting workflows, using customer
+              research to simplify complex tasks.
+            </p>
+            <p>
+              Partnered with eight engineers and a product manager to take an onboarding flow from
+              interviews to release.
+            </p>
+          </div>
+          <div className="source-relevance">
+            <StatusBadge tone="positive">Ready to review</StatusBadge>
+            <strong>Your experience, selected for this role.</strong>
+            <p>
+              The example brings Alex’s B2B work forward. Check each change against the original
+              career facts.
+            </p>
+            <span>
+              <Icon name="check" size={14} /> Relevant projects first
+            </span>
+            <span>
+              <Icon name="check" size={14} /> Original resume kept
+            </span>
+            <a href="#features" className="text-link">
+              Compare the full resume <Icon name="arrowUpRight" size={14} />
+            </a>
+          </div>
+        </div>
+      </>
+    );
+  if (active === 3)
+    return (
+      <>
+        <div className="source-window-title">
+          <Icon name="file" size={20} />
+          <h4>Prepare the rest of the application</h4>
+        </div>
+        <div className="source-letter-preview">
+          <div>
+            <strong>Cover letter · Northstar</strong>
+            <StatusBadge tone="positive">Draft ready</StatusBadge>
+          </div>
+          <p>Dear Northstar team,</p>
+          <p>
+            At Meridian Studio, I lead discovery and interaction design for B2B reporting tools.
+            Your focus on complex workflows is close to the work I do with customers and engineers.
+          </p>
+          <p>
+            I would welcome the chance to discuss how that experience could support your product
+            team.
+          </p>
+          <span>Alex Morgan</span>
+        </div>
+        <div className="source-video-task">
+          <Icon name="monitor" size={20} />
+          <div>
+            <strong>Another role asks for a video</strong>
+            <p>
+              Morrow · 90-second introduction. Script and recording checklist prepared for review.
+            </p>
+          </div>
+          <StatusBadge tone="attention">Needs you</StatusBadge>
+        </div>
+      </>
+    );
+  if (active === 4)
+    return (
+      <>
+        <div className="source-window-title">
+          <Icon name="shield" size={20} />
+          <h4>Review the Northstar application</h4>
+        </div>
+        <div className="source-application">
+          <span className="source-company">N</span>
+          <div>
+            <strong>Senior Product Designer</strong>
+            <p>Northstar · London · £85k–£105k</p>
+          </div>
+          <StatusBadge tone={submitted ? 'positive' : 'attention'}>
+            {submitted ? 'Recorded' : 'Your approval'}
+          </StatusBadge>
+        </div>
+        <ol className="application-progress">
+          <li>
+            <Icon name="check" size={14} />
+            <div>
+              <strong>Material prepared</strong>
+              <span>Tailored resume and cover letter attached</span>
+            </div>
+          </li>
+          <li>
+            <Icon name="check" size={14} />
+            <div>
+              <strong>Preferences checked</strong>
+              <span>Your location, pay range and confirmed career facts</span>
+            </div>
+          </li>
+          <li>
+            <Icon name={submitted ? 'check' : 'clock'} size={14} />
+            <div>
+              <strong>
+                {submitted ? 'Sample application recorded' : 'Waiting for your decision'}
+              </strong>
+              <span>
+                {submitted
+                  ? 'The sample outcome stays with this role'
+                  : 'Review the documents before approving'}
+              </span>
+            </div>
+          </li>
+        </ol>
+        <div className="source-delivery">
+          <Icon name="bell" size={22} />
+          <div>
+            <strong>
+              {submitted ? 'Your application is in.' : 'Northstar is ready for review.'}
+            </strong>
+            <p>
+              {submitted
+                ? 'This preview recorded a sample confirmation. It did not submit an application.'
+                : 'Review the tailored resume and cover letter, then approve the next step.'}
+            </p>
+          </div>
+        </div>
+        <button className="dark-button source-approve" onClick={onApprove}>
+          {submitted ? 'Replay application preview' : 'Approve sample application'}
+          <Icon name={submitted ? 'clock' : 'arrowUpRight'} size={14} />
+        </button>
+        <div className="source-check">
+          <Icon name="shield" size={16} />
+          <span>Autopilot follows your limits. Outreach requires a separate approval.</span>
+        </div>
+      </>
+    );
+  return (
+    <>
+      <div className="source-window-title">
+        <Icon name="bell" size={20} />
+        <h4>Catch up on your search</h4>
+      </div>
+      <div className="source-update-list">
+        <div>
+          <span className="source-update-icon">
+            <Icon name="check" size={18} />
+          </span>
+          <div>
+            <strong>Bramble application recorded</strong>
+            <p>Sample receipt SAMPLE-ONLY-1042 · resume and letter saved with the role.</p>
+          </div>
+          <StatusBadge tone="positive">Complete</StatusBadge>
+        </div>
+        <div>
+          <span className="source-update-icon">
+            <Icon name="file" size={18} />
+          </span>
+          <div>
+            <strong>Northstar needs a review</strong>
+            <p>Check the documents and the sponsorship question before proceeding.</p>
+          </div>
+          <StatusBadge tone="attention">Needs you</StatusBadge>
+        </div>
+        <div>
+          <span className="source-update-icon">
+            <Icon name="monitor" size={18} />
+          </span>
+          <div>
+            <strong>Morrow asks for a video</strong>
+            <p>Open the script, record your introduction and add the link.</p>
+          </div>
+          <StatusBadge tone="attention">Needs you</StatusBadge>
+        </div>
+      </div>
+      <a className="source-phone-link" href="#companion">
+        <Icon name="phone" size={22} />
+        <div>
+          <strong>Review from your phone</strong>
+          <span>See the companion preview</span>
+        </div>
+        <Icon name="arrowUpRight" size={16} />
+      </a>
+      <p className="source-scene-note">
+        Sample updates show the intended workflow. No employer or inbox was contacted.
+      </p>
+    </>
+  );
+}
 
 export function SourceStory() {
   const root = useRef<HTMLDivElement>(null);
@@ -89,14 +423,13 @@ export function SourceStory() {
     <section id="how-it-works" className="source-story" aria-label="From discovery to application">
       <div className="source-story-heading dark-frame">
         <h2>
-          Your search.
+          From the search
           <br />
-          <span>A little further, every day.</span>
+          <span>to the next application.</span>
         </h2>
         <p>
-          Find the role. Make your case. Move forward.
-          <br />
-          One assistant keeps the whole story together.
+          Follow a sample search through the workspace, from a new role to the documents and
+          decisions it needs.
         </p>
       </div>
       <div className="source-story-track" ref={root}>
@@ -142,180 +475,17 @@ export function SourceStory() {
                   <small>Sample career</small>
                 </div>
                 <div className="source-window-body" key={active}>
-                  {active === 0 ? (
-                    <>
-                      <div className="source-window-title">
-                        <Icon name="search" size={20} />
-                        <h4>Find the work you want more of.</h4>
-                      </div>
-                      <div className="source-filter">
-                        <span>Product design</span>
-                        <span>London / Remote</span>
-                        <span>£80k+</span>
-                      </div>
-                      <div className="source-job-head">
-                        <span>Opportunity</span>
-                        <span>Why it fits</span>
-                      </div>
-                      {[
-                        [
-                          'Northstar',
-                          'Senior Product Designer',
-                          'B2B workflows · Research',
-                          'Strong fit',
-                        ],
-                        [
-                          'Morrow',
-                          'Lead Product Designer',
-                          'Systems · Team leadership',
-                          'Video requested',
-                        ],
-                        [
-                          'Fieldstone',
-                          'Product Designer',
-                          'Accessible product design',
-                          'Ready to prepare',
-                        ],
-                      ].map(([company, title, reason, status]) => (
-                        <div className="source-job" key={company}>
-                          <span className="source-company">{company![0]}</span>
-                          <div>
-                            <strong>{title}</strong>
-                            <p>
-                              {company} · {reason}
-                            </p>
-                          </div>
-                          <small>{status}</small>
-                        </div>
-                      ))}
-                      <div className="source-check">
-                        <Icon name="check" size={16} />
-                        <span>Duplicate roles grouped. Your exclusions kept.</span>
-                      </div>
-                    </>
-                  ) : active === 1 ? (
-                    <>
-                      <div className="source-window-title">
-                        <Icon name="file" size={20} />
-                        <h4>A stronger case for Northstar.</h4>
-                      </div>
-                      <div className="source-tailoring">
-                        <div className="source-mini-resume">
-                          <h5>Alex Morgan</h5>
-                          <span>Product Designer</span>
-                          <hr />
-                          <small>PROFILE</small>
-                          <p>
-                            Six years turning complex workflows into clear, accessible experiences.
-                          </p>
-                          <small>EXPERIENCE</small>
-                          <strong>Senior Product Designer</strong>
-                          <span>Meridian Studio · 2022—Present</span>
-                          <p className="source-highlight">
-                            Led discovery and interaction design for complex B2B reporting
-                            workflows, translating customer research into clear, accessible product
-                            experiences.
-                          </p>
-                          <p>
-                            Partnered with eight engineers and a product manager to take a new
-                            onboarding flow from interviews to release.
-                          </p>
-                        </div>
-                        <div className="source-relevance">
-                          <Icon name="check" size={20} />
-                          <strong>Grounded in your experience.</strong>
-                          <p>
-                            Relevant work comes forward. New achievements never appear out of thin
-                            air.
-                          </p>
-                          <span>
-                            <Icon name="file" size={14} /> Resume tailored
-                          </span>
-                          <span>
-                            <Icon name="file" size={14} /> Cover letter prepared
-                          </span>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="source-window-title">
-                        <Icon name="shield" size={20} />
-                        <h4>Keep your direction. Lose the busywork.</h4>
-                      </div>
-                      <div className="source-application">
-                        <span className="source-company">N</span>
-                        <div>
-                          <strong>Senior Product Designer</strong>
-                          <p>Northstar · London · £85k–£105k</p>
-                        </div>
-                        <Icon name="check" size={18} />
-                      </div>
-                      <ol className="application-progress">
-                        <li>
-                          <Icon name="check" size={14} />
-                          <div>
-                            <strong>Material prepared</strong>
-                            <span>Resume and cover letter, tailored for this role</span>
-                          </div>
-                        </li>
-                        <li>
-                          <Icon name="check" size={14} />
-                          <div>
-                            <strong>Preferences checked</strong>
-                            <span>Location, compensation and your confirmed facts</span>
-                          </div>
-                        </li>
-                        <li>
-                          <Icon name={submitted ? 'check' : 'clock'} size={14} />
-                          <div>
-                            <strong>
-                              {submitted
-                                ? 'Sample application recorded'
-                                : 'Waiting for your decision'}
-                            </strong>
-                            <span>
-                              {submitted
-                                ? 'Your sample record stays with the role'
-                                : 'One clear next step, with the material beside you'}
-                            </span>
-                          </div>
-                        </li>
-                      </ol>
-                      <div className="source-delivery">
-                        <Icon name="bell" size={22} />
-                        <div>
-                          <strong>
-                            {submitted ? 'Your application is in.' : 'A role worth your attention.'}
-                          </strong>
-                          <p>
-                            {submitted
-                              ? 'Tailored material and a sample confirmation, together in your timeline.'
-                              : 'Your resume and cover letter are ready. Review them before the next step.'}
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        className="dark-button source-approve"
-                        onClick={() => setSubmitted((v) => !v)}
-                      >
-                        {submitted ? 'Replay application preview' : 'Approve sample application'}
-                        <Icon name={submitted ? 'clock' : 'arrowUpRight'} size={14} />
-                      </button>
-                      <div className="source-check">
-                        <Icon name="shield" size={16} />
-                        <span>
-                          {submitted
-                            ? 'Your limits govern each application. Outreach still needs approval.'
-                            : 'Your documents. Your decision. One clear next step.'}
-                        </span>
-                      </div>
-                    </>
-                  )}
+                  <SourceScene
+                    active={active}
+                    submitted={submitted}
+                    onApprove={() => setSubmitted((v) => !v)}
+                  />
                 </div>
                 <div className="source-window-footer">
                   <span>Fictional product walkthrough · no external actions</span>
-                  <span>{active + 1} / 3</span>
+                  <span>
+                    {active + 1} / {chapters.length}
+                  </span>
                 </div>
               </div>
             </div>
@@ -333,14 +503,14 @@ export function WatchersShowcase() {
       <div className="watchers-copy">
         <Icon name="bell" size={30} />
         <h2>
-          Your favourite teams.
+          Hear when a team
           <br />
-          <span>On your radar.</span>
+          <span>you follow is hiring.</span>
         </h2>
-        <p>That company you keep coming back to? Let Pursuit keep an eye on its careers page.</p>
+        <p>Keep a watch on the companies you want to join, with your roles and locations saved.</p>
         <p>
-          Follow the teams you care about. See a new role, understand the fit, and send it into your
-          application pipeline without starting the search again.
+          The preview shows how a new listing enters your search. Check the fit, then prepare an
+          application without re-entering the company details.
         </p>
         <a href="/product-tour" className="text-link">
           Explore your career workspace <Icon name="arrowUpRight" size={15} />
@@ -365,12 +535,15 @@ export function WatchersShowcase() {
             <strong>PostHog</strong>
             <span>posthog.com/careers</span>
           </div>
-          <span className="watcher-pulse">{checked ? 'Change detected' : 'Watching'}</span>
+          <StatusBadge tone={checked ? 'attention' : 'positive'}>
+            {checked ? 'Change detected' : 'Watching'}
+          </StatusBadge>
         </div>
         <div className="watcher-other-companies">
           {[
             ['Stripe', 'stripe.svg', 'stripe.com/jobs'],
             ['Linear', 'linear.svg', 'linear.app/careers'],
+            ['Cloudflare', 'cloudflare.png', 'cloudflare.com/careers'],
           ].map(([name, logo, url]) => (
             <div key={name}>
               <img src={`/brands/${logo}`} alt={name} width={28} height={28} />
@@ -404,7 +577,7 @@ export function WatchersShowcase() {
           <div className="watcher-found" role="status">
             <Icon name="bell" size={20} />
             <div>
-              <strong>A new role to consider.</strong>
+              <strong>A new role matches your watch.</strong>
               <p>
                 Example: Product Engineer. Check your requirements, then prepare the application.
               </p>

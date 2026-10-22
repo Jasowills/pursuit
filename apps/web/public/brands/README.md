@@ -7,10 +7,12 @@ Downloaded 2026-10-21 from the `@lobehub/icons-static-svg` package on jsDelivr.
 Files: openai.svg, claude.svg, gemini-color.svg, nousresearch.svg, ollama.svg.
 The collection license is included in LICENSE-lobe-icons.txt.
 Brand names and marks belong to their respective owners. Their appearance does
-not imply endorsement. Ollama is explicitly labeled as a planned integration.
+not imply endorsement. Integration availability differs between the desktop and retained web workflow; see the product capability checklist.
 
 Dark landing additions: OpenCode icon from `https://github.com/lobehub/lobe-icons/blob/master/packages/static-svg/icons/opencode.svg` (MIT, same Lobe Icons license included here). Gmail icon from `https://github.com/simple-icons/simple-icons/blob/develop/icons/gmail.svg` (CC0 icon collection; brand rights remain with Google). Both are used only to identify integrations.
 
 Operating-system identifiers added 2026-10-22: apple.svg, windows.svg and linux.svg from the Devicon collection (icons/apple/apple-original.svg, icons/windows11/windows11-original.svg and icons/linux/linux-original.svg at https://github.com/devicons/devicon). Its MIT license is included as LICENSE-devicon.txt. Used to identify platform choices, without endorsement.
 
 2026-10-22 annotation refinement: gmail.svg now replaces the monochrome Simple Icons file with Google's own current Gmail SVG, linked by its Workspace page. Composio, PostHog, Stripe and Linear use their own published assets. See docs/research/neutral-interface-sources.md for exact first-party URLs and usage boundaries.
+
+Cloudflare added 2026-10-22: official https://www.cloudflare.com/favicon.ico (PNG response, saved as cloudflare.png), used for an example watcher. Source details are embedded in the PNG and recorded in docs/research/neutral-interface-sources.md.

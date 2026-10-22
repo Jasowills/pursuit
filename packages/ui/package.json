@@ -12,7 +12,8 @@
     },
     "./tokens.css": "./dist/tokens.css",
     "./career-workspace": "./src/CareerWorkspace.tsx",
-    "./career-workspace.css": "./src/career-workspace.css"
+    "./career-workspace.css": "./src/career-workspace.css",
+    "./status": "./src/status.tsx"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json && cp src/tokens.css dist/tokens.css",
