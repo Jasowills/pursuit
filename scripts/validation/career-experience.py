@@ -43,11 +43,11 @@ with sync_playwright() as p:
  page.locator('#features').screenshot(path=str(OUT/'desktop-video.png'),style='.site-header {visibility:hidden!important;}')
  page.get_by_role('button',name='Resume tailoring',exact=True).click();page.get_by_role('button',name='Changes highlighted',exact=True).click();expect(page.locator('.document-switch')).to_have_attribute('aria-pressed','false')
  page.get_by_role('button',name='Get the match',exact=False).click();page.get_by_role('button',name='Review the opportunity',exact=True).click();expect(page.locator('.phone-role')).to_be_visible()
- page.get_by_role('button',name='Review approval',exact=True).click();page.get_by_role('button',name='Approve sample application',exact=True).click();expect(page.locator('.phone-complete')).to_contain_text('Your application is in.')
+ page.get_by_role('button',name='Review approval',exact=True).click();page.get_by_role('button',name='Approve sample application',exact=True).click();expect(page.locator('.phone-complete')).to_contain_text('Application recorded.')
  page.get_by_role('button',name='Composio',exact=True).click();expect(page.locator('.gmail-consent')).to_contain_text('Composio project')
  page.get_by_role('button',name='Review draft',exact=True).click();expect(page.get_by_role('status').filter(has_text='No email')).to_be_visible()
  page.get_by_role('button',name='Apply and keep track',exact=True).click();expect(page.locator('.source-delivery')).to_contain_text('Northstar is ready for review')
  page.locator('.source-approve').click();expect(page.locator('.source-delivery')).to_contain_text('Your application is in.')
- page.get_by_role('button',name='Preview a new-role alert',exact=True).click();expect(page.locator('.watcher-found')).to_contain_text('not a live PostHog vacancy')
+ expect(page.get_by_role('button',name='Preview a new-role alert',exact=True)).to_have_count(0)
  assert not errors,errors
  b.close();print('Career experience passed: actual renderer tour, conversation counts, role intake, outreach, background, full resume/video; landing 1440/973/390/320, document changes, companion approval, Gmail paths, sample run.')

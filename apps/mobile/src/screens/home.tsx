@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useResource } from '../use-resource';
-import { Card, Empty, ErrorView, Loading, Pill, Screen, Unavailable } from '../components';
+import { Card, Empty, ErrorView, Loading, Pill, Screen } from '../components';
 import { colors, spacing } from '../theme';
 
 interface ProfileResponse {
@@ -21,7 +21,7 @@ interface NotesResponse {
   items: { id: string; read_at: string | null }[];
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function Stat({ label, value }: { label: string; value: number | string }) {
   return (
     <View style={styles.stat}>
       <Text style={styles.statLabel}>{label}</Text>
@@ -30,7 +30,13 @@ function Stat({ label, value }: { label: string; value: number }) {
   );
 }
 
-export function HomeScreen({ onSignOut }: { onSignOut: () => void }) {
+export function HomeScreen({
+  onSignOut,
+  onNavigate,
+}: {
+  onSignOut: () => void;
+  onNavigate: (tab: 'jobs' | 'agent' | 'vault') => void;
+}) {
   const profile = useResource<ProfileResponse>('/profile');
   const apps = useResource<AppsResponse>('/applications');
   const runs = useResource<RunsResponse>('/agent/runs');
@@ -48,14 +54,31 @@ export function HomeScreen({ onSignOut }: { onSignOut: () => void }) {
 
   return (
     <Screen
-      title={`Welcome, ${profile.data.user.display_name}`}
-      subtitle="Your job search at a glance. You approve anything that leaves the building."
+      title={`Today, ${profile.data.user.display_name.split(' ')[0]}`}
+      subtitle="Your applications, documents and background work."
     >
+      <View style={styles.searchHeader}>
+        <Text style={styles.searchHeading}>
+          {activeRuns
+            ? `${activeRuns} task${activeRuns === 1 ? '' : 's'} running`
+            : 'Your search, in one place.'}
+        </Text>
+        <Text style={styles.searchDetail}>
+          Check an opportunity, follow an application or return to your documents.
+        </Text>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => onNavigate('jobs')}
+          style={styles.openJobs}
+        >
+          <Text style={styles.openJobsText}>Review opportunities</Text>
+        </Pressable>
+      </View>
       <View style={styles.statsRow}>
-        <Stat label="APPLICATIONS" value={openApps.length} />
-        <Stat label="AGENT RUNS" value={runs.data?.items.length ?? 0} />
-        <Stat label="WATCHERS" value={enabledWatchers} />
-        <Stat label="UNREAD" value={unread} />
+        <Stat label="APPLICATIONS" value={apps.data ? openApps.length : '—'} />
+        <Stat label="AGENT RUNS" value={runs.data ? runs.data.items.length : '—'} />
+        <Stat label="WATCHERS" value={watchers.data ? enabledWatchers : '—'} />
+        <Stat label="UNREAD" value={notes.data ? unread : '—'} />
       </View>
 
       <Text style={styles.sectionTitle}>Recent applications</Text>
@@ -86,6 +109,8 @@ export function HomeScreen({ onSignOut }: { onSignOut: () => void }) {
       <Text style={styles.sectionTitle}>Agent activity</Text>
       {runs.loading ? (
         <Loading />
+      ) : runs.error ? (
+        <ErrorView error={runs.error} onRetry={runs.reload} />
       ) : (runs.data?.items.length ?? 0) === 0 ? (
         <Empty>No agent runs yet.</Empty>
       ) : (
@@ -101,31 +126,61 @@ export function HomeScreen({ onSignOut }: { onSignOut: () => void }) {
         ))
       )}
 
-      <Text style={styles.sectionTitle}>Not yet available</Text>
-      <Unavailable
-        feature="Outreach"
-        detail="Drafting and sending contact messages is not implemented. Nothing has been or will be emailed on your behalf."
-      />
-      <Unavailable
-        feature="Push notifications"
-        detail="Notifications are in-app only. Nothing is pushed to this device in this milestone."
-      />
-      <Unavailable
-        feature="Resume upload"
-        detail="The vault lists versions recorded through the API; upload lands in a later phase."
-      />
+      <View style={styles.capabilityNote}>
+        <Text style={styles.searchDetail}>
+          Connected to your API workspace. Device pairing, push notifications and mobile approval
+          are not available yet.
+        </Text>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => onNavigate('vault')}
+          style={styles.documentLink}
+        >
+          <Text style={styles.itemTitle}>Open your document vault</Text>
+        </Pressable>
+      </View>
 
       <Pressable onPress={onSignOut} style={styles.signOut} accessibilityRole="button">
         <Text style={styles.signOutText}>Sign out</Text>
       </Pressable>
-      <Text style={styles.footnote}>
-        Tenant {profile.data.tenant_id.slice(0, 8)}… · runtime “dev”
-      </Text>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  searchHeader: {
+    padding: 20,
+    marginTop: 22,
+    marginBottom: 20,
+    backgroundColor: colors.surfaceRaised,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  searchHeading: {
+    fontSize: 23,
+    letterSpacing: -0.6,
+    fontWeight: '600',
+    color: colors.foreground,
+    marginTop: 14,
+  },
+  searchDetail: { fontSize: 13, lineHeight: 20, color: colors.mutedForeground, marginTop: 8 },
+  openJobs: {
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+    minHeight: 46,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  openJobsText: { color: colors.primaryForeground, fontSize: 13, fontWeight: '600' },
+  capabilityNote: {
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    marginTop: 16,
+  },
+  documentLink: { minHeight: 46, justifyContent: 'center', marginTop: 8 },
   statsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.lg },
   stat: {
     flexBasis: '47%',

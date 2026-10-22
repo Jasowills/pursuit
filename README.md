@@ -4,7 +4,7 @@ An open-source, local-first career assistant. Pursuit is being built to discover
 
 **Developer alpha — not a complete unattended job-application service.** The desktop workspace, retained web/API prototype, and mobile shell have different capabilities. Product-tour screens use fictional data and perform no external actions. See the [feature checklist and audit](docs/qa/REPORT.md) before relying on a feature.
 
-[Product direction](PRODUCT.md) · [Contributing](CONTRIBUTING.md) · [Architecture](docs/PRODUCT_CAPABILITY_MAP.md) · [Connection setup](docs/CONNECTION_SETUP.md) · [Pipeline decisions](docs/CAREER_PIPELINE_DECISIONS.md)
+[Product direction](PRODUCT.md) · [Contributing](CONTRIBUTING.md) · [Architecture](docs/PRODUCT_CAPABILITY_MAP.md) · [Connection setup](docs/CONNECTION_SETUP.md) · [Pipeline decisions](docs/CAREER_PIPELINE_DECISIONS.md) · [Interviews, tasks & leads](docs/POST_APPLICATION_WORKFLOW.md)
 
 ## What works today
 
@@ -151,7 +151,7 @@ PURSUIT_TEST_OLLAMA_MODEL=llama3.2:1b cargo test \
 
 The draft check verifies wiring and basic grounded content, not exhaustive hallucination freedom. Review the observed metadata-contamination finding in the [audit report](docs/qa/REPORT.md). Full native UI automation, cross-platform installers, live Gmail consent/send and end-to-end unattended applications remain unverified or missing.
 
-Browser annotation regression: `python3 scripts/validation/neutral-refinement.py` (Python Playwright, browser installed, web server running). Audit helper instructions and measured limitations are in [the audit plan](docs/qa/AUDIT_PLAN.md).
+Browser annotation regression: `python3 scripts/validation/neutral-refinement.py` (Python Playwright, browser installed, web server running). The continuous walkthrough and isolated companion checks are documented in [CONTINUOUS_STORY.md](docs/qa/CONTINUOUS_STORY.md). Audit helper instructions and measured limitations are in [the audit plan](docs/qa/AUDIT_PLAN.md).
 
 ## Security and release status
 
@@ -162,3 +162,7 @@ The October 22 audit verdict is **NOT_READY for the complete autopilot product**
 ## Contributing
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md), reproduce a narrow issue, add behavior-focused verification, and distinguish live evidence from fixtures. Please avoid adding marketing claims or simulated success for unavailable features. Issues and pull requests are welcome at [Jasowills/pursuit](https://github.com/Jasowills/pursuit).
+
+## Competitive research
+
+[DevOpsHunt harness comparison](docs/research/devopshunt-harness-comparison.md) separates its published agent/workspace contracts from authenticated behavior we have not tested, compares them with Pursuit source, and proposes an execution-first build order.

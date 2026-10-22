@@ -22,9 +22,9 @@ import { VaultScreen } from './src/screens/vault';
 type Tab = 'home' | 'jobs' | 'agent' | 'outreach' | 'vault';
 
 const TABS: ReadonlyArray<readonly [Tab, string]> = [
-  ['home', 'Home'],
+  ['home', 'Today'],
   ['jobs', 'Jobs'],
-  ['agent', 'Agent'],
+  ['agent', 'Activity'],
   ['outreach', 'Outreach'],
   ['vault', 'Vault'],
 ];
@@ -57,7 +57,7 @@ export default function App() {
   if (!authed) {
     return (
       <>
-        <ExpoStatusBar style="dark" />
+        <ExpoStatusBar style="light" />
         <SafeAreaView style={styles.safe}>
           <LoginScreen onSignedIn={() => setAuthed(true)} />
         </SafeAreaView>
@@ -67,10 +67,10 @@ export default function App() {
 
   return (
     <>
-      <ExpoStatusBar style="dark" />
+      <ExpoStatusBar style="light" />
       <SafeAreaView style={styles.safe}>
         <View style={styles.appBody}>
-          {tab === 'home' && <HomeScreen onSignOut={signOut} />}
+          {tab === 'home' && <HomeScreen onSignOut={signOut} onNavigate={setTab} />}
           {tab === 'jobs' && <JobsScreen />}
           {tab === 'agent' && <AgentScreen />}
           {tab === 'outreach' && <OutreachScreen />}
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     minHeight: 52,
   },
   tabLabel: { fontSize: 12, fontWeight: '500', color: colors.muted },
-  tabLabelActive: { color: colors.foreground, fontWeight: '700' },
+  tabLabelActive: { color: colors.primary, fontWeight: '700' },
   tabIndicator: {
     marginTop: 4,
     width: 16,

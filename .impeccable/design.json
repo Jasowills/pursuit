@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-22T20:22:58.433867+00:00",
+  "generatedAt": "2026-10-22T20:55:58.700275+00:00",
   "title": "Design System: Pursuit",
   "extensions": {
     "typographyMeta": {
@@ -52,19 +52,19 @@
         "purpose": "Closing notification decoration, disabled by reduced motion."
       },
       {
-        "name": "source-scene-in",
-        "value": "550ms cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Chapter entrance from translateX(20px), opacity .5 and blur(3px); reduced motion disables animation. Scroll arrival separately maps translateY(70px) and scale(.94) to settled content."
-      },
-      {
         "name": "footer-pen-draw",
-        "value": "3900ms overall; cubic-bezier(0.3, 0.05, 0.45, 1)",
-        "purpose": "Ten original monoline SVG strokes with pen lifts for t crossbar, i dot and terminal dot. Starts at 35% viewport visibility; pointer entry replays; reduced motion renders fully drawn static paths."
+        "value": "650ms mask draw; delays 0\u20132400ms; 350ms fill; 650ms settling bounce",
+        "purpose": "Original pen masks reveal actual Geist SVG text silhouettes. Selected glyphs settle from -8px through 3px to rest. Starts at 35% visibility, pointer entry replays, reduced motion shows complete static glyphs."
       },
       {
         "name": "companion-stage-cycle",
-        "value": "4500ms",
+        "value": "2600ms",
         "purpose": "First four of seven sample states only; requires visible section/document, enabled playback and no reduced motion. Manual selection pauses playback."
+      },
+      {
+        "name": "source-continuous-camera",
+        "value": "scroll-scrubbed transform/opacity",
+        "purpose": "Six persistent scene layers and one camera; reversible scroll keyframes and document emphasis, no timed grid transition. Rail retires during paper/approval close-ups; 44px frame controls remain. Static manual fallback for reduced motion and compact viewports."
       }
     ],
     "breakpoints": [
@@ -152,7 +152,7 @@
   ],
   "narrative": {
     "northStar": "Forward motion",
-    "overview": "Neutral black and gray materials, off-white typography and primary lime actions extend the accepted trajectory hero into the shared conversational career workspace. Companion is dark neutral; closing is light neutral; footer handwriting uses original off-white SVG pen strokes with a lime dot. Fictional sample journeys stay visibly separate from native personal records and explicit model requests.",
+    "overview": "Neutral black and gray surfaces, off-white type and primary lime actions pair a cinematic career promise with a familiar conversational workspace. Preserve the accepted centered hero, decorative WebGL trajectory and original north-east trajectory mark. The compact floating navigation dock and fuller product journey extend that world. Self-hosted Geist remains the brand face; Arial resumes and Georgia letters are intentional document typography.",
     "keyCharacteristics": [
       "Geist interface with Arial resumes and Georgia letters",
       "Neutral border-separated conversation and contextual inspector",
@@ -161,17 +161,25 @@
       "Licensed semantic activity table with local filters and details",
       "Six scroll-linked chapters: discovery, requirements, resume, supporting material, review/apply and updates",
       "First-party brand marks and documented illustrative stock photos",
-      "Ten-stroke original handwritten SVG footer, 3.9-second drawing, pointer replay and static reduced motion",
       "Explicit sample provenance and execution boundaries",
       "Three desktop OS selector cards with source ZIP/build instructions and explicit unpublished installer/mobile release states",
       "Labeled semantic status badges: green ready/completed, amber review/unknown, red exclusion; no colored panels",
       "Black main workspace, #070707 sidebar and #080808 inspector; simulated demo sourcing and truthful unconnected personal mode",
       "Direct Product link, live outlined GitHub-count pill with unavailable em dash and 700px mobile hiding",
-      "Four simulated company watchers: PostHog, Stripe, Linear and Cloudflare; first-party marks",
+      "Four simulated company watchers: PostHog, Stripe, Linear and Cloudflare; first-party marks; console first in DOM order, desktop left in a 1.15fr 1fr grid and before explanatory copy on mobile",
       "Pexels 8463168 professional introduction portrait with documented provenance",
-      "Six chapter controls meet 44px minimum targets; refreshed actual shared-workspace harness capture"
+      "Six chapter controls meet 44px minimum targets; refreshed actual shared-workspace harness capture",
+      "Persistent six-scene scroll camera with paper and approval close-ups, manual frame controls and static reduced-motion fallback",
+      "Actual Geist footer glyphs revealed by pen masks with bounded settling bounce",
+      "Native Expo black/neutral materials, lime actions and visible real-data/error states; fixture verification only"
     ],
-    "rules": [],
+    "rules": [
+      {
+        "name": "The Continuous Frame Rule",
+        "body": "SourceStory keeps six persistent scene layers and one product camera. Scroll directly scrubs camera keyframes, scene transform/opacity and document emphasis; reversing scroll rewinds the same stage. It has no timer or timed grid transition. The explanatory rail deliberately fades and becomes inert during paper and approval close-ups; previous/next controls remain in the frame with 44px minimum targets. Static responsive and reduced-motion layouts retain manual chapter selection.",
+        "section": "elevation"
+      }
+    ],
     "dos": [
       "Preserve the accepted hero and trajectory geometry.",
       "Retain reduced-motion and shader failure fallbacks.",

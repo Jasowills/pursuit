@@ -106,3 +106,7 @@ The landing now includes a centered scroll-linked sourcing/preparation/applicati
 ## Neutral annotation refinement — 2026-10-22
 
 The user rejected green/blue-tinted product surfaces and colored panel borders. Landing and shared desktop now use neutral black/gray materials, preserving the primary lime action/mark. User-approved hero structure remains; download/watch actions align. The application story removes mode tabs in favor of a progress/approval timeline. Companion has more useful example work and screens, visible-only autoplay and manual/pause/reduced-motion controls. Watchers show real company marks but simulated alerts. Gmail/Composio use first-party marks, Pexels imagery remains illustrative, and the footer uses original per-letter spring/fade motion inspired by the requested Bitnob reference. These are UI refinements, not implementation of the job-hunting pipeline.
+
+## Post-application work — confirmed 2026-10-22
+
+The intended harness also follows the work after an application: automatically track interview invitations from both Gmail and Google Calendar, manage application/interview tasks, and find source-backed contact leads at the company applied to. Keep these under the application record with documents, receipts and communications. Ambiguous invitations need review; sending outreach remains separately approved. Implementation and acceptance requirements are in [Interviews, tasks and company leads](docs/POST_APPLICATION_WORKFLOW.md). These are confirmed requirements, not currently shipped native integrations.

@@ -295,7 +295,7 @@ export function CompanionShowcase() {
   }, []);
   useEffect(() => {
     if (!playing || !onScreen || reduced || !pageVisible || stage > 3) return;
-    const timer = setTimeout(() => setStage((s) => (s + 1) % 4), 4500);
+    const timer = setTimeout(() => setStage((s) => (s + 1) % 4), 2600);
     return () => clearTimeout(timer);
   }, [playing, onScreen, reduced, pageVisible, stage]);
   function selectStage(next: number) {
@@ -369,7 +369,7 @@ export function CompanionShowcase() {
               <i /> Your desktop stays in control
             </div>
           </div>
-          <div className="phone-device">
+          <div className="phone-device companion-refined" data-preview-stage={stage}>
             <div className="phone-notch" />
             <div className="phone-status">
               <strong>9:41</strong>
@@ -389,7 +389,6 @@ export function CompanionShowcase() {
               <Icon name="bell" size={17} />
             </div>
             <div className="phone-greeting">
-              <span>Good morning, Alex</span>
               <h3>{titles[stage]}</h3>
             </div>
             {stage === 0 ? (
@@ -402,11 +401,14 @@ export function CompanionShowcase() {
                     <strong>PURSUIT</strong>
                     <small>now</small>
                   </div>
-                  <h4>A role worth your attention</h4>
-                  <p>
-                    Senior Product Designer at Northstar. A strong match for your B2B product
-                    experience.
-                  </p>
+                  <div className="phone-match-heading">
+                    <span>N</span>
+                    <div>
+                      <small>Northstar · London</small>
+                      <h4>Senior Product Designer</h4>
+                    </div>
+                  </div>
+                  <p>£85k–£105k · Hybrid Your B2B product experience matches this role.</p>
                   <button onClick={() => selectStage(1)}>
                     Review the opportunity <Icon name="arrowUpRight" size={12} />
                   </button>
@@ -454,10 +456,10 @@ export function CompanionShowcase() {
               <div className="phone-content">
                 <div className="phone-approval">
                   <Icon name="shield" size={30} />
-                  <h4>You choose what leaves.</h4>
+                  <h4>Ready for your approval.</h4>
                   <p>
-                    Northstar will receive your tailored resume, cover letter and the answers you
-                    reviewed.
+                    Review the exact documents prepared for Northstar before approving this sample
+                    application.
                   </p>
                   <div>
                     <span>Application</span>
@@ -529,11 +531,9 @@ export function CompanionShowcase() {
                   <span>
                     <Icon name="check" size={30} />
                   </span>
-                  <h4>Your application is in.</h4>
+                  <h4>Application recorded.</h4>
                   <p>Northstar · Senior Product Designer</p>
-                  <div>
-                    Resume, cover letter and sample confirmation saved to your application record.
-                  </div>
+                  <div>09:42 · Sample confirmation saved Resume v3 · Cover letter v2</div>
                   <small>Sample scenario · no real submission</small>
                 </div>
                 <div className="phone-next">

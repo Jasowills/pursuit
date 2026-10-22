@@ -46,10 +46,10 @@ with sync_playwright() as p:
     page.set_viewport_size({'width': 1263, 'height': 1024})
     page.get_by_role('button', name=LABELS[0], exact=True).click()
     for label, tone in [('Strong fit', 'positive'), ('Video requested', 'attention'), ('Not a fit', 'negative')]:
-        expect(page.locator('.source-window-body').get_by_text(label, exact=True)).to_have_attribute('data-tone', tone)
+        expect(page.locator('.source-scene-layer[data-current=true]').get_by_text(label, exact=True)).to_have_attribute('data-tone', tone)
     page.get_by_role('button', name=LABELS[4], exact=True).click()
     page.locator('.source-approve').click()
-    expect(page.locator('.source-delivery')).to_contain_text('did not submit an application')
+    expect(page.locator('.source-scene-layer[data-current=true] .source-delivery')).to_contain_text('did not submit an application')
     page.get_by_role('button', name='Video introduction', exact=True).click()
     photo = page.locator('.recording-photo')
     assert photo.evaluate('(el)=>el.complete && el.naturalWidth===1200')
@@ -76,12 +76,12 @@ with sync_playwright() as p:
     page.emulate_media(reduced_motion='no-preference')
     page.locator('.footer-handwriting').scroll_into_view_if_needed()
     expect(page.locator('.footer-handwriting')).to_have_attribute('data-visible', 'true')
-    expect(page.locator('.footer-pen-stroke')).to_have_count(10)
-    assert page.locator('.footer-pen-stroke').first.evaluate('(el)=>getComputedStyle(el).animationName') == 'pursuit-pen-draw'
+    expect(page.locator('.brand-pen-mask')).to_have_count(8)
+    assert page.locator('.brand-pen-mask').first.evaluate('(el)=>getComputedStyle(el).animationName') == 'brand-ink'
     page.wait_for_timeout(4200)
-    assert float(page.locator('.footer-pen-stroke').first.evaluate('(el)=>getComputedStyle(el).strokeDashoffset').removesuffix('px')) == 0
+    assert float(page.locator('.brand-pen-mask').first.evaluate('(el)=>getComputedStyle(el).strokeDashoffset').removesuffix('px')) == 0
     page.emulate_media(reduced_motion='reduce')
-    assert page.locator('.footer-pen-stroke').first.evaluate('(el)=>getComputedStyle(el).animationName') == 'none'
+    assert page.locator('.brand-pen-mask').first.evaluate('(el)=>getComputedStyle(el).animationName') == 'none'
     assert not errors, errors
     browser.close()
     print('Passed: six steps, five widths, semantic statuses, direct nav, four companies, professional image, pen motion, tour/native sourcing honesty.')

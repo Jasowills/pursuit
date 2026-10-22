@@ -56,3 +56,13 @@ Remove the Product dropdown. Use a direct Product link and a compact outlined Gi
 Replace the video-preparation photo with Pexels 8463168 (Kampus Production), a professional portrait facing the camera. Add Cloudflare as the fourth watcher with its first-party icon. Replace the footer bounce/fade with original SVG pen trajectories, including pen lifts/dot/crossbar, static under reduced motion. The header logo remains the established sans wordmark.
 
 Rewrite landing copy around concrete tasks and user decisions; keep the accepted hero composition, factual availability and privacy disclosures. Remove generic "next chapter", "not another dashboard", "keep your freedom" and similar slogans. The actual harness capture must reflect the darker shared workspace and visible demo sourcing status.
+
+## Continuous walkthrough and companion — 2026-10-22
+
+Motion thesis: the focal moment is the same role travelling through discovery, eligibility, a tailored document, preparation, approval and its record. Keep a persistent framed stage and scrub its camera, scene coordinates and document emphasis directly with scroll; manual chapter controls remain available. A compact phone cycles through match, review, approval and confirmation at 2.6 seconds per step, pausing offscreen, when hidden, under reduced motion or on manual interaction. Limit work to transform/opacity on six bounded scene layers and one camera; no new motion dependency. Footer pen masks reveal actual Geist text silhouettes, followed by a bounded settling bounce. Native companion adopts black neutral materials and clear real-data/error states; it must not imply pairing or approval execution exists.
+
+Reference observation: Neatlogs' public atmosphere story uses a long pinned stage, expanded trace details and floating source/context panels that settle back into the frame. Pursuit uses its own six workflow scenes and composition rather than copying their source or artwork. Remove the simulated watcher alert control.
+
+## Watcher order — latest user annotation
+
+Place the company watcher console before its explanation, in both DOM order and desktop columns. Preserve the existing component, companies, contrast and responsive reflow. This is an order correction, not another visual-world redesign.

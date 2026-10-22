@@ -1,27 +1,24 @@
-/**
- * Design tokens mirrored from @pursuit/ui for React Native (no CSS variables
- * on native). Values must match packages/ui/src/tokens.css exactly.
- */
+/** Native counterpart of the black, ivory and lime product palette. */
 export const colors = {
-  background: '#ffffff',
-  foreground: '#111111',
-  primary: '#111111',
-  primaryForeground: '#ffffff',
-  surface: '#fafafa',
-  surfaceRaised: '#ffffff',
-  muted: '#71717a',
-  mutedForeground: '#52525b',
-  border: '#e4e4e7',
-  hover: '#f4f4f5',
-  success: '#15803d',
-  warning: '#a16207',
-  danger: '#b91c1c',
-  successBg: '#effcf3',
-  successBorder: '#d3f2de',
-  warningBg: '#fdf6ec',
-  warningBorder: '#f5e3c2',
-  dangerBg: '#fdf3f2',
-  dangerBorder: '#f4c7c3',
+  background: '#080808',
+  foreground: '#ededed',
+  primary: '#d5f578',
+  primaryForeground: '#101010',
+  surface: '#111111',
+  surfaceRaised: '#141414',
+  muted: '#909090',
+  mutedForeground: '#b0b0b0',
+  border: '#303030',
+  hover: '#1c1c1c',
+  success: '#85dfad',
+  warning: '#f0c675',
+  danger: '#f29999',
+  successBg: '#12251b',
+  successBorder: '#294c38',
+  warningBg: '#2b2417',
+  warningBorder: '#554527',
+  dangerBg: '#301b1b',
+  dangerBorder: '#633333',
 } as const;
 
 export const radius = { sm: 8, md: 10, lg: 14, xl: 20 } as const;

@@ -374,6 +374,13 @@ export function SourceStory() {
       frame = 0;
       if (!media.matches) {
         view.style.removeProperty('--arrival');
+        view.style.removeProperty('--rail-opacity');
+        view.querySelector<HTMLElement>('.source-story-copy')?.removeAttribute('inert');
+        view.querySelectorAll<HTMLElement>('.source-scene-layer').forEach((layer) => {
+          layer.style.removeProperty('opacity');
+          layer.style.removeProperty('transform');
+          layer.style.removeProperty('pointer-events');
+        });
         return;
       }
       const rect = track.getBoundingClientRect();
@@ -381,7 +388,53 @@ export function SourceStory() {
         0,
         Math.min(0.999, -rect.top / Math.max(1, track.offsetHeight - innerHeight)),
       );
-      setActive(Math.floor(progress * chapters.length));
+      const position = progress * chapters.length;
+      setActive(Math.floor(position));
+      // Continuous camera and panel coordinates; scrolling backwards rewinds the same stage.
+      const chapter = Math.floor(position);
+      const local = position - chapter;
+      const ease = (x: number) => {
+        const t = Math.max(0, Math.min(1, x));
+        return t * t * (3 - 2 * t);
+      };
+      view.style.setProperty('--story-progress', String(progress));
+      // A camera keyframe track: list overview, requirements close-up, full-width
+      // paper, supporting material, approval and the final receipt overview.
+      const cameras = [
+        [0.94, 0],
+        [1.04, -12],
+        [1.19, -112],
+        [1.03, -28],
+        [1.15, -95],
+        [0.98, -10],
+        [0.98, -10],
+      ];
+      const from = cameras[chapter]!;
+      const to = cameras[chapter + 1]!;
+      const travel = ease((local - 0.64) / 0.36);
+      view.style.setProperty('--camera-scale', String(from[0]! + (to[0]! - from[0]!) * travel));
+      view.style.setProperty('--camera-x', `${from[1]! + (to[1]! - from[1]!) * travel}px`);
+      const railOpacity =
+        chapter === 2 || chapter === 4
+          ? 0
+          : chapter === 1 || chapter === 3
+            ? 1 - travel
+            : chapter === 5
+              ? ease(local / 0.2)
+              : 1;
+      view.style.setProperty('--rail-opacity', String(railOpacity));
+      const rail = view.querySelector<HTMLElement>('.source-story-copy');
+      if (rail) rail.inert = railOpacity < 0.5;
+      view.querySelectorAll<HTMLElement>('.source-scene-layer').forEach((layer, index) => {
+        const distance = index - chapter;
+        const leaving = ease((local - 0.82) / 0.18);
+        const opacity = distance === 0 ? 1 - leaving : distance === 1 ? leaving : 0;
+        layer.style.opacity = String(opacity);
+        layer.style.transform = `translate3d(${distance === 0 ? -leaving * 45 : (1 - leaving) * 90}px, ${distance === 0 ? 0 : (1 - leaving) * 20}px, 0) scale(${distance === 0 ? 1 + leaving * 0.025 : 0.96 + leaving * 0.04})`;
+        layer.style.pointerEvents = distance === 0 ? 'auto' : 'none';
+      });
+      view.style.setProperty('--focus', String(ease((local - 0.22) / 0.5)));
+
       view.style.setProperty(
         '--arrival',
         String(Math.max(0, Math.min(1, (innerHeight - rect.top) / (innerHeight * 0.85)))),
@@ -474,18 +527,58 @@ export function SourceStory() {
                   </span>
                   <small>Sample career</small>
                 </div>
-                <div className="source-window-body" key={active}>
-                  <SourceScene
-                    active={active}
-                    submitted={submitted}
-                    onApprove={() => setSubmitted((v) => !v)}
-                  />
+                <div className="source-window-body source-film">
+                  {chapters.map((chapter, index) => (
+                    <div
+                      className="source-scene-layer"
+                      key={chapter.label}
+                      data-scene={index}
+                      data-current={active === index}
+                      aria-hidden={active !== index}
+                      inert={active !== index}
+                    >
+                      <SourceScene
+                        active={index}
+                        submitted={submitted}
+                        onApprove={() => setSubmitted((v) => !v)}
+                      />
+                    </div>
+                  ))}
+                  <div className="source-focus-caption" aria-hidden="true">
+                    <span>{String(active + 1).padStart(2, '0')}</span>
+                    {
+                      [
+                        'A wider search. One shortlist.',
+                        'Requirements checked before preparation.',
+                        'Your experience, tailored to this role.',
+                        'Documents and answers in one place.',
+                        'Your decision, with the evidence beside it.',
+                        'A record you can return to.',
+                      ][active]
+                    }
+                  </div>
                 </div>
                 <div className="source-window-footer">
                   <span>Fictional product walkthrough · no external actions</span>
-                  <span>
-                    {active + 1} / {chapters.length}
-                  </span>
+                  <div className="source-frame-controls">
+                    <button
+                      onClick={() => select(Math.max(0, active - 1))}
+                      disabled={active === 0}
+                      aria-label="Previous walkthrough step"
+                    >
+                      <Icon name="arrowUpRight" size={14} />
+                    </button>
+                    <span>
+                      {active + 1} / {chapters.length}
+                    </span>
+                    <button
+                      onClick={() => select(Math.min(chapters.length - 1, active + 1))}
+                      disabled={active === chapters.length - 1}
+                      aria-label="Next walkthrough step"
+                    >
+                      <Icon name="arrowUpRight" size={14} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -497,25 +590,8 @@ export function SourceStory() {
 }
 
 export function WatchersShowcase() {
-  const [checked, setChecked] = useState(false);
   return (
     <section className="watchers-story dark-frame" id="watchers">
-      <div className="watchers-copy">
-        <Icon name="bell" size={30} />
-        <h2>
-          Hear when a team
-          <br />
-          <span>you follow is hiring.</span>
-        </h2>
-        <p>Keep a watch on the companies you want to join, with your roles and locations saved.</p>
-        <p>
-          The preview shows how a new listing enters your search. Check the fit, then prepare an
-          application without re-entering the company details.
-        </p>
-        <a href="/product-tour" className="text-link">
-          Explore your career workspace <Icon name="arrowUpRight" size={15} />
-        </a>
-      </div>
       <div className="watcher-console">
         <div className="watcher-top">
           <span>
@@ -535,9 +611,7 @@ export function WatchersShowcase() {
             <strong>PostHog</strong>
             <span>posthog.com/careers</span>
           </div>
-          <StatusBadge tone={checked ? 'attention' : 'positive'}>
-            {checked ? 'Change detected' : 'Watching'}
-          </StatusBadge>
+          <StatusBadge tone="positive">Watching</StatusBadge>
         </div>
         <div className="watcher-other-companies">
           {[
@@ -573,25 +647,25 @@ export function WatchersShowcase() {
             <span>Check the fit before preparing anything</span>
           </div>
         </div>
-        {checked && (
-          <div className="watcher-found" role="status">
-            <Icon name="bell" size={20} />
-            <div>
-              <strong>A new role matches your watch.</strong>
-              <p>
-                Example: Product Engineer. Check your requirements, then prepare the application.
-              </p>
-              <small>Simulated change, not a live PostHog vacancy.</small>
-            </div>
-          </div>
-        )}
-        <button className="dark-button" onClick={() => setChecked((v) => !v)}>
-          <Icon name={checked ? 'check' : 'search'} size={16} />
-          {checked ? 'Reset example' : 'Preview a new-role alert'}
-        </button>
         <p className="watcher-boundary">
           Illustrative watcher. This preview does not poll the website or submit an application.
         </p>
+      </div>
+      <div className="watchers-copy">
+        <Icon name="bell" size={30} />
+        <h2>
+          Hear when a team
+          <br />
+          <span>you follow is hiring.</span>
+        </h2>
+        <p>Keep a watch on the companies you want to join, with your roles and locations saved.</p>
+        <p>
+          The preview shows how a new listing enters your search. Check the fit, then prepare an
+          application without re-entering the company details.
+        </p>
+        <a href="/product-tour" className="text-link">
+          Explore your career workspace <Icon name="arrowUpRight" size={15} />
+        </a>
       </div>
     </section>
   );
