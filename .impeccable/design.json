@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T16:06:22.516525+00:00",
+  "title": "Design System: Pursuit",
+  "extensions": {
+    "typographyMeta": {
+      "resume-paper": {
+        "displayName": "Resume paper",
+        "purpose": "Arial for document content, not a brand font replacement."
+      },
+      "letter-paper": {
+        "displayName": "Cover letter",
+        "purpose": "Georgia for letter paragraphs, retaining Geist for the interface."
+      }
+    },
+    "shadows": [
+      {
+        "name": "floating-dock",
+        "value": "0 12px 45px #0005",
+        "purpose": "Floating landing navigation."
+      },
+      {
+        "name": "product-disclosure",
+        "value": "0 20px 70px #0009",
+        "purpose": "Product menu overlay."
+      },
+      {
+        "name": "resume-paper",
+        "value": "0 12px 32px #0003",
+        "purpose": "Shared document paper."
+      }
+    ],
+    "motion": [
+      {
+        "name": "journey-entry",
+        "value": "900ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "One-time opacity/transform reveal from 38px left or right; reduced motion shows settled content."
+      },
+      {
+        "name": "companion-float",
+        "value": "7s ease-in-out infinite",
+        "purpose": "Desktop companion note; disabled by reduced motion and narrow-screen override."
+      },
+      {
+        "name": "letter-float",
+        "value": "7s ease-in-out infinite",
+        "purpose": "Closing paper decoration, only when motion is allowed."
+      },
+      {
+        "name": "source-flow",
+        "value": "2s ease-in-out infinite",
+        "purpose": "Decorative sourcing connector; disabled by reduced motion."
+      },
+      {
+        "name": "notice-arrive",
+        "value": "600ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Sample-run notification arrival when motion is allowed."
+      },
+      {
+        "name": "ping-float",
+        "value": "6s ease-in-out infinite",
+        "purpose": "Closing notification decoration, disabled by reduced motion."
+      },
+      {
+        "name": "footer-dot-hop",
+        "value": "2s cubic-bezier(0.2, 0.8, 0.3, 1) infinite; animation-delay: 1s",
+        "purpose": "Footer dot motion; reduced motion disables animation."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "workspace-compact-three-columns",
+        "value": "1240px"
+      },
+      {
+        "name": "landing-menu",
+        "value": "1100px"
+      },
+      {
+        "name": "workspace-inspector-below",
+        "value": "1000px"
+      },
+      {
+        "name": "landing-stack",
+        "value": "800px"
+      },
+      {
+        "name": "workspace-mobile",
+        "value": "650px"
+      },
+      {
+        "name": "hero-footer-mobile",
+        "value": "600px"
+      },
+      {
+        "name": "landing-narrow",
+        "value": "500px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Workspace control",
+      "kind": "button",
+      "description": "Shared career-workspace neutral action, including native busy/disabled state.",
+      "html": "<button class=\"ds-button\">Review draft</button>",
+      "css": ".ds-button {font:inherit;cursor:pointer;min-height:36px;border:1px solid #282a25;background:#171914;color:#eeeee7;border-radius:6px;padding:7px 11px;display:inline-flex;align-items:center;justify-content:center;gap:8px}.ds-button:hover:enabled {background:#242a1b;border-color:#58633e}.ds-button:disabled {opacity:.45;cursor:not-allowed}.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav a:focus-visible {outline:2px solid #d5f578;outline-offset:3px;}"
+    },
+    {
+      "name": "Workspace text field",
+      "kind": "input",
+      "description": "Native/shared career entry field; the surrounding screen supplies its label.",
+      "html": "<label for=\"ds-request\">Your next move</label><input class=\"ds-input\" id=\"ds-request\" placeholder=\"Ask about your career\" />",
+      "css": ".ds-input {font:inherit;border:1px solid #3c4133;background:#10120d;border-radius:5px;padding:10px 12px;color:#eeeee7}.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav a:focus-visible {outline:2px solid #d5f578;outline-offset:3px;}"
+    },
+    {
+      "name": "Resume paper",
+      "kind": "card",
+      "description": "Arial document surface used by the full original/tailored resume; sample excerpt here.",
+      "html": "<article class=\"ds-paper\"><h3>Alex Morgan</h3><p>Product Designer</p></article>",
+      "css": ".ds-paper {background:#fafaf6;color:#2c3027;border:1px solid #dddeda;border-radius:2px;padding:30px 27px;text-align:left;box-shadow:0 12px 32px #0003;font-family:Arial,sans-serif}.ds-paper h3 {color:#20261a;font-size:24px;font-weight:600;letter-spacing:-.03em}"
+    },
+    {
+      "name": "Floating dock",
+      "kind": "nav",
+      "description": "Dock material and frame; Product disclosure and live GitHub behavior belong to the application.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Product\"><a href=\"#product\">Product</a><a href=\"#models\">Models</a></nav>",
+      "css": ".ds-nav {display:flex;align-items:center;gap:4px;padding:10px 16px;border:1px solid #363d2d;border-radius:14px;background:#0b0e08f5;backdrop-filter:blur(16px);box-shadow:0 12px 45px #0005;min-height:66px}.ds-nav a {color:#b7beac;font:12px Geist,sans-serif;text-decoration:none;padding-inline:12px}.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav a:focus-visible {outline:2px solid #d5f578;outline-offset:3px;}"
+    },
+    {
+      "name": "Document view selector",
+      "kind": "chip",
+      "description": "Pressed document-view button from the landing workshop.",
+      "html": "<button class=\"ds-view\" aria-pressed=\"true\">Resume</button>",
+      "css": ".ds-view {display:inline-flex;align-items:center;gap:7px;border:1px solid transparent;background:none;color:#a7c0cf;min-height:44px;padding:0 12px;border-radius:5px;font:10px Geist,sans-serif;cursor:pointer}.ds-view[aria-pressed=\"true\"] {border-color:#56798d;color:#cbeafb;background:#1c3340}.ds-view:focus-visible {outline:2px solid #d5f578;outline-offset:5px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Forward motion",
+    "overview": "The accepted black, ivory, acid and ice WebGL world extends into a conversational career workspace. Fictional sample journeys remain visibly separate from native personal records and explicit model requests.",
+    "keyCharacteristics": [
+      "Geist interface with Arial resumes and Georgia letters",
+      "Border-separated conversation and contextual inspector",
+      "Lime companion and closing fields",
+      "Explicit sample provenance and execution boundaries"
+    ],
+    "rules": [],
+    "dos": [
+      "Preserve the accepted hero and trajectory geometry.",
+      "Retain reduced-motion and shader failure fallbacks.",
+      "Keep the retained light web dashboard separately scoped."
+    ],
+    "donts": [
+      "Do not represent sample counts or completion states as real submissions.",
+      "Do not infer connected desktop Gmail or companion execution from preview UI."
+    ]
+  }
+}

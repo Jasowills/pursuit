@@ -702,3 +702,96 @@ button.secondary:hover:enabled {
     gap: 6px;
   }
 }
+.desktop-utility {
+  background: #161d0e;
+  border-bottom: 1px solid #3b4c28;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 7px 20px;
+  color: #acbc93;
+  font-size: 10px;
+  min-height: 35px;
+}
+.desktop-utility button {
+  min-height: 25px;
+  padding: 3px 9px;
+  font-size: 9px;
+  background: none;
+  border: 1px solid #51663a;
+  color: #d5f578;
+}
+.desktop-settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: #000c;
+  display: grid;
+  place-items: center;
+  padding: 30px;
+}
+.desktop-settings {
+  width: min(900px, 95vw);
+  height: min(850px, 90dvh);
+  border: 1px solid #485b32;
+  border-radius: 12px;
+  background: #0c0e09;
+  box-shadow: 0 25px 100px #000b;
+  overflow: auto;
+}
+.desktop-settings > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #13180d;
+  border-bottom: 1px solid #354428;
+  padding: 15px 25px;
+  font-size: 13px;
+}
+.desktop-settings > header button {
+  padding: 7px;
+  min-height: 34px;
+  background: transparent;
+  color: #d5f578;
+}
+.desktop-settings-content,
+.desktop-settings-preview {
+  padding: 28px 35px;
+}
+.desktop-settings-preview h2 {
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+.desktop-settings-preview button {
+  margin-top: 25px;
+}
+.desktop-loading {
+  padding: 80px;
+  color: #d5f578;
+}
+.desktop-settings .page-heading h1 {
+  font-size: 25px;
+}
+.desktop-utility + .career-workspace .cw-sidebar {
+  height: calc(100dvh - 35px);
+}
+
+.desktop-settings-dialog {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #e5edda;
+  max-width: 96vw;
+  max-height: 94dvh;
+  overflow: visible;
+}
+.desktop-settings-dialog::backdrop {
+  background: #000c;
+}
+.desktop-settings-dialog .desktop-settings {
+  max-width: 95vw;
+}

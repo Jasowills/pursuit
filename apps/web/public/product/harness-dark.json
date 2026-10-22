@@ -1,7 +1,7 @@
 {
   "file": "harness-dark.png",
   "date": "2026-10-22",
-  "origin": "Playwright screenshot of the actual Pursuit desktop React renderer at http://127.0.0.1:1420, 1440x960, reduced motion",
-  "state": "Browser preview: no IPC fixture, no native storage connection, no simulated records",
-  "limitations": "Not a native application screenshot, model inference demonstration or submission proof. Native-disconnected notice is visible."
+  "origin": "Playwright screenshot of the actual Pursuit desktop React renderer at http://127.0.0.1:1420/?tour=1, 1536x1050, reduced motion",
+  "state": "Explicit fictional sample workspace, in-memory records, no IPC fixtures or native saves",
+  "limitations": "Renderer capture, not native OS chrome, live inference, notification delivery or application submission proof. Sample workspace banner is visible."
 }

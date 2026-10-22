@@ -1,3 +1,4 @@
+mod casebook;
 mod sessions;
 pub use sessions::SessionRecord;
 mod identity;
@@ -34,7 +35,7 @@ impl Store {
             "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;",
         )?;
         let version: i64 = connection.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-        if version > 3 {
+        if version > 4 {
             return Err(rusqlite::Error::InvalidQuery);
         }
         if version == 0 {
@@ -69,6 +70,10 @@ impl Store {
         if version == 2 {
             connection.execute_batch("BEGIN IMMEDIATE; CREATE TABLE runtime_sessions(id TEXT PRIMARY KEY,title TEXT NOT NULL,provider TEXT NOT NULL,model TEXT NOT NULL,state TEXT NOT NULL DEFAULT 'idle',snapshot TEXT NOT NULL DEFAULT '[]',created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))); PRAGMA user_version=3; COMMIT;")?;
         }
+        let version: i64 = connection.query_row("PRAGMA user_version", [], |r| r.get(0))?;
+        if version == 3 {
+            connection.execute_batch("BEGIN IMMEDIATE; CREATE TABLE career_book(id INTEGER PRIMARY KEY CHECK(id=1),body TEXT NOT NULL CHECK(json_valid(body))); PRAGMA user_version=4; COMMIT;")?;
+        }
         Ok(Self {
             connection,
             path: path.as_ref().to_path_buf(),
@@ -90,7 +95,7 @@ impl Store {
             .collect::<Result<Vec<_>>>()?;
         Ok(Workspace {
             database_path: self.path.to_string_lossy().into_owned(),
-            schema_version: 3,
+            schema_version: 4,
             tasks,
         })
     }
@@ -165,7 +170,7 @@ mod tests {
         let path = dir.path().join("future.sqlite");
         Connection::open(&path)
             .unwrap()
-            .execute_batch("PRAGMA user_version=4;")
+            .execute_batch("PRAGMA user_version=5;")
             .unwrap();
         assert!(Store::open(path).is_err());
     }

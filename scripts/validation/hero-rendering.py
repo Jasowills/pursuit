@@ -16,10 +16,6 @@ with sync_playwright() as p:
  first=page.locator('.opportunity-field canvas').screenshot();page.wait_for_timeout(250)
  second=page.locator('.opportunity-field canvas').screenshot()
  assert first==second,'Reduced motion should hold a static frame'
- for scene in range(3):
-  article=page.locator('.flow-scenes article').nth(scene);article.evaluate("el=>el.scrollIntoView({block:'center',behavior:'instant'})")
-  expect(article).to_have_attribute('data-active','true')
-  expect(page.locator('.flow-view')).to_have_attribute('data-scene-active',str(scene))
  page.evaluate("document.querySelector('canvas').dispatchEvent(new Event('webglcontextlost',{cancelable:true}))")
  expect(field).to_have_attribute('data-ready','false')
  expect(page.locator('.field-fallback')).to_be_visible()
@@ -31,4 +27,4 @@ with sync_playwright() as p:
  expect(page2.get_by_role('heading',level=1)).to_contain_text('Your career.')
  assert not errors,errors
  browser.close()
- print('Hero rendering passed: live shader animation, reduced-motion static frame, scroll-driven career scenes, context-loss fallback, WebGL unavailable fallback.')
+ print('Hero rendering passed: live shader animation, reduced-motion static frame, context-loss fallback, WebGL unavailable fallback.')

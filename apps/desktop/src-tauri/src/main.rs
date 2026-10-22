@@ -20,6 +20,22 @@ fn workspace(core: tauri::State<Core>) -> Result<Workspace, String> {
         .map_err(|e| e.to_string())
 }
 #[tauri::command]
+fn career_book(core: tauri::State<Core>) -> Result<Option<String>, String> {
+    core.0
+        .lock()
+        .map_err(|_| "Workspace is busy".to_string())?
+        .career_book()
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
+fn save_career_book(core: tauri::State<Core>, body: String) -> Result<(), String> {
+    core.0
+        .lock()
+        .map_err(|_| "Workspace is busy".to_string())?
+        .save_career_book(&body)
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
 fn save_task(core: tauri::State<Core>, title: String) -> Result<Task, String> {
     core.0
         .lock()
@@ -85,6 +101,8 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             workspace,
+            career_book,
+            save_career_book,
             save_task,
             identity,
             import_identity,

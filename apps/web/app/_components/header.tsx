@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from './icons';
+import { GitHubStars } from './github-stars';
 
 export function PursuitMark({
   size = 28,
@@ -56,10 +57,10 @@ export function Wordmark({ className = '' }: { className?: string }) {
 const REPOSITORY_URL = 'https://github.com/Jasowills/pursuit';
 
 const NAV = [
-  ['Product', '#product'],
+  ['Workspace', '#product'],
   ['Autopilot', '#autopilot'],
   ['Models', '#models'],
-  ['Connect', '#connect'],
+  ['Companion', '#companion'],
 ] as const;
 
 export function LandingHeader() {
@@ -78,10 +79,23 @@ export function LandingHeader() {
   }, []);
 
   useEffect(() => {
+    const closeProduct = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        const menu = document.querySelector<HTMLDetailsElement>('.nav-product[open]');
+        if (menu) {
+          menu.removeAttribute('open');
+          menu.querySelector<HTMLElement>('summary')?.focus();
+        }
+      }
+    };
+    document.addEventListener('keydown', closeProduct);
     const update = () => setScrolled(window.scrollY > 10);
     update();
     window.addEventListener('scroll', update, { passive: true });
-    return () => window.removeEventListener('scroll', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      document.removeEventListener('keydown', closeProduct);
+    };
   }, []);
 
   useEffect(() => {
@@ -130,11 +144,47 @@ export function LandingHeader() {
         </Link>
 
         <nav className="site-nav" aria-label="Primary">
-          {NAV.map(([label, href]) => (
-            <a key={href} href={href}>
-              {label}
-            </a>
-          ))}
+          {NAV.map(([label, href]) =>
+            label === 'Workspace' ? (
+              <details className="nav-product" key={href}>
+                <summary>
+                  Product <Icon name="chevronDown" size={12} />
+                </summary>
+                <div>
+                  {[
+                    [
+                      'Your career workspace',
+                      'A conversation with context.',
+                      '#product',
+                      'command',
+                    ],
+                    [
+                      'Resumes & cover letters',
+                      'Make a clear case for the role.',
+                      '#features',
+                      'file',
+                    ],
+                    ['Cold outreach', 'Source, prepare, review.', '#outreach', 'send'],
+                    ['Background work', 'Keep your search moving.', '#autopilot', 'clock'],
+                  ].map(([title, description, target, icon]) => (
+                    <a
+                      href={target}
+                      key={target}
+                      onClick={(e) => e.currentTarget.closest('details')?.removeAttribute('open')}
+                    >
+                      <Icon name={icon as 'file'} size={20} />
+                      <strong>{title}</strong>
+                      <span>{description}</span>
+                    </a>
+                  ))}
+                </div>
+              </details>
+            ) : (
+              <a key={href} href={href}>
+                {label}
+              </a>
+            ),
+          )}
         </nav>
 
         <div className="site-header-actions">
@@ -149,6 +199,7 @@ export function LandingHeader() {
               <path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.08c-3.13.68-3.8-1.33-3.8-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.63 1.22 3.27.93.1-.73.39-1.23.71-1.51-2.5-.29-5.13-1.25-5.13-5.57 0-1.23.44-2.24 1.16-3.03-.12-.28-.5-1.43.11-2.99 0 0 .95-.3 3.08 1.16a10.7 10.7 0 0 1 5.61 0c2.14-1.46 3.08-1.16 3.08-1.16.61 1.56.23 2.71.11 2.99.72.79 1.16 1.8 1.16 3.03 0 4.33-2.64 5.28-5.15 5.56.4.35.76 1.03.76 2.08v3.09c0 .3.2.65.77.54A11.2 11.2 0 0 0 12 .8Z" />
             </svg>
             <span>Star on GitHub</span>
+            <GitHubStars />
           </a>
           <Link href="/app/login" className="site-link">
             Sign in

@@ -12,6 +12,8 @@ globalThis.isTauri=true;
 window.__TAURI_INTERNALS__={invoke:async(cmd,args)=>{
  const key='pursuit-interface-test';
  let data=JSON.parse(sessionStorage.getItem(key)||'{"sources":[],"facts":[]}');
+ if(cmd==='career_book')return null;
+ if(cmd==='save_career_book')return;
  if(cmd==='managed_status')return data.runtime || {running:false,provider:'',model:'',directory:''};
  if(cmd==='managed_start'){data.runtime={running:true,provider:args.provider,model:args.model,directory:'/fixture/managed-runtime'};sessionStorage.setItem(key,JSON.stringify(data));return data.runtime;}
  if(cmd==='managed_stop'){data.runtime.running=false;sessionStorage.setItem(key,JSON.stringify(data));return;}
@@ -26,7 +28,7 @@ window.__TAURI_INTERNALS__={invoke:async(cmd,args)=>{
  if(cmd==='provider_models')return {models:['fixture/nested-model:tag'],truncated:true};
  if(cmd==='test_provider')return 'ready (synthetic provider fixture)';
  if(cmd==='probe_opencode')return {version:'fixture-2.1.2',isolatedDirectory:'/fixture/opencode-probe'};
- if(cmd==='workspace')return {databasePath:'/fixture/workspace.sqlite',schemaVersion:3,tasks:[]};
+ if(cmd==='workspace')return {databasePath:'/fixture/workspace.sqlite',schemaVersion:4,tasks:[]};
  if(cmd==='identity')return data;
  if(cmd==='import_identity'){
   const sourceId=String(data.sources.length+1);
@@ -50,11 +52,16 @@ with sync_playwright() as p:
  browser=p.chromium.launch(headless=True)
  page=browser.new_page(viewport={'width':1440,'height':1000})
  page.goto('http://127.0.0.1:1420');page.wait_for_load_state('networkidle')
- page.get_by_role('link',name='Career Identity',exact=True).click()
+ def navigate(name):
+  close=page.get_by_role('button',name='Close settings',exact=True)
+  if close.is_visible():close.click()
+  page.get_by_role('button',name=name,exact=True).click()
+
+ navigate('Career Identity')
  expect(page.get_by_role('button',name='Save source and review')).to_be_disabled()
  page.screenshot(path=str(CAPTURES/'preview.png'),full_page=True)
  page.add_init_script(FIXTURE);page.reload();page.wait_for_load_state('networkidle')
- page.get_by_role('link',name='Career Identity',exact=True).click()
+ navigate('Career Identity')
  def import_source(name,text):
   page.get_by_label('Source name',exact=True).fill(name)
   page.get_by_label('Source text',exact=True).fill(text)
@@ -74,9 +81,9 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Confirm replacement').click()
  expect(page.locator('.confirmed-facts')).to_contain_text('London, UK')
  expect(page.locator('.history-record')).to_contain_text('superseded')
- page.reload();page.get_by_role('link',name='Career Identity',exact=True).click()
+ page.reload();navigate('Career Identity')
  expect(page.locator('.confirmed-facts')).to_contain_text('London, UK')
- page.get_by_role('link',name='Models',exact=True).click()
+ navigate('Models & connections')
  page.get_by_role('button',name='Find local models').click()
  expect(page.get_by_label('Installed model')).to_have_value('fixture/model:tag')
  page.get_by_role('button',name='Test text generation').click()
@@ -99,7 +106,7 @@ with sync_playwright() as p:
  card.get_by_role('button',name='Remove key from app').click()
  expect(card).to_contain_text('No key saved')
  assert 'fixture-only-not-a-real-key' not in page.evaluate('JSON.stringify(sessionStorage)+JSON.stringify(localStorage)')
- page.get_by_role('link',name='Agent workspace',exact=True).click()
+ navigate('Agent workspace')
  page.get_by_role('button',name='Start isolated runtime').click()
  expect(page.get_by_role('button',name='Stop runtime')).to_be_visible()
  page.get_by_label('New session title').fill('Synthetic runtime queue check')
@@ -115,7 +122,7 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Stop runtime').click()
  expect(page.get_by_text('Last saved local snapshot.',exact=False)).to_be_visible()
  page.evaluate("""() => {const key='pursuit-interface-test';const data=JSON.parse(sessionStorage.getItem(key));data.runtime={running:true,provider:'ollama',model:'fixture/model:tag',directory:'/fixture/managed-runtime'};data.sessions=[{id:'ses_stream_fixture',title:'Synthetic streaming UI check',provider:'ollama',model:'fixture/model:tag',state:'running',snapshot:JSON.stringify([{role:'assistant_live',text:'Synthetic partial text from the UI fixture'}]),updatedAt:'2026-10-22'}];sessionStorage.setItem(key,JSON.stringify(data));}""")
- page.reload();page.get_by_role('link',name='Agent workspace',exact=True).click()
+ page.reload();navigate('Agent workspace')
  page.get_by_role('button',name='Synthetic streaming UI check',exact=False).click()
  expect(page.get_by_role('heading',name='Pursuit draft · streaming',exact=True)).to_be_visible()
  expect(page.get_by_role('button',name='Send request to model')).to_be_disabled()
