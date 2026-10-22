@@ -1,4 +1,4 @@
-"""Annotation regression: neutral surfaces, rich phone, brand assets, table, motion and alignment."""
+"""Annotation regression: neutral surfaces, compact phone, brand assets, table, motion and alignment."""
 from pathlib import Path
 import os
 from playwright.sync_api import sync_playwright,expect
@@ -23,11 +23,11 @@ with sync_playwright() as p:
  for logo in ['posthog','stripe','linear','gmail','composio']:
   assert q.locator(f'img[src="/brands/{logo}.svg"]').first.evaluate('(el)=>el.complete&&el.naturalWidth>0'),logo
  q.get_by_role('button',name='Preview a new-role alert',exact=True).click();q.locator('#watchers').screenshot(path=str(OUT/'watcher-alert.png'),style='.site-header{visibility:hidden!important;}')
- companion=q.locator('#companion');companion.get_by_role('button',name='Get the match',exact=False).click();expect(companion.locator('.phone-worklist button')).to_have_count(2)
- companion.get_by_role('button',name='Your introduction video Morrow · script prepared',exact=True).click();expect(companion.locator('.phone-video-plan')).to_contain_text('90-second');companion.get_by_role('button',name='Assistant',exact=True).click();expect(companion.locator('.phone-chat-preview')).to_contain_text('Illustrative assistant response');companion.get_by_role('button',name='Applications',exact=True).click();expect(companion.locator('.phone-application-list button')).to_have_count(4)
+ companion=q.locator('#companion');companion.get_by_role('button',name='Get the match',exact=False).click();expect(companion.locator('.phone-worklist')).to_have_count(0);assert companion.locator('.phone-device').bounding_box()['height']<=662
+ companion.get_by_role('button',name='Assistant',exact=True).click();expect(companion.locator('.phone-chat-preview')).to_contain_text('Illustrative assistant response');companion.get_by_role('button',name='Applications',exact=True).click();expect(companion.locator('.phone-application-list button')).to_have_count(4)
  companion.get_by_role('button',name='Get the match',exact=False).click();companion.get_by_role('button',name='Review the opportunity',exact=True).click();q.locator('#companion').screenshot(path=str(OUT/'companion-review.png'),style='.site-header{visibility:hidden!important;}')
  q.get_by_role('button',name='Video introduction',exact=True).click();expect(q.locator('.recording-photo')).to_be_visible();q.locator('#features').screenshot(path=str(OUT/'video-photo.png'),style='.site-header{visibility:hidden!important;}')
  q.emulate_media(reduced_motion='no-preference');q.reload();q.wait_for_load_state('networkidle');companion.scroll_into_view_if_needed();expect(companion.get_by_role('button',name='Pause preview',exact=True)).to_be_visible();expect(companion.locator('.phone-greeting h3')).to_have_text('Everything you need to decide.',timeout=7500);companion.get_by_role('button',name='Pause preview',exact=True).click();paused=companion.locator('.phone-greeting h3').inner_text();q.wait_for_timeout(4700);expect(companion.locator('.phone-greeting h3')).to_have_text(paused)
  q.locator('.footer-lettering').scroll_into_view_if_needed();expect(q.locator('.footer-lettering')).to_have_attribute('data-visible','true');expect(q.locator('.footer-letter')).to_have_count(8);assert 'pursuit-letter-rise' in q.locator('.footer-letter').first.evaluate('(el)=>getComputedStyle(el).animationName');q.wait_for_timeout(1700);q.locator('.new-footer').screenshot(path=str(OUT/'footer-settled.png'),style='.site-header{visibility:hidden!important;}')
  q.emulate_media(reduced_motion='reduce');assert q.locator('.footer-letter').first.evaluate('(el)=>getComputedStyle(el).animationName')=='none';assert not errors,errors
- b.close();print('Neutral refinement passed: five widths, aligned hero, neutral surfaces, timeline, ledger filters, official assets, rich companion/autoplay/pause, Pexels, letter motion/reduced motion.')
+ b.close();print('Neutral refinement passed: five widths, aligned hero, neutral surfaces, timeline, ledger filters, official assets, compact companion/autoplay/pause, Pexels, letter motion/reduced motion.')

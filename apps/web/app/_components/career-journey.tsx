@@ -425,38 +425,6 @@ export function CompanionShowcase() {
                     <span>application to review</span>
                   </div>
                 </div>
-                <div className="phone-worklist">
-                  <div>
-                    <h4>Up next</h4>
-                    <span>2 need you</span>
-                  </div>
-                  <button onClick={() => selectStage(1)}>
-                    <Icon name="file" size={15} />
-                    <span>
-                      <strong>Northstar application</strong>
-                      <small>Tailored resume · ready to review</small>
-                    </span>
-                    <Icon name="arrowUpRight" size={12} />
-                  </button>
-                  <button onClick={() => selectStage(4)}>
-                    <Icon name="monitor" size={15} />
-                    <span>
-                      <strong>Your introduction video</strong>
-                      <small>Morrow · script prepared</small>
-                    </span>
-                    <Icon name="arrowUpRight" size={12} />
-                  </button>
-                  <div className="phone-recent">
-                    <Icon name="check" size={13} />
-                    <span>
-                      Bramble application recorded <small>Sample activity · 09:26</small>
-                    </span>
-                  </div>
-                </div>
-                <button className="phone-ask" onClick={() => selectStage(5)}>
-                  <DeskIcon name="chat" size={14} /> Ask Pursuit about your search{' '}
-                  <Icon name="arrowUpRight" size={12} />
-                </button>
               </div>
             ) : stage === 1 ? (
               <div className="phone-content">
@@ -796,7 +764,7 @@ export function ClosingInvitation() {
             <br />
             with your name on it.
           </h2>
-          <p>Give it a place to begin.</p>
+          <p>Your experience. Your direction. A little less searching alone.</p>
           <form action="/product-tour">
             <label htmlFor="closing-prompt">Your next move</label>
             <div>
@@ -813,6 +781,9 @@ export function ClosingInvitation() {
             </div>
             <span>Open the interactive product tour · no account needed</span>
           </form>
+          <a className="closing-download" href="#download">
+            Build your workspace <Icon name="arrowUpRight" size={17} />
+          </a>
         </div>
         <div className="closing-art" aria-hidden="true">
           <div className="closing-orbit" />

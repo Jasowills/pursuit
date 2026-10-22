@@ -285,3 +285,55 @@ describe('approval single-use lifecycle', () => {
     expect(res.body.error).toBe('approval_already_used');
   });
 });
+
+describe('watcher configuration integrity', () => {
+  it('validates patches and reschedules enabled watchers with the new interval', async () => {
+    const owner = await login(`watcher-owner-${Date.now()}@pursuit.test`);
+    const other = await login(`watcher-other-${Date.now()}@pursuit.test`);
+    const created = await api(owner.token)
+      .post('/api/v1/watchers')
+      .send({
+        kind: 'COMPANY_URL',
+        source_url: 'https://example.com/careers',
+        frequency_minutes: 60,
+      })
+      .expect(201);
+    const id = created.body.watcher.id;
+    for (const patch of [
+      { frequency_minutes: -1 },
+      {},
+      { frequency_minutes: 15.5 },
+      { enabled: 'yes' },
+      { unknown: true },
+    ]) {
+      await api(owner.token).patch(`/api/v1/watchers/${id}`).send(patch).expect(400);
+    }
+    await api(other.token).patch(`/api/v1/watchers/${id}`).send({ enabled: false }).expect(404);
+    const before = Date.now();
+    const changed = await api(owner.token)
+      .patch(`/api/v1/watchers/${id}`)
+      .send({ frequency_minutes: 30 })
+      .expect(200);
+    expect(changed.body.watcher.enabled).toBe(true);
+    expect(new Date(changed.body.watcher.next_check_at).getTime()).toBeGreaterThanOrEqual(
+      before + 30 * 60000,
+    );
+    expect(new Date(changed.body.watcher.next_check_at).getTime()).toBeLessThan(
+      Date.now() + 31 * 60000,
+    );
+    const initiallyDisabled = await api(owner.token)
+      .post('/api/v1/watchers')
+      .send({
+        kind: 'COMPANY_URL',
+        source_url: 'https://example.com/disabled',
+        enabled: false,
+      })
+      .expect(201);
+    expect(initiallyDisabled.body.watcher.next_check_at).toBeNull();
+    const disabled = await api(owner.token)
+      .patch(`/api/v1/watchers/${id}`)
+      .send({ enabled: false })
+      .expect(200);
+    expect(disabled.body.watcher.next_check_at).toBeNull();
+  });
+});

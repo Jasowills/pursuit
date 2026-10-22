@@ -1,0 +1,13 @@
+{
+  "runtime": "OpenCode 2.1.2",
+  "service": "Ollama 0.35.1, loopback port 11434",
+  "model": "llama3.2:1b",
+  "isolation": "temporary private runtime, synthetic career facts, all tools denied",
+  "before_fix": "llama response empty; qwen2.5:7b continued runtime limit instruction instead of answering user",
+  "cause": "steps=1 injected MAXIMUM STEPS REACHED as assistant prefill before initial response",
+  "after_fix": { "connection_reply": "READY", "response_seconds": 4.69, "draft_seconds": 53.76 },
+  "draft_wiring": "resume and cover-letter paragraphs included supplied Postman and SQL facts",
+  "draft_quality": "FAILED manual acceptance: appended runtime metadata; no automatic sending performed",
+  "contamination_excerpt": "# Your Model\n- Name: llama3.2:1b\n- Provider ID: pursuit\nEnvironment:\n  Working directory: [temporary test directory]",
+  "scope_limit": "Not a persisted native document packet or web workflow test. Basic content assertions do not prove factual quality."
+}

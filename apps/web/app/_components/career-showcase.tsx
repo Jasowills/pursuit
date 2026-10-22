@@ -216,38 +216,79 @@ export function DownloadOptions() {
   const [choice, setChoice] = useState<Platform | null>(null);
   const platform = choice || detected || 'macOS';
   return (
-    <div className="download-options">
-      <div role="group" aria-label="Choose your operating system" className="platform-picker">
+    <div className="download-options release-downloads">
+      <div className="platform-picker" role="group" aria-label="Choose your operating system">
         {(['macOS', 'Windows', 'Linux'] as const).map((os) => (
           <button key={os} aria-pressed={platform === os} onClick={() => setChoice(os)}>
-            <PlatformLogo platform={os} size={19} /> {os}
+            <span className="download-os-mark">
+              <PlatformLogo platform={os} size={30} />
+            </span>
+            <strong>{os}</strong>
+            <span>{os === detected ? 'Detected on this device' : 'Desktop alpha target'}</span>
           </button>
         ))}
       </div>
-      <p aria-live="polite">
-        {platform === 'macOS'
-          ? 'An internal Intel build is verified. Public signed installers are not published yet.'
-          : `${platform} is an alpha target. Platform build and runtime qualification are still in progress.`}
-      </p>
-      <div className="download-actions">
-        <a
-          className="dark-button primary"
-          href="https://github.com/Jasowills/pursuit/archive/refs/heads/main.zip"
-        >
-          <Icon name="folder" size={17} /> Download source
-        </a>
+      <div className="release-download-detail">
+        <div>
+          <strong>{platform} developer alpha</strong>
+          <p>
+            {platform === 'macOS'
+              ? 'Unsigned Intel build verified locally. Public signed installers are not published.'
+              : `${platform} installers are not published; platform qualification is outstanding.`}
+          </p>
+        </div>
+        <div className="download-actions">
+          <a
+            className="dark-button primary"
+            href="https://github.com/Jasowills/pursuit/archive/refs/heads/main.zip"
+          >
+            <Icon name="folder" size={17} />
+            Download source ZIP
+          </a>
+          <a
+            className="dark-button"
+            href="https://github.com/Jasowills/pursuit/blob/main/docs/DESKTOP_BUILD_STATUS.md"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Build instructions
+            <Icon name="arrowUpRight" size={15} />
+          </a>
+        </div>
+        <small>Shared source archive, not an installer. Bring your own model.</small>
+      </div>
+      <div className="companion-download" id="companion-download">
+        <div>
+          <Icon name="phone" size={25} />
+          <div>
+            <h3>Pursuit Connect for your phone.</h3>
+            <p>The companion is not released yet. Explore its source and setup requirements.</p>
+          </div>
+        </div>
+        <div className="companion-platforms">
+          <span>
+            <PlatformLogo platform="macOS" size={19} />
+            iOS <small>Not published</small>
+          </span>
+          <span>
+            <Icon name="phone" size={19} />
+            Android <small>Not published</small>
+          </span>
+        </div>
         <a
           className="dark-button"
-          href="https://github.com/Jasowills/pursuit/blob/main/docs/DESKTOP_BUILD_STATUS.md"
+          href="https://github.com/Jasowills/pursuit/tree/main/apps/mobile"
           target="_blank"
           rel="noreferrer"
         >
-          Build instructions <Icon name="arrowUpRight" size={16} />
+          Companion source & setup
+          <Icon name="arrowUpRight" size={15} />
         </a>
+        <small>
+          No App Store, Play Store or installable PWA release is available. A QR code will pair a
+          released companion; it cannot install an unfinished app.
+        </small>
       </div>
-      <span className="download-note">
-        Developer alpha · bring your own model · no Pursuit account required by the desktop app
-      </span>
     </div>
   );
 }

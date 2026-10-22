@@ -45,7 +45,14 @@ fn installed_runtime_generation_and_interrupt() {
                     .is_none_or(|tools| tools.as_array().is_some_and(|tools| tools.is_empty())),
                 "The tool-disabled agent exposed tools"
             );
-            assert_eq!(body["max_tokens"], 256);
+            assert_eq!(body["max_tokens"], 2048);
+            assert_eq!(body["max_completion_tokens"], 2048);
+            assert!(
+                !body["messages"]
+                    .to_string()
+                    .contains("MAXIMUM STEPS REACHED"),
+                "Runtime step policy must not replace the first user request with a forced summary"
+            );
             observed.fetch_add(1, Ordering::SeqCst);
             stream.write_all(b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nConnection: close\r\n\r\n").unwrap();
             let chunk = json!({"id":"chatcmpl-fixture","object":"chat.completion.chunk","created":0,"model":"fixture-model","choices":[{"index":0,"delta":{"role":"assistant","content":if index==0{"ready from local fixture"}else{"partial fixture response"}},"finish_reason":null}]});
@@ -66,7 +73,7 @@ fn installed_runtime_generation_and_interrupt() {
         json!({"action":"provider.use","resource":"*","effect":"deny"}),
         json!({"action":"provider.use","resource":"pursuit","effect":"allow"}),
     ]);
-    configured["providers"] = json!({"pursuit":{"name":"Synthetic local test only","env":["PURSUIT_MODEL_KEY"],"package":"@opencode/ai/providers/openai-compatible","settings":{"baseURL":format!("http://{address}/v1")},"models":{"fixture-model":{"name":"Fixture model","body":{"max_tokens":256}}}}});
+    configured["providers"] = json!({"pursuit":{"name":"Synthetic local test only","env":["PURSUIT_MODEL_KEY"],"package":"@opencode/ai/providers/openai-compatible","settings":{"baseURL":format!("http://{address}/v1")},"models":{"fixture-model":{"name":"Fixture model","body":{"max_tokens":2048,"max_completion_tokens":2048}}}}});
     let instance = Instance::spawn_config(
         tmp.path().join("runtime"),
         "fixture".into(),
@@ -161,4 +168,121 @@ fn installed_runtime_generation_and_interrupt() {
         std::thread::sleep(Duration::from_millis(100));
     }
     assert!(interrupted);
+}
+
+#[test]
+#[ignore = "Explicit opt-in: real installed OpenCode and local Ollama inference; temporary workspace, no paid provider"]
+fn installed_ollama_managed_generation() {
+    let model = std::env::var("PURSUIT_TEST_OLLAMA_MODEL")
+        .expect("Set PURSUIT_TEST_OLLAMA_MODEL to an installed text model");
+    let tmp = tempfile::tempdir().unwrap();
+    let instance = Instance::launch(
+        tmp.path().join("runtime"),
+        "ollama".into(),
+        model,
+        String::new(),
+    )
+    .unwrap();
+    instance.watch(|| {});
+    let id = instance
+        .create_session("Real local Ollama wiring check")
+        .unwrap();
+    instance
+        .call(
+            &format!("/api/session/{id}/prompt"),
+            Some(json!({"text":"Reply with exactly READY. Do not use tools.","resume":true})),
+        )
+        .unwrap();
+    let began = Instant::now();
+    loop {
+        let view = instance.view(&id).unwrap();
+        if view.state == "completed" {
+            let answer = view
+                .messages
+                .iter()
+                .filter(|m| m.role == "assistant")
+                .map(|m| m.text.clone())
+                .collect::<Vec<_>>()
+                .join("\n");
+            assert!(
+                answer.to_uppercase().contains("READY"),
+                "Expected real local model response, got {answer:?}; transcript: {:?}",
+                instance
+                    .call(
+                        &format!("/api/session/{id}/message?limit=10&order=desc"),
+                        None
+                    )
+                    .unwrap()
+            );
+            println!(
+                "Real Ollama managed response verified in {:.2}s",
+                began.elapsed().as_secs_f64()
+            );
+            break;
+        }
+        assert!(
+            !["failed", "interrupted"].contains(&view.state.as_str()),
+            "Local model session failed: {}",
+            view.state
+        );
+        assert!(
+            began.elapsed() < Duration::from_secs(120),
+            "No completed local inference within 120 seconds"
+        );
+        std::thread::sleep(Duration::from_millis(250));
+    }
+}
+
+#[test]
+#[ignore = "Explicit opt-in: real local model career draft; no paid inference or external actions"]
+fn installed_ollama_career_draft() {
+    let model = std::env::var("PURSUIT_TEST_OLLAMA_MODEL").expect("Choose an installed text model");
+    let tmp = tempfile::tempdir().unwrap();
+    let instance = Instance::launch(
+        tmp.path().join("runtime"),
+        "ollama".into(),
+        model,
+        String::new(),
+    )
+    .unwrap();
+    let id = instance
+        .create_session("Grounded career draft check")
+        .unwrap();
+    instance.call(&format!("/api/session/{id}/prompt"), Some(json!({"text":"Write a short tailored resume paragraph and cover letter paragraph (under 100 words total). Career facts: Alex Morgan, QA analyst, Acme, 2022-2025; tested REST APIs with Postman and SQL. Target role: QA Analyst needing API testing and SQL. Use only those facts. Do not add degrees or numerical achievements. Label the paragraphs Resume and Cover letter.","resume":true}))).unwrap();
+    let began = Instant::now();
+    loop {
+        let view = instance.view(&id).unwrap();
+        if view.state == "completed" {
+            let answer = view
+                .messages
+                .iter()
+                .filter(|m| m.role == "assistant")
+                .map(|m| m.text.as_str())
+                .collect::<Vec<_>>()
+                .join("\n");
+            let lower = answer.to_lowercase();
+            assert!(
+                lower.contains("resume")
+                    && lower.contains("cover")
+                    && lower.contains("sql")
+                    && lower.contains("postman"),
+                "Missing grounded draft material: {answer}"
+            );
+            assert!(
+                !lower.contains("maximum steps"),
+                "Runtime replaced the career request"
+            );
+            println!(
+                "Real local draft ({:.2}s): {answer}",
+                began.elapsed().as_secs_f64()
+            );
+            break;
+        }
+        assert!(!["failed", "interrupted"].contains(&view.state.as_str()));
+        assert!(
+            began.elapsed() < Duration::from_secs(180),
+            "Local draft timed out"
+        );
+        std::thread::sleep(Duration::from_millis(500));
+    }
 }

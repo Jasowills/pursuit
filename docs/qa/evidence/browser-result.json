@@ -1,0 +1,22 @@
+{
+  "login": "passed",
+  "watcher_persistence": "passed",
+  "source_status": 201,
+  "jobs_persisted": 25,
+  "gmail_unconfigured": [
+    {
+      "path": "direct",
+      "status": 503,
+      "body": {
+        "error": "direct_gmail_not_configured"
+      }
+    },
+    {
+      "path": "composio",
+      "status": 503,
+      "body": {
+        "error": "gmail_composio_not_configured"
+      }
+    }
+  ]
+}

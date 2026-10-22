@@ -13,13 +13,21 @@ only local environment variables. It does not complete OAuth consent or send mai
 Copy missing variable names from `.env.example` into an ignored `.env` file. The
 API loads the root `.env` at startup. Never paste secret values into chat or commit
 them. Generate a persistent encryption key with `openssl rand -hex 32` and put its
-output in `CONNECTION_ENCRYPTION_KEY`. A local key has already been generated for
-this workspace; keep it rather than generating a replacement. Back it up securely: changing or losing it
+output in `CONNECTION_ENCRYPTION_KEY`. If a key is already configured, keep it rather than generating a replacement.
+Back it up securely: changing or losing it
 makes saved provider keys and Google refresh tokens unreadable.
 
 Set `WEB_URL=http://127.0.0.1:3000` for normal local development (the separate preview
 uses `http://127.0.0.1:3001`), then restart the API after
 configuration changes. The exact browser origin must agree with `WEB_URL` and CORS.
+
+## Native Ollama versus retained web models
+
+The desktop connects to local Ollama and runs a private tool-denied OpenCode
+runtime. See the root README for native setup. The instructions below apply to
+the separate retained web/API workflow, which currently accepts cloud-provider
+keys and does not use the native Ollama connection. No live Gmail account was
+connected in the 2026-10-22 audit; both unconfigured paths rejected locally.
 
 ## Bring your own model
 

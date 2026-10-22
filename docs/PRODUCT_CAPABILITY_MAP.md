@@ -26,3 +26,7 @@ Sample counts, companies, documents and confirmations do not assert real sourcin
 ## Landing verification
 
 The 2026-10-22 refinement passed production build, TypeScript and formatting checks; browser checks cover 1440/973/390/320 widths, scroll-driven chapter progression, manual/reduced-motion controls, watcher alert/reset, menu Escape, OS selection and mobile/iPad detection safeguards. The fresh design review identified one mini-resume contrast fix and scored its correction resolved (`ship` at that fix scope). Tests simulate browser OS metadata, not real job data or submissions.
+
+## Executed functional audit
+
+See [the 2026-10-22 audit](qa/REPORT.md) for verified versus missing capabilities. Real Ollama wiring and retained Greenhouse sourcing/research were exercised; native unattended applications and companion transport remain absent. The product-level verdict is NOT_READY.

@@ -1,0 +1,59 @@
+{
+  "environment": "loopback production build, Chromium, warm host cache, no network throttling, reduced motion",
+  "samples": [
+    {
+      "lcp": 344,
+      "cls": 0.0003279125072337963,
+      "dom": 385.89999997615814,
+      "bytes": 487712,
+      "device": "desktop",
+      "run": 1,
+      "cpu": 1
+    },
+    {
+      "lcp": 240,
+      "cls": 0.0003279125072337963,
+      "dom": 226.5,
+      "bytes": 487712,
+      "device": "desktop",
+      "run": 2,
+      "cpu": 1
+    },
+    {
+      "lcp": 264,
+      "cls": 0.00035406946252893517,
+      "dom": 251.5,
+      "bytes": 487712,
+      "device": "desktop",
+      "run": 3,
+      "cpu": 1
+    },
+    {
+      "lcp": 972,
+      "cls": 0,
+      "dom": 1137.3999999761581,
+      "bytes": 487712,
+      "device": "mobile",
+      "run": 1,
+      "cpu": 4
+    },
+    {
+      "lcp": 836,
+      "cls": 0,
+      "dom": 1197.0999999642372,
+      "bytes": 487712,
+      "device": "mobile",
+      "run": 2,
+      "cpu": 4
+    },
+    {
+      "lcp": 1248,
+      "cls": 0,
+      "dom": 2485.800000011921,
+      "bytes": 487712,
+      "device": "mobile",
+      "run": 3,
+      "cpu": 4
+    }
+  ]
+}

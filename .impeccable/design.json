@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-22T19:10:00.057945+00:00",
+  "generatedAt": "2026-10-22T19:43:02.795295+00:00",
   "title": "Design System: Pursuit",
   "extensions": {
     "typographyMeta": {
@@ -155,12 +155,13 @@
       "Geist interface with Arial resumes and Georgia letters",
       "Neutral border-separated conversation and contextual inspector",
       "Dark neutral companion and light neutral closing band",
-      "Seven phone sample states with visible-only four-stage autoplay and manual controls",
+      "Compact 660px phone with a notification-focused first state, seven sample states, visible-only four-stage autoplay and manual/pause controls",
       "Licensed semantic activity table with local filters and details",
       "Scroll-linked sourcing with application timeline and approval preview",
       "First-party brand marks and documented illustrative stock photos",
       "Per-letter footer spring/fade with static reduced-motion rendering",
-      "Explicit sample provenance and execution boundaries"
+      "Explicit sample provenance and execution boundaries",
+      "Three desktop OS selector cards with source ZIP/build instructions and explicit unpublished installer/mobile release states"
     ],
     "rules": [],
     "dos": [

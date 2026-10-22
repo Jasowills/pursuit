@@ -1,0 +1,107 @@
+{
+  "run_id": "pursuit-2026-10-22",
+  "verdict": "NOT_READY",
+  "scope": "Complete career-autopilot product; UI review separately shipped narrow refinement",
+  "findings": [
+    {
+      "id": "ADV-0001",
+      "severity": "high",
+      "status": "fixed",
+      "title": "Runtime initial prompt replaced by step-limit instruction",
+      "reproduction": "REPORT.md#adv-0001"
+    },
+    {
+      "id": "ADV-0002",
+      "severity": "medium",
+      "status": "fixed",
+      "title": "Invalid watcher patches and schedule loss",
+      "reproduction": "REPORT.md#adv-0002"
+    },
+    {
+      "id": "ADV-0003",
+      "severity": "high",
+      "status": "open",
+      "title": "Native discovery/application execution absent",
+      "reproduction": "REPORT.md#adv-0003"
+    },
+    {
+      "id": "ADV-0004",
+      "severity": "high",
+      "status": "open",
+      "title": "Companion transport and releases absent",
+      "reproduction": "REPORT.md#adv-0004"
+    },
+    {
+      "id": "ADV-0005",
+      "severity": "high",
+      "status": "open",
+      "title": "Real local-model draft contains runtime metadata",
+      "reproduction": "REPORT.md#adv-0005"
+    },
+    {
+      "id": "ADV-0006",
+      "severity": "high",
+      "status": "open",
+      "title": "Remaining dependency advisories",
+      "reproduction": "REPORT.md#adv-0006"
+    }
+  ],
+  "executed": {
+    "api": {
+      "suites": 7,
+      "passed": 35,
+      "failed": 0,
+      "external_services": "mocked"
+    },
+    "shared_passed": 26,
+    "agent_core_passed": 10,
+    "local_store_passed": 11,
+    "native_default": {
+      "passed": 9,
+      "ignored": 6
+    },
+    "installed_runtime_fixture_passed": 1,
+    "live_ollama": {
+      "model": "llama3.2:1b",
+      "connectivity": "passed",
+      "draft_content_assertions": "passed",
+      "manual_draft_quality": "failed"
+    },
+    "browser_workflow": "passed",
+    "landing_widths": [1440, 1263, 973, 390, 320],
+    "builds": ["web production", "API", "desktop renderer"],
+    "workspace_typecheck": "passed",
+    "api_load": {
+      "vus": 5,
+      "duration_seconds": 10,
+      "requests": 574,
+      "failures": 0,
+      "p95_ms": 41.54
+    },
+    "frontend_lab": "evidence/frontend-performance.json",
+    "dependencies": {
+      "critical": 0,
+      "high": 3,
+      "moderate": 1
+    },
+    "live_research": {
+      "status": "COMPLETED",
+      "jobs_persisted": 25,
+      "notifications": 1,
+      "applications_created": 0,
+      "model_preparation": false
+    }
+  },
+  "not_executed": [
+    "Live Gmail consent/send",
+    "Native OS UI E2E",
+    "Windows/Linux installer tests",
+    "Real application submission",
+    "Companion pairing/push",
+    "ZAP/Semgrep penetration scan",
+    "Mutation testing",
+    "Production capacity testing"
+  ],
+  "evidence": "evidence/",
+  "human_report": "REPORT.md"
+}

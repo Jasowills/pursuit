@@ -1,197 +1,164 @@
 # Pursuit
 
-[Star on GitHub](https://github.com/Jasowills/pursuit) · [Contribute](CONTRIBUTING.md)
+An open-source, local-first career assistant. Pursuit is being built to discover suitable roles, prepare grounded application materials, track the search, and carry out bounded work with your own models.
 
-The desktop-first developer alpha now includes a dark harness, Career Identity review, secure model settings and managed OpenCode draft sessions. See [desktop build status](docs/DESKTOP_BUILD_STATUS.md), [runtime guide](docs/DESKTOP_AGENT_RUNTIME.md), and the [implementation plan](docs/DESKTOP_IMPLEMENTATION_PLAN.md). Public signed installers and automatic application submission are not available yet.
+**Developer alpha — not a complete unattended job-application service.** The desktop workspace, retained web/API prototype, and mobile shell have different capabilities. Product-tour screens use fictional data and perform no external actions. See the [feature checklist and audit](docs/qa/REPORT.md) before relying on a feature.
 
-Career autopilot is a core product goal. The current background worker researches configured Greenhouse boards and can prepare drafts using your tested model connection. Automatic applications and offline push/email alerts are not implemented. See [autopilot capabilities and remaining work](docs/AUTOPILOT.md).
+[Product direction](PRODUCT.md) · [Contributing](CONTRIBUTING.md) · [Architecture](docs/PRODUCT_CAPABILITY_MAP.md) · [Connection setup](docs/CONNECTION_SETUP.md) · [Pipeline decisions](docs/CAREER_PIPELINE_DECISIONS.md)
 
-The current workflow slice adds per-user BYOM connections, two Gmail connection
-paths, prepared materials, and real-app landing media. See
-[implementation status](docs/WORKFLOW_IMPLEMENTATION_STATUS.md) for the verified
-boundary and remaining launch work, and [connection setup](docs/CONNECTION_SETUP.md)
-for model, Composio and direct Google configuration. The M1 inventory below describes
-the original baseline.
+## What works today
 
-**Your next opportunity doesn't wait. Neither should you.**
+| Capability                                  | Desktop                                                          | Retained web/API                                                |
+| ------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------- |
+| Career facts, preferences and local records | SQLite career book and identity                                  | Tenant-scoped Postgres profile and records                      |
+| Assistant conversation                      | Managed, tool-denied OpenCode with BYOM; Ollama verified locally | Earlier agent adapter/prototype                                 |
+| Job intake                                  | Paste and save a posting                                         | Manual intake and bounded Greenhouse board import               |
+| Resume and cover-letter drafting            | Conversational draft; requires review                            | Structured saved drafts using a verified cloud-model connection |
+| Watchers                                    | No watcher executor                                              | Configuration CRUD; no polling executor                         |
+| Scheduled work                              | No background sourcing/application worker                        | Opt-in Greenhouse research/preparation, up to five drafts/run   |
+| Automatic applications                      | **Not implemented**                                              | **Not implemented**; application records are not submissions    |
+| Gmail                                       | Not connected to native workspace                                | Direct Google OAuth or Composio; exact saved-message approval   |
+| Mobile companion                            | No pairing/relay transport                                       | Expo prototype; no released phone companion                     |
 
-Pursuit is a personal career automation platform: it tracks target roles, scores
-eligibility, runs a proposal-only agent, and keeps a human approval in front of
-anything that leaves the building. This repository is a pnpm + Turborepo
-monorepo with a Next.js web app, an Expo mobile shell, a NestJS API, shared Zod
-contracts, a Prisma/Postgres data layer, and a constrained OpenCode adapter.
+The intended 100-applications/day ceiling, broad global discovery and optional user-hosted always-on worker are design decisions, not current execution guarantees. Indeed/Glassdoor and arbitrary job-board scraping are not implemented. There is no universal applicant-tracking-system submission adapter.
 
-The governing rule across every surface: **nothing fabricates success.** Features
-that are not implemented say so, agent tool steps are recorded verbatim, and an
-application can only enter `SUBMITTED` with a real `confirmation_ref`.
+## Desktop quick start
 
----
+Requirements: Git, Node.js 22+, pnpm 11.12, Rust stable and your operating system's [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/). macOS is locally build-tested; Windows/Linux remain qualification targets. No signed public installers are published yet.
 
-## What is in this milestone (M1)
-
-| Area                                               | Status                                 |
-| -------------------------------------------------- | -------------------------------------- |
-| Landing page (brand + design system)               | Implemented                            |
-| Dev login (passwordless, 7-day DB sessions)        | Implemented — dev only                 |
-| Career profile read/update                         | Implemented                            |
-| Manual job intake, dedupe, eligibility scoring     | Implemented                            |
-| Application state machine + event timeline         | Implemented                            |
-| Approval records (hash-bound preview payloads)     | Implemented (API)                      |
-| Agent runtime (`dev`, deterministic)               | Implemented — proposal-only            |
-| SSE event stream (outbox-backed)                   | Implemented                            |
-| Watcher CRUD + enable/disable                      | Implemented                            |
-| Notifications (in-app)                             | Implemented                            |
-| Web dashboard (9 pages) + `/showcase`              | Implemented                            |
-| Expo mobile shell (Home/Jobs/Agent/Outreach/Vault) | Implemented (typechecked)              |
-| Real model runs (OpenCode provider)                | Adapter exists; provider decision open |
-| Watcher execution / job discovery                  | Not available yet                      |
-| Outreach drafting / sending                        | Not available yet                      |
-| Gmail / LinkedIn connections                       | Not available yet                      |
-| Resume upload / AI tailoring                       | Not available yet                      |
-| Autonomous browser actions                         | Not available yet                      |
-
-Unavailable features are rendered as explicit notices in the UI and labeled in
-the API docs — never as dummy buttons that pretend to work.
-
-## Architecture
-
-```
-apps/
-  api/      NestJS REST API (/api/v1) + SSE stream, tenant-scoped
-  web/      Next.js 15 dashboard + marketing site (Tailwind v4)
-  mobile/   Expo (React Native) shell, same REST contract
-packages/
-  shared/   Zod contracts, state machine, dedupe/eligibility, prompt policy
-  database/ Prisma schema, tenant-scoped client, migrations, seed
-  agent-core/  Runtime interface, policy gateway, dev + OpenCode adapters
-  ui/       Design tokens + shared web tokens
-docs/
-  specifications/  Product, architecture, security, design specs
-  TECHNICAL_AUDIT.md, REQUIREMENTS_TRACEABILITY.md, OPEN_QUESTIONS.md, ...
+```sh
+git clone https://github.com/Jasowills/pursuit.git
+cd pursuit
+pnpm install --frozen-lockfile
+pnpm dev:desktop
 ```
 
-Key invariants (enforced in code + tests):
+The desktop uses local SQLite and OS credential storage; Postgres and the Nest API are not needed for its local workspace. Existing legacy task records are retained. The browser-only Vite preview cannot exercise native IPC or the OS vault.
 
-- **Tenant isolation** — every query goes through `tenantDb(tenantId)`; cross-tenant reads return 404/empty, not someone else's data.
-- **Evidence-bound submissions** — `SUBMITTED` requires `confirmation_ref`; illegal transitions are rejected by a shared state machine.
-- **Approvals are hash-bound and single-use** — changing a preview payload invalidates the approval; replaying one returns `approval_already_used`.
-- **Policy-gated tools** — the agent can only call allow-listed tools; gated tools (`submit_application`, `send_outreach`) never execute without an approval.
-- **Untrusted content stays data** — job postings, emails, and web content are never treated as instructions (see `packages/shared/src/untrusted.ts`).
-- **Secrets never in the repo** — `.env` files are gitignored; `.env.example` lists names only.
+To build locally:
 
-## Prerequisites
+```sh
+pnpm --filter @pursuit/desktop build
+pnpm build:desktop
+```
 
-- Node.js 22+
-- pnpm 11 (`corepack enable`)
-- Docker (Postgres 16 + Redis 7 via `infrastructure/docker-compose.yml`)
+Native bundles appear under `apps/desktop/src-tauri/target/release/bundle`. A local unsigned build is not a signed/distributed release. macOS may require local developer approval for unsigned binaries.
 
-## Quick start
+### Use Ollama
 
-```bash
-# 1. Install dependencies
-pnpm install
+1. Install and run [Ollama](https://ollama.com/), then pull an appropriate text model, for example `ollama pull llama3.2:1b`.
+2. In **Models & connections**, select an installed model and run the connection test. The endpoint is fixed to `127.0.0.1:11434`; do not expose it publicly.
+3. Install the qualified **OpenCode 2.1.2** runtime. Open **Agent workspace**, choose Ollama and the installed model, then start the managed runtime.
+4. Ask Pursuit a question or paste a posting. Include Career Identity only when you choose to share those facts with the selected model.
+5. Review every generated claim. A small local model can follow instructions poorly or append runtime context. Successful connection is not proof of resume quality.
 
-# 2. Start Postgres (port 54329) and Redis (port 63799)
+Pursuit launches a private OpenCode configuration with tools and integrations denied. It does not inherit a general-purpose coding agent's shell/browser permissions. OpenCode is the runtime, not an AI model. Ollama runs models locally; cloud providers require your own API credentials and may charge for inference. Chat subscriptions do not automatically supply API access.
+
+Managed drafting is bounded to 2,048 output tokens per response and two runtime steps, with tool use denied. Large or complex documents may need a stronger model and further review; this is not a model-spend accounting system. Do not mistake token limits for a guaranteed provider bill.
+
+## Retained web/API development
+
+This prototype contains workflow and integration code that is **not wired into the desktop**. It requires Postgres. Do not expose development sign-in to the internet.
+
+```sh
+cp .env.example .env
 pnpm db:up
-
-# 3. Database environment
-#    packages/database/.env must contain:
-#    DATABASE_URL="postgresql://pursuit:pursuit@127.0.0.1:54329/pursuit?schema=public"
-cp .env.example .env   # shell-level overrides (optional)
-
-# 4. Migrate + seed (demo tenant: demo@pursuit.local)
 pnpm db:migrate
 pnpm db:seed
-
-# 5. Build once, then run the API (port 4000) and web (port 3000)
-pnpm build
 pnpm dev:api
 pnpm dev:web
 ```
 
-Open <http://127.0.0.1:3000>, sign in with any email/display name (dev login),
-or use the seeded account `demo@pursuit.local`.
+Open `http://127.0.0.1:3000`; the API listens on loopback port 4000 under `/api/v1`. Ensure `NEXT_PUBLIC_API_URL`, `WEB_URL` and `CORS_ORIGINS` agree if you use other ports. The API loads the root `.env`; Next also supports its local environment file. Keep credentials in ignored files.
 
-### Mobile shell
+Development sign-in creates a tenant and seven-day session; it is passwordless and disabled in production. Production identity, deployment hardening and public hosting are release gates. Set `ENABLE_DEV_LOGIN=false` to disable development sign-in explicitly.
 
-```bash
-pnpm dev:mobile          # expo start
-# or from apps/mobile: pnpm start / pnpm ios / pnpm android
+### Models and prepared materials
+
+Generate a persistent encryption key with `openssl rand -hex 32` and set `CONNECTION_ENCRYPTION_KEY`. Back it up securely: replacing it makes saved provider credentials and refresh tokens unreadable.
+
+In Settings, connect your own OpenAI, Anthropic, Google AI Studio or OpenRouter/Hermes key; select a returned model and run **Test & select**. Then use Search workflow to import a Greenhouse board or add a job manually, paste a factual resume, and prepare draft material. Resume/cover-letter downloads are plain text. PDF/DOCX parsing and polished document export are not implemented. The retained API model gateway does not currently support Ollama; native Ollama tests do not prove web-workflow integration.
+
+Preparation sends the selected career facts, resume and posting to your provider. Review gaps, unsupported claims, recipient and exact message. Editing an approved draft invalidates its approval. Ambiguous email delivery locks the draft for verification and is never automatically retried.
+
+### Gmail: two connection options
+
+No live mailbox was connected during the audit. Local tests verify authorization/failure paths and mocked provider contracts, not real consent or delivery.
+
+- **Composio:** create a dedicated project and Gmail authentication configuration, save `COMPOSIO_API_KEY` and `COMPOSIO_GMAIL_AUTH_CONFIG_ID`, restart the API, then authorize your own mailbox in Settings. Use the narrowest required send permissions. Public deployment also requires the callback identity-verifier setup.
+- **Direct Google OAuth:** enable Gmail API in Google Cloud, configure the consent screen/test users, create a Web application OAuth client, register the exact `WEB_URL/app/settings` redirect, and save `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`. Restart and connect directly in Settings.
+
+Follow the complete [connection walkthrough](docs/CONNECTION_SETUP.md), or run `bash scripts/setup-connections.local.sh` for guided local configuration. Never paste keys into chat or commit them. A Gmail plugin in a coding tool is separate from a Pursuit user's mailbox grant. No message is sent merely by connecting Gmail or approving a preview.
+
+### Scheduled research
+
+`AUTOPILOT_WORKER_ENABLED=false` disables the retained API polling worker. Existing modes research configured Greenhouse boards and optionally prepare drafts using a verified model. They do not submit job applications. Watcher configuration is separate and currently has no executor. See [autopilot implementation](docs/AUTOPILOT.md).
+
+## Companion development and downloads
+
+There is no App Store, Play Store or installable PWA release, and no implemented accountless encrypted relay/pairing transport. A landing-page phone animation is an illustrative product preview.
+
+```sh
+pnpm --filter @pursuit/mobile start
+pnpm --filter @pursuit/mobile android
+pnpm --filter @pursuit/mobile ios
 ```
 
-The app talks to the same API. On a **physical device** `127.0.0.1` is the
-phone itself — point it at your machine's LAN IP:
+These commands start the Expo development project; native simulators/development builds and platform toolchains are required. They do not produce a production store app. A QR code can open a compatible development build; it cannot provide the unfinished desktop companion functionality. Desktop sleep/offline behavior and the future user-hosted worker are still implementation work.
 
-```bash
-EXPO_PUBLIC_API_URL="http://192.168.1.20:4000/api/v1" pnpm dev:mobile
+## Repository map
+
+```text
+apps/desktop         Tauri/Rust + React local workspace
+apps/web             Next.js landing page, product tour, retained dashboard
+apps/api             NestJS tenant-scoped workflow and integrations
+apps/mobile          Expo prototype
+packages/local-store Rust SQLite records and migrations
+packages/ui          Shared career workspace and visual components
+packages/shared      Zod contracts, matching and transition rules
+packages/agent-core  Runtime boundary and agent contracts
+packages/database    Prisma/Postgres schema and migrations
+infrastructure       Local development containers
+scripts/qa           Isolated API/browser/load audit helpers
+docs/qa              Executed evidence, findings and feature checklist
 ```
 
-The mobile shell stores the session token in `expo-secure-store` on native
-builds. There is no Xcode/simulator requirement for a UI smoke check: an Expo
-**web preview** renders the same React Native components at a phone viewport.
+## Tests and verification
 
-```bash
-pnpm --filter @pursuit/mobile web          # dev preview on :8081
-pnpm --filter @pursuit/mobile export:web   # static export to apps/mobile/web-dist
+```sh
+pnpm --filter @pursuit/shared test
+pnpm --filter @pursuit/agent-core test
+pnpm test:local-store
+cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml
+pnpm --filter @pursuit/api test --runInBand
+pnpm typecheck
+pnpm --filter @pursuit/web build
+pnpm audit --prod
 ```
 
-The web preview is a development aid only (token falls back to localStorage);
-native builds remain the shipping target.
+API integration tests use real Postgres, so set `DATABASE_URL` to a disposable database and apply migrations first. External providers are mocked in the normal suite. Do not point tests at personal or production data. Native socket tests require loopback access.
 
-## Environment variables
+Opt-in real Ollama checks (installed OpenCode and model required, temporary workspace, local inference only):
 
-| Variable                      | Where                    | Purpose                                                  |
-| ----------------------------- | ------------------------ | -------------------------------------------------------- |
-| `DATABASE_URL`                | `packages/database/.env` | Postgres connection (Prisma CLI, seed, API runtime)      |
-| `REDIS_URL`                   | shell / `.env`           | Reserved for queued watcher execution (not used yet)     |
-| `PORT`                        | API                      | HTTP port, default `4000`                                |
-| `CORS_ORIGINS`                | API                      | Comma-separated allowed web origins                      |
-| `ENABLE_DEV_LOGIN`            | API                      | `false` disables dev login (default enabled in dev)      |
-| `NEXT_PUBLIC_API_URL`         | web                      | API base URL, default `http://127.0.0.1:4000/api/v1`     |
-| `EXPO_PUBLIC_API_URL`         | mobile                   | API base URL reachable from the device                   |
-| `AGENT_RUNTIME`               | API                      | `dev` (default, deterministic) or `opencode`             |
-| `OPENCODE_BASE_URL`           | API                      | OpenCode server URL (only when `AGENT_RUNTIME=opencode`) |
-| `OPENCODE_PASSWORD`           | API                      | Password printed once by `opencode serve`; never commit  |
-| `OPENCODE_MODEL`              | API                      | Model ID used by the adapter                             |
-| `STORAGE_DRIVER` / `DATA_DIR` | API                      | Local file storage (S3 reserved)                         |
-
-Never commit real values. `.env.example` documents names only.
-
-## Quality gates
-
-```bash
-pnpm typecheck        # all packages/apps (turbo)
-pnpm test             # shared, agent-core, API (jest + supertest); database has no unit files
-pnpm build            # builds packages, API, web (Next static pages)
-pnpm format:check     # prettier
+```sh
+PURSUIT_TEST_OLLAMA_MODEL=llama3.2:1b cargo test \
+  --manifest-path apps/desktop/src-tauri/Cargo.toml installed_ollama_managed_generation \
+  -- --ignored --nocapture
+PURSUIT_TEST_OLLAMA_MODEL=llama3.2:1b cargo test \
+  --manifest-path apps/desktop/src-tauri/Cargo.toml installed_ollama_career_draft \
+  -- --ignored --nocapture
 ```
 
-- API tests require the Postgres container and `DATABASE_URL` (they run against
-  the real schema and clean up with unique stamps).
-- `AGENT_RUNTIME=dev` is CI-safe and makes no network calls to model providers.
+The draft check verifies wiring and basic grounded content, not exhaustive hallucination freedom. Review the observed metadata-contamination finding in the [audit report](docs/qa/REPORT.md). Full native UI automation, cross-platform installers, live Gmail consent/send and end-to-end unattended applications remain unverified or missing.
 
-## Documentation
+Browser annotation regression: `python3 scripts/validation/neutral-refinement.py` (Python Playwright, browser installed, web server running). Audit helper instructions and measured limitations are in [the audit plan](docs/qa/AUDIT_PLAN.md).
 
-- `docs/specifications/` — PRD, architecture, security/policy, delivery plan, design system, brand/landing.
-- `docs/TECHNICAL_AUDIT.md` — what was verified, how, and known gaps (DECISIONS table).
-- `docs/REQUIREMENTS_TRACEABILITY.md` — requirement → implementation → evidence.
-- `docs/OPEN_QUESTIONS.md` — decisions that need a human (including model provider choice).
+## Security and release status
 
-## Security and trust
+Credentials belong in the OS vault (desktop) or authenticated encryption (retained API), never in source control. Local career data still needs device protection and backups. Model output and imported job descriptions are untrusted. Approval and recorded submission evidence are distinct concepts; an application record is not proof that an employer received anything.
 
-- Dev login is the only auth in this milestone; production identity is not wired.
-- No CAPTCHA bypass, no scraping behind logins, no automatic submissions.
-- Anything that leaves the system (application submit, outreach send) is gated by
-  a human approval that is bound to the exact payload hash and can be used once.
-- All API mutations write audit records; agent runs record each step's outcome,
-  including policy blocks.
-- Untrusted job/email/web text is wrapped as data in prompts and is never
-  followed as instructions.
+The October 22 audit verdict is **NOT_READY for the complete autopilot product**. It includes fixed runtime/watcher defects and remaining functional, quality and dependency risks. Local performance measurements are not production capacity claims. See [REPORT.md](docs/qa/REPORT.md) and machine-readable evidence before planning a release.
 
-## License
+## Contributing
 
-Private — all rights reserved. No license is granted for redistribution.
-
-## Desktop development
-
-The local-first desktop foundation lives in `apps/desktop`. Run `pnpm dev:desktop` for the native Tauri app or see [desktop build status](docs/DESKTOP_BUILD_STATUS.md) for prerequisites, checks and remaining alpha gates. The existing web app remains available during migration.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), reproduce a narrow issue, add behavior-focused verification, and distinguish live evidence from fixtures. Please avoid adding marketing claims or simulated success for unavailable features. Issues and pull requests are welcome at [Jasowills/pursuit](https://github.com/Jasowills/pursuit).

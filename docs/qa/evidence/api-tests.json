@@ -1,0 +1,192 @@
+{
+  "numTotalTestSuites": 7,
+  "numPassedTestSuites": 7,
+  "numTotalTests": 35,
+  "numPassedTests": 35,
+  "numFailedTests": 0,
+  "success": true,
+  "suites": [
+    {
+      "name": "test/e2e.careers.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "SUBMITTED evidence gate creates a job and dedupes a second identical intake",
+          "status": "passed"
+        },
+        {
+          "title": "SUBMITTED evidence gate rejects SUBMITTED without confirmation_ref",
+          "status": "passed"
+        },
+        {
+          "title": "SUBMITTED evidence gate rejects illegal transition DISCOVERED \u2192 SUBMITTED",
+          "status": "passed"
+        },
+        {
+          "title": "SUBMITTED evidence gate accepts SUBMITTED with confirmation evidence and records the event",
+          "status": "passed"
+        },
+        {
+          "title": "cross-tenant isolation cannot read or mutate another tenant\u2019s application",
+          "status": "passed"
+        },
+        {
+          "title": "approval single-use lifecycle consumes an approval exactly once",
+          "status": "passed"
+        },
+        {
+          "title": "watcher configuration integrity validates patches and reschedules enabled watchers with the new interval",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "test/e2e.autopilot.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "persistent opt-in autopilot (real Postgres, external providers mocked) defaults off, isolates owners, and rejects unsupported application mode and unsafe sources",
+          "status": "passed"
+        },
+        {
+          "title": "persistent opt-in autopilot (real Postgres, external providers mocked) claims one background run across competing workers and persists completion notifications",
+          "status": "passed"
+        },
+        {
+          "title": "persistent opt-in autopilot (real Postgres, external providers mocked) prepares one draft per opportunity and never submits it",
+          "status": "passed"
+        },
+        {
+          "title": "persistent opt-in autopilot (real Postgres, external providers mocked) fences pause during model generation so no draft is saved after pause",
+          "status": "passed"
+        },
+        {
+          "title": "persistent opt-in autopilot (real Postgres, external providers mocked) does not overwrite a newer schedule when an older request finishes",
+          "status": "passed"
+        },
+        {
+          "title": "persistent opt-in autopilot (real Postgres, external providers mocked) counts failed model requests toward the per-run preparation limit",
+          "status": "passed"
+        },
+        {
+          "title": "persistent opt-in autopilot (real Postgres, external providers mocked) records source failures instead of reporting success and recovers stale leases",
+          "status": "passed"
+        },
+        {
+          "title": "persistent opt-in autopilot (real Postgres, external providers mocked) rejects stale settings writes and empty enabled source lists",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "test/e2e.sse.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "SSE event stream streams tenant-scoped outbox events and excludes other tenants",
+          "status": "passed"
+        },
+        {
+          "title": "SSE event stream rejects the stream without a bearer token",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "test/e2e.workflow.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "BYOM career workflow (real Postgres, mocked external services) stores a user-owned encrypted connection and requires an inference test",
+          "status": "passed"
+        },
+        {
+          "title": "BYOM career workflow (real Postgres, mocked external services) prepares and persists materials and prevents cross-user access",
+          "status": "passed"
+        },
+        {
+          "title": "BYOM career workflow (real Postgres, mocked external services) binds approvals to saved content and invalidates them on edit",
+          "status": "passed"
+        },
+        {
+          "title": "BYOM career workflow (real Postgres, mocked external services) consumes an approval only once under concurrent sends",
+          "status": "passed"
+        },
+        {
+          "title": "BYOM career workflow (real Postgres, mocked external services) locks ambiguous delivery and never retries it",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "test/unit.connections.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "user-owned credential encryption encrypts non-deterministically and refuses another user or provider",
+          "status": "passed"
+        },
+        {
+          "title": "user-owned credential encryption fails closed when no encryption key is configured",
+          "status": "passed"
+        },
+        {
+          "title": "model transport uses fixed authenticated endpoints and removes unsupported model families",
+          "status": "passed"
+        },
+        {
+          "title": "model transport never returns a provider body containing a key",
+          "status": "passed"
+        },
+        {
+          "title": "model transport requires real nonempty model output",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "test/unit.validation.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "approval payload hash binding is stable for identical payloads",
+          "status": "passed"
+        },
+        {
+          "title": "approval payload hash binding changes when any payload detail changes (PRD: exact-payload binding)",
+          "status": "passed"
+        },
+        {
+          "title": "ZodValidationPipe passes valid data",
+          "status": "passed"
+        },
+        {
+          "title": "ZodValidationPipe raises a structured validation error with field paths",
+          "status": "passed"
+        },
+        {
+          "title": "application state machine (PRD core gate) accepts legal transitions through the happy path",
+          "status": "passed"
+        },
+        {
+          "title": "application state machine (PRD core gate) rejects the fabricated-submission shortcut and terminal dead-ends",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "test/unit.gmail.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "title": "direct Gmail OAuth uses single-use state, PKCE and send-only Gmail permission",
+          "status": "passed"
+        },
+        {
+          "title": "direct Gmail OAuth rejects a forged callback before contacting Google",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

@@ -867,3 +867,150 @@
 .recording-photo {
   object-position: center 70%;
 }
+.phone-device {
+  height: 660px;
+  min-height: 660px;
+}
+.release-downloads .platform-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+.dark-landing .release-downloads .platform-picker > button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 12px;
+  padding: 22px 18px;
+  background: #0e0e0e;
+  border: 1px solid #2d2d2d;
+  border-radius: 9px;
+  color: #eee;
+  min-height: 160px;
+}
+.dark-landing .release-downloads .platform-picker > button[aria-pressed='true'] {
+  background: #1b1b1b;
+  border-color: #757575;
+}
+.download-os-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+}
+.release-downloads .platform-picker strong {
+  font-size: 16px;
+  font-weight: 500;
+}
+.release-downloads .platform-picker button > span:last-child {
+  font-size: 9px;
+  color: #aaa;
+  line-height: 1.6;
+}
+.release-download-detail {
+  border: 1px solid #292929;
+  border-radius: 9px;
+  padding: 24px;
+  margin-top: 14px;
+  background: #101010;
+}
+.release-download-detail strong {
+  font-size: 16px;
+  font-weight: 500;
+}
+.release-download-detail p {
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 10px;
+}
+.release-download-detail .download-actions {
+  margin-top: 22px;
+}
+.release-download-detail > small {
+  display: block;
+  font-size: 10px;
+  color: #999;
+  margin-top: 18px;
+  line-height: 1.6;
+}
+.companion-download {
+  margin-top: 25px;
+  padding-top: 26px;
+  border-top: 1px solid #333;
+}
+.companion-download > div:first-child {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+.companion-download h3 {
+  font-size: 20px;
+  font-weight: 450;
+  color: #eee;
+  line-height: 1.3;
+}
+.companion-download p {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.8;
+  margin-top: 10px;
+}
+.companion-platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin: 22px 0;
+}
+.companion-platforms > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.companion-platforms small {
+  font-size: 9px;
+  color: #999;
+}
+.companion-download > small {
+  display: block;
+  color: #999;
+  font-size: 10px;
+  line-height: 1.8;
+  margin-top: 15px;
+}
+@media (max-width: 500px) {
+  .phone-device {
+    height: 660px;
+    min-height: 660px;
+  }
+  .dark-landing .release-downloads .platform-picker > button {
+    padding: 15px 10px;
+    min-height: 140px;
+  }
+  .release-downloads .platform-picker strong {
+    font-size: 13px;
+  }
+  .release-download-detail {
+    padding: 19px;
+  }
+  .release-download-detail .download-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.closing-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 6px;
+}

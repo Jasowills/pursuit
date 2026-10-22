@@ -41,6 +41,14 @@ const transitionSchema = z.object({
   evidence_key: z.string().max(200).optional(),
 });
 
+const watcherPatchSchema = z
+  .object({
+    enabled: z.boolean().optional(),
+    frequency_minutes: z.number().int().min(15).max(14400).optional(),
+  })
+  .strict()
+  .refine((value) => Object.keys(value).length > 0, 'Provide a watcher setting');
+
 const decisionSchema = z.object({ decision: z.enum(['approve', 'reject']) });
 
 const profilePatchSchema = z
@@ -223,7 +231,7 @@ export class CareersController {
         frequencyMinutes: body.frequency_minutes,
         keywords: body.keywords as never,
         enabled: body.enabled,
-        nextCheckAt: new Date(Date.now() + body.frequency_minutes * 60_000),
+        nextCheckAt: body.enabled ? new Date(Date.now() + body.frequency_minutes * 60_000) : null,
       },
     });
     await this.dbw.emit(a.tenantId, 'watcher.created', `watcher:${row.id}`, {
@@ -236,7 +244,8 @@ export class CareersController {
   async patchWatcher(
     @Req() req: Request,
     @Param('id') id: string,
-    @Body() body: { enabled?: boolean; frequency_minutes?: number },
+    @Body(new ZodValidationPipe(watcherPatchSchema))
+    body: z.infer<typeof watcherPatchSchema>,
   ) {
     const a = au(req);
     const existing = await this.dbw.db.watcher.findFirst({
@@ -248,9 +257,10 @@ export class CareersController {
       data: {
         enabled: body.enabled ?? undefined,
         frequencyMinutes: body.frequency_minutes ?? undefined,
-        nextCheckAt: body.enabled
-          ? new Date(Date.now() + existing.frequencyMinutes * 60_000)
-          : null,
+        nextCheckAt:
+          (body.enabled ?? existing.enabled)
+            ? new Date(Date.now() + (body.frequency_minutes ?? existing.frequencyMinutes) * 60_000)
+            : null,
       },
     });
     return { watcher: mapWatcher(row) };

@@ -1,0 +1,14 @@
+{
+  "status": 201,
+  "body": {
+    "board": "cloudflare",
+    "total_available": 442,
+    "imported": 25,
+    "limit": 25,
+    "sample_titles": [
+      "Account Executive, FedCiv",
+      "Account Executive, Indonesia",
+      "AI Security Research & Red Team Engineer"
+    ]
+  }
+}
