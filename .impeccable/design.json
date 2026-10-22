@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-22T16:06:22.516525+00:00",
+  "generatedAt": "2026-10-22T16:30:37.990611+00:00",
   "title": "Design System: Pursuit",
   "extensions": {
     "typographyMeta": {
@@ -16,7 +16,7 @@
     "shadows": [
       {
         "name": "floating-dock",
-        "value": "0 12px 45px #0005",
+        "value": "inset 0 1px 0 #ffffff20, inset 0 -1px 0 #ffffff05, 0 14px 40px #0008",
         "purpose": "Floating landing navigation."
       },
       {
@@ -52,11 +52,6 @@
         "purpose": "Decorative sourcing connector; disabled by reduced motion."
       },
       {
-        "name": "notice-arrive",
-        "value": "600ms cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Sample-run notification arrival when motion is allowed."
-      },
-      {
         "name": "ping-float",
         "value": "6s ease-in-out infinite",
         "purpose": "Closing notification decoration, disabled by reduced motion."
@@ -65,6 +60,11 @@
         "name": "footer-dot-hop",
         "value": "2s cubic-bezier(0.2, 0.8, 0.3, 1) infinite; animation-delay: 1s",
         "purpose": "Footer dot motion; reduced motion disables animation."
+      },
+      {
+        "name": "source-scene-in",
+        "value": "550ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Chapter entrance from translateX(20px), opacity .5 and blur(3px); reduced motion disables animation. Scroll arrival separately maps translateY(70px) and scale(.94) to settled content."
       }
     ],
     "breakpoints": [
@@ -95,6 +95,10 @@
       {
         "name": "landing-narrow",
         "value": "500px"
+      },
+      {
+        "name": "source-story-static",
+        "value": "max-width: 900px, max-height: 699px, or prefers-reduced-motion: reduce"
       }
     ]
   },
@@ -125,7 +129,7 @@
       "kind": "nav",
       "description": "Dock material and frame; Product disclosure and live GitHub behavior belong to the application.",
       "html": "<nav class=\"ds-nav\" aria-label=\"Product\"><a href=\"#product\">Product</a><a href=\"#models\">Models</a></nav>",
-      "css": ".ds-nav {display:flex;align-items:center;gap:4px;padding:10px 16px;border:1px solid #363d2d;border-radius:14px;background:#0b0e08f5;backdrop-filter:blur(16px);box-shadow:0 12px 45px #0005;min-height:66px}.ds-nav a {color:#b7beac;font:12px Geist,sans-serif;text-decoration:none;padding-inline:12px}.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav a:focus-visible {outline:2px solid #d5f578;outline-offset:3px;}"
+      "css": ".ds-nav {display:flex;align-items:center;gap:4px;padding:10px 16px;border:1px solid #ffffff24;border-radius:20px;background:linear-gradient(115deg,#ffffff12,#ffffff04 45%,#ffffff0a),#08090cb8;backdrop-filter:blur(28px) saturate(140%);box-shadow:inset 0 1px 0 #ffffff20,inset 0 -1px 0 #ffffff05,0 14px 40px #0008;transition:background 250ms,border-color 250ms;min-height:66px}.ds-nav a {color:#b7beac;font:12px Geist,sans-serif;text-decoration:none;padding-inline:12px}.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav a:focus-visible {outline:2px solid #d5f578;outline-offset:3px;}.ds-nav a:hover {color:#f5f5ef}"
     },
     {
       "name": "Document view selector",
@@ -142,7 +146,8 @@
       "Geist interface with Arial resumes and Georgia letters",
       "Border-separated conversation and contextual inspector",
       "Lime companion and closing fields",
-      "Explicit sample provenance and execution boundaries"
+      "Explicit sample provenance and execution boundaries",
+      "Central scroll-linked sourcing story with manual/static fallbacks and explicit watcher simulation"
     ],
     "rules": [],
     "dos": [

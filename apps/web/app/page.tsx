@@ -3,7 +3,6 @@ import { Icon } from './_components/icons';
 import { DownloadOptions } from './_components/career-showcase';
 import { OpportunityField } from './_components/opportunity-field';
 import {
-  ProductJourney,
   HarnessFeature,
   DocumentWorkshop,
   CompanionShowcase,
@@ -13,6 +12,9 @@ import {
 } from './_components/career-journey';
 import './landing-dark.css';
 import './career-story.css';
+import './source-story.css';
+import { SourceStory, WatchersShowcase } from './_components/source-story';
+import { HeroDownload } from './_components/platform-download';
 
 const REPO = 'https://github.com/Jasowills/pursuit';
 const providers = [
@@ -76,9 +78,7 @@ export default function HomePage() {
               <br className="desktop-break" /> where you are and where you want to be.
             </p>
             <div className="dark-actions">
-              <a href="#download" className="dark-button primary">
-                <Icon name="monitor" size={17} /> Get Pursuit <Icon name="arrowUpRight" size={16} />
-              </a>
+              <HeroDownload />
               <a href="#how-it-works" className="hero-watch">
                 <span>
                   <svg
@@ -119,11 +119,12 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <ProductJourney />
+        <SourceStory />
         <HarnessFeature />
         <DocumentWorkshop />
         <CompanionShowcase />
         <BackgroundShowcase />
+        <WatchersShowcase />
         <OutreachShowcase />{' '}
         <section className="dark-section dark-frame models-section" id="models">
           <div className="section-heading-pair">

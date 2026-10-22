@@ -166,6 +166,7 @@ export function LandingHeader() {
                     ],
                     ['Cold outreach', 'Source, prepare, review.', '#outreach', 'send'],
                     ['Background work', 'Keep your search moving.', '#autopilot', 'clock'],
+                    ['Company watchers', 'Be there when a role opens.', '#watchers', 'bell'],
                   ].map(([title, description, target, icon]) => (
                     <a
                       href={target}

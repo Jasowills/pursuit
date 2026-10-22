@@ -36,3 +36,7 @@ FIRST VIEWPORT: Preserve the accepted centered hero and WebGL trajectory; a comp
 FORM: User-pinned continuation of the accepted hero and familiar T3-like conversational workspace. No historical seed key or ordered candidate list is available; none is retroactively invented.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+
+## Sourcing story and acquisition refinement
+
+Preserve the accepted hero and palette. Replace the old timed morning-run panel with a centrally framed, scroll-linked three-stage product walkthrough inspired by the public sticky-stage behavior of Neatlogs. Keep explicit controls and static reflow for mobile/reduced motion. Add Company watchers with a clearly simulated PostHog careers change alert; source freshness and real vacancy claims are not implied. The hero detects desktop OS, shows the correct platform mark, and leads to actual available alpha options; never invent installer URLs. The user requests a glossy neutral-black navbar, superseding the opaque olive dock material. Main harness pipeline remains discussion-only during this pass.

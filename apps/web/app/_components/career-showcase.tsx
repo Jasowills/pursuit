@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from './icons';
+import { usePlatform, PlatformLogo, type Platform } from './platform-download';
 
 export function HarnessShowcase() {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -211,13 +212,15 @@ export function AutopilotStudy() {
 }
 
 export function DownloadOptions() {
-  const [platform, setPlatform] = useState('macOS');
+  const detected = usePlatform();
+  const [choice, setChoice] = useState<Platform | null>(null);
+  const platform = choice || detected || 'macOS';
   return (
     <div className="download-options">
       <div role="group" aria-label="Choose your operating system" className="platform-picker">
-        {['macOS', 'Windows', 'Linux'].map((os) => (
-          <button key={os} aria-pressed={platform === os} onClick={() => setPlatform(os)}>
-            {os}
+        {(['macOS', 'Windows', 'Linux'] as const).map((os) => (
+          <button key={os} aria-pressed={platform === os} onClick={() => setChoice(os)}>
+            <PlatformLogo platform={os} size={19} /> {os}
           </button>
         ))}
       </div>

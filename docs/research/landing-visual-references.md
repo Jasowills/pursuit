@@ -9,3 +9,7 @@ The user asked for a replacement of the lavender page, with a pure-black foundat
 Implemented palette: black `#000000`, ivory `#f5f5ef`, acid yellow `#d5f578`, ice blue `#7bc8f6`, with neutral ramps and quiet state tints. Each signal has a role rather than tinting every heading or entire card.
 
 The hero's animation is decorative. Workflow examples are illustrative, not live application proof. The actual harness screenshot is an unmocked browser renderer capture with disconnected native storage visibly disclosed. No unavailable submission executor or public installer is presented as working.
+
+## Post-hero follow-up — 2026-10-22
+
+Inspected Neatlogs' public rendered page and delivered CSS again: its `stickyStage` is `position: sticky; top: 0; height: 100svh`, with clipping/isolation and layered copy panels switching opacity/visibility. Public browser captures show the window moving into a central stage as the reader scrolls. Pursuit implements an original scroll-linked source → tailoring → application sequence using its own markup, sample career and palette; desktop uses a sticky viewport while small/short screens and reduced motion use direct stage controls. No Neatlogs code or artwork is reused. The navbar is refined into a neutral glossy black floating surface; OS logos identify download choices.

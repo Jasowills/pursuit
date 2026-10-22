@@ -34,7 +34,7 @@ with sync_playwright() as p:
   if width<1100:
    page.get_by_role('button',name='Open menu',exact=True).click();expect(page.get_by_role('navigation',name='Mobile',exact=True)).to_be_visible();page.keyboard.press('Escape')
   if width in [1440,390]:
-   for key,sel in [('journey','#how-it-works'),('resume','#features'),('companion','#companion'),('background','#autopilot'),('outreach','#outreach'),('cta','.closing-invitation'),('footer','.new-footer')]:
+   for key,sel in [('journey','#how-it-works'),('resume','#features'),('companion','#companion'),('background','#autopilot'),('watchers','#watchers'),('outreach','#outreach'),('cta','.closing-invitation'),('footer','.new-footer')]:
     page.locator(sel).screenshot(path=str(OUT/(name+'-'+key+'.png')),style='.site-header {visibility:hidden!important;}')
  page.set_viewport_size({'width':1440,'height':1000})
  page.get_by_role('button',name='Cover letter',exact=True).click();expect(page.locator('.marketing-letter')).to_contain_text('Dear Northstar team')
@@ -46,6 +46,8 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Review approval',exact=True).click();page.get_by_role('button',name='Approve sample application',exact=True).click();expect(page.locator('.phone-complete')).to_contain_text('Your application is in.')
  page.get_by_role('button',name='Composio',exact=True).click();expect(page.locator('.gmail-consent')).to_contain_text('Composio project')
  page.get_by_role('button',name='Review draft',exact=True).click();expect(page.get_by_role('status').filter(has_text='No email')).to_be_visible()
- page.get_by_role('button',name='See the journey',exact=True).click();expect(page.locator('.run-play')).to_have_text('Replay the journey',timeout=8000)
+ page.get_by_role('button',name='Apply and keep track',exact=True).click();expect(page.locator('.source-delivery')).to_contain_text('A role worth your attention')
+ page.get_by_role('button',name='Autopilot within limits',exact=True).click();expect(page.locator('.source-delivery')).to_contain_text('Your application is in.')
+ page.get_by_role('button',name='Preview a new-role alert',exact=True).click();expect(page.locator('.watcher-found')).to_contain_text('not a live PostHog vacancy')
  assert not errors,errors
  b.close();print('Career experience passed: actual renderer tour, conversation counts, role intake, outreach, background, full resume/video; landing 1440/973/390/320, document changes, companion approval, Gmail paths, sample run.')
