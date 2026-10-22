@@ -33,7 +33,7 @@ textarea:focus-visible {
   outline: 2px solid #d5f578;
 }
 ::selection {
-  background: #252c17;
+  background: #232323;
   color: #f1f1f1;
 }
 button {
@@ -92,7 +92,7 @@ button:disabled {
   border-radius: 6px;
 }
 .sidebar nav a[aria-current] {
-  background: #252c17;
+  background: #232323;
   color: #d5f578;
   font-weight: 600;
 }
@@ -264,7 +264,7 @@ button:hover:enabled {
 }
 .task:hover:enabled,
 .task.selected {
-  background: #202613;
+  background: #1e1e1e;
 }
 .task strong {
   font-weight: 500;
@@ -703,14 +703,14 @@ button.secondary:hover:enabled {
   }
 }
 .desktop-utility {
-  background: #161d0e;
-  border-bottom: 1px solid #3b4c28;
+  background: #161616;
+  border-bottom: 1px solid #3a3a3a;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 15px;
   padding: 7px 20px;
-  color: #acbc93;
+  color: #a9a9a9;
   font-size: 10px;
   min-height: 35px;
 }
@@ -719,7 +719,7 @@ button.secondary:hover:enabled {
   padding: 3px 9px;
   font-size: 9px;
   background: none;
-  border: 1px solid #51663a;
+  border: 1px solid #505050;
   color: #d5f578;
 }
 .desktop-settings-backdrop {
@@ -734,9 +734,9 @@ button.secondary:hover:enabled {
 .desktop-settings {
   width: min(900px, 95vw);
   height: min(850px, 90dvh);
-  border: 1px solid #485b32;
+  border: 1px solid #474747;
   border-radius: 12px;
-  background: #0c0e09;
+  background: #0c0c0c;
   box-shadow: 0 25px 100px #000b;
   overflow: auto;
 }
@@ -747,8 +747,8 @@ button.secondary:hover:enabled {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: #13180d;
-  border-bottom: 1px solid #354428;
+  background: #131313;
+  border-bottom: 1px solid #363636;
   padding: 15px 25px;
   font-size: 13px;
 }
@@ -784,7 +784,7 @@ button.secondary:hover:enabled {
   padding: 0;
   border: 0;
   background: transparent;
-  color: #e5edda;
+  color: #e4e4e4;
   max-width: 96vw;
   max-height: 94dvh;
   overflow: visible;

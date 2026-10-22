@@ -19,7 +19,7 @@ with sync_playwright() as p:
   page.wait_for_timeout(650)
   assert abs(stage.bounding_box()['y'])<2
   page.screenshot(path=str(OUT/f'scroll-{i}.png'))
- page.get_by_role('button',name='Autopilot within limits',exact=True).click()
+ page.locator('.source-approve').click()
  expect(page.locator('.source-delivery')).to_contain_text('Your application is in.')
  page.locator('#watchers').scroll_into_view_if_needed();page.get_by_role('button',name='Preview a new-role alert',exact=True).click()
  expect(page.locator('.watcher-found')).to_contain_text('Simulated change')

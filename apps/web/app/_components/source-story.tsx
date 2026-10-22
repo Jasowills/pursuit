@@ -27,7 +27,7 @@ export function SourceStory() {
   const root = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const [automatic, setAutomatic] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   useEffect(() => {
     const track = root.current;
     const view = stage.current;
@@ -243,14 +243,6 @@ export function SourceStory() {
                         <Icon name="shield" size={20} />
                         <h4>Keep your direction. Lose the busywork.</h4>
                       </div>
-                      <div className="source-mode" role="group" aria-label="Application mode">
-                        <button aria-pressed={!automatic} onClick={() => setAutomatic(false)}>
-                          Review each application
-                        </button>
-                        <button aria-pressed={automatic} onClick={() => setAutomatic(true)}>
-                          Autopilot within limits
-                        </button>
-                      </div>
                       <div className="source-application">
                         <span className="source-company">N</span>
                         <div>
@@ -259,23 +251,61 @@ export function SourceStory() {
                         </div>
                         <Icon name="check" size={18} />
                       </div>
+                      <ol className="application-progress">
+                        <li>
+                          <Icon name="check" size={14} />
+                          <div>
+                            <strong>Material prepared</strong>
+                            <span>Resume and cover letter, tailored for this role</span>
+                          </div>
+                        </li>
+                        <li>
+                          <Icon name="check" size={14} />
+                          <div>
+                            <strong>Preferences checked</strong>
+                            <span>Location, compensation and your confirmed facts</span>
+                          </div>
+                        </li>
+                        <li>
+                          <Icon name={submitted ? 'check' : 'clock'} size={14} />
+                          <div>
+                            <strong>
+                              {submitted
+                                ? 'Sample application recorded'
+                                : 'Waiting for your decision'}
+                            </strong>
+                            <span>
+                              {submitted
+                                ? 'Your sample record stays with the role'
+                                : 'One clear next step, with the material beside you'}
+                            </span>
+                          </div>
+                        </li>
+                      </ol>
                       <div className="source-delivery">
                         <Icon name="bell" size={22} />
                         <div>
                           <strong>
-                            {automatic ? 'Your application is in.' : 'A role worth your attention.'}
+                            {submitted ? 'Your application is in.' : 'A role worth your attention.'}
                           </strong>
                           <p>
-                            {automatic
+                            {submitted
                               ? 'Tailored material and a sample confirmation, together in your timeline.'
                               : 'Your resume and cover letter are ready. Review them before the next step.'}
                           </p>
                         </div>
                       </div>
+                      <button
+                        className="dark-button source-approve"
+                        onClick={() => setSubmitted((v) => !v)}
+                      >
+                        {submitted ? 'Replay application preview' : 'Approve sample application'}
+                        <Icon name={submitted ? 'clock' : 'arrowUpRight'} size={14} />
+                      </button>
                       <div className="source-check">
                         <Icon name="shield" size={16} />
                         <span>
-                          {automatic
+                          {submitted
                             ? 'Your limits govern each application. Outreach still needs approval.'
                             : 'Your documents. Your decision. One clear next step.'}
                         </span>
@@ -287,16 +317,6 @@ export function SourceStory() {
                   <span>Fictional product walkthrough · no external actions</span>
                   <span>{active + 1} / 3</span>
                 </div>
-              </div>
-              <div className="source-floating-note" aria-hidden="true">
-                <Icon name={chapters[active]!.icon} size={17} />
-                <span>
-                  {active === 0
-                    ? 'Less searching. More possibility.'
-                    : active === 1
-                      ? 'Your story, with the right emphasis.'
-                      : 'A clear record of every next step.'}
-                </span>
               </div>
             </div>
           </div>
@@ -334,12 +354,33 @@ export function WatchersShowcase() {
           <small>Product preview</small>
         </div>
         <div className="watcher-url">
-          <Icon name="globe" size={18} />
+          <img
+            className="watcher-company-logo"
+            src="/brands/posthog.svg"
+            alt="PostHog"
+            width={34}
+            height={34}
+          />
           <div>
             <strong>PostHog</strong>
             <span>posthog.com/careers</span>
           </div>
           <span className="watcher-pulse">{checked ? 'Change detected' : 'Watching'}</span>
+        </div>
+        <div className="watcher-other-companies">
+          {[
+            ['Stripe', 'stripe.svg', 'stripe.com/jobs'],
+            ['Linear', 'linear.svg', 'linear.app/careers'],
+          ].map(([name, logo, url]) => (
+            <div key={name}>
+              <img src={`/brands/${logo}`} alt={name} width={28} height={28} />
+              <div>
+                <strong>{name}</strong>
+                <span>{url}</span>
+              </div>
+              <small>Example watch</small>
+            </div>
+          ))}
         </div>
         <div className="watcher-rule">
           <span>Looking for</span>

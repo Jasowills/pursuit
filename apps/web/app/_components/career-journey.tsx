@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ResumeDocument, COVER_LETTER, VIDEO_SCRIPT, DeskIcon } from '@pursuit/ui/career-workspace';
 import '@pursuit/ui/career-workspace.css';
 import { Icon } from './icons';
+import { ActivityLedger } from './activity-ledger';
 
 function Enter({
   children,
@@ -207,10 +208,15 @@ export function DocumentWorkshop() {
               <div className="video-studio">
                 <div className="video-preview">
                   <span className="camera-corners" />
-                  <div>
-                    <Icon name="monitor" size={44} />
-                    <span>Your space. Your story.</span>
-                  </div>
+                  <img
+                    className="recording-photo"
+                    src="/photos/recording-workspace.jpg"
+                    alt="Stock example of a professional workspace for video preparation"
+                    width={900}
+                    height={600}
+                    loading="lazy"
+                  />
+                  <span className="recording-label">Your space. Your story.</span>
                   <span className="video-length">01:30</span>
                 </div>
                 <div className="video-request">
@@ -266,14 +272,50 @@ export function DocumentWorkshop() {
 
 export function CompanionShowcase() {
   const [stage, setStage] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [onScreen, setOnScreen] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const [pageVisible, setPageVisible] = useState(true);
+  const section = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    const motion = () => setReduced(media.matches);
+    const visibility = () => setPageVisible(!document.hidden);
+    motion();
+    visibility();
+    media.addEventListener('change', motion);
+    document.addEventListener('visibilitychange', visibility);
+    const observer = new IntersectionObserver(
+      (entries) => setOnScreen(entries.some((e) => e.isIntersecting)),
+      { threshold: 0.25 },
+    );
+    if (section.current) observer.observe(section.current);
+    return () => {
+      observer.disconnect();
+      media.removeEventListener('change', motion);
+      document.removeEventListener('visibilitychange', visibility);
+    };
+  }, []);
+  useEffect(() => {
+    if (!playing || !onScreen || reduced || !pageVisible || stage > 3) return;
+    const timer = setTimeout(() => setStage((s) => (s + 1) % 4), 4500);
+    return () => clearTimeout(timer);
+  }, [playing, onScreen, reduced, pageVisible, stage]);
+  function selectStage(next: number) {
+    setPlaying(false);
+    setStage(next);
+  }
   const titles = [
     'A role that fits you.',
     'Everything you need to decide.',
     'A clear yes, on your terms.',
     'One less loose end.',
+    'Your introduction, prepared.',
+    'Your assistant, close by.',
+    'Every application, together.',
   ];
   return (
-    <section className="companion-band" id="companion">
+    <section className="companion-band" id="companion" ref={section}>
       <div className="dark-frame companion-layout">
         <div className="companion-copy">
           <h2>
@@ -292,7 +334,7 @@ export function CompanionShowcase() {
           <div className="companion-steps" role="group" aria-label="Companion workflow">
             {['Get the match', 'Review the role', 'Approve the next step', 'Get the update'].map(
               (s, i) => (
-                <button key={s} onClick={() => setStage(i)} aria-pressed={stage === i}>
+                <button key={s} onClick={() => selectStage(i)} aria-pressed={stage === i}>
                   <span>{stage > i ? <Icon name="check" size={13} /> : i + 1}</span>
                   {s}
                   <Icon name="arrowUpRight" size={14} />
@@ -300,6 +342,19 @@ export function CompanionShowcase() {
               ),
             )}
           </div>
+          {!reduced && (
+            <button
+              className="companion-playback"
+              onClick={() => {
+                if (stage > 3) setStage(0);
+                setPlaying((v) => !v);
+              }}
+              aria-pressed={playing}
+            >
+              <Icon name={playing ? 'pause' : 'arrowUpRight'} size={14} />
+              {playing ? 'Pause preview' : 'Play preview'}
+            </button>
+          )}
           <small>Companion product preview · fictional sample career · no external actions</small>
         </div>
         <Enter side="right" className="companion-devices">
@@ -355,7 +410,7 @@ export function CompanionShowcase() {
                     Senior Product Designer at Northstar. A strong match for your B2B product
                     experience.
                   </p>
-                  <button onClick={() => setStage(1)}>
+                  <button onClick={() => selectStage(1)}>
                     Review the opportunity <Icon name="arrowUpRight" size={12} />
                   </button>
                 </div>
@@ -370,6 +425,38 @@ export function CompanionShowcase() {
                     <span>application to review</span>
                   </div>
                 </div>
+                <div className="phone-worklist">
+                  <div>
+                    <h4>Up next</h4>
+                    <span>2 need you</span>
+                  </div>
+                  <button onClick={() => selectStage(1)}>
+                    <Icon name="file" size={15} />
+                    <span>
+                      <strong>Northstar application</strong>
+                      <small>Tailored resume · ready to review</small>
+                    </span>
+                    <Icon name="arrowUpRight" size={12} />
+                  </button>
+                  <button onClick={() => selectStage(4)}>
+                    <Icon name="monitor" size={15} />
+                    <span>
+                      <strong>Your introduction video</strong>
+                      <small>Morrow · script prepared</small>
+                    </span>
+                    <Icon name="arrowUpRight" size={12} />
+                  </button>
+                  <div className="phone-recent">
+                    <Icon name="check" size={13} />
+                    <span>
+                      Bramble application recorded <small>Sample activity · 09:26</small>
+                    </span>
+                  </div>
+                </div>
+                <button className="phone-ask" onClick={() => selectStage(5)}>
+                  <DeskIcon name="chat" size={14} /> Ask Pursuit about your search{' '}
+                  <Icon name="arrowUpRight" size={12} />
+                </button>
               </div>
             ) : stage === 1 ? (
               <div className="phone-content">
@@ -394,7 +481,7 @@ export function CompanionShowcase() {
                     <Icon name="file" size={14} /> Cover letter <Icon name="check" size={12} />
                   </span>
                 </div>
-                <button className="phone-primary" onClick={() => setStage(2)}>
+                <button className="phone-primary" onClick={() => selectStage(2)}>
                   Review approval <Icon name="arrowUpRight" size={13} />
                 </button>
               </div>
@@ -416,12 +503,60 @@ export function CompanionShowcase() {
                     <strong>Not included</strong>
                   </div>
                 </div>
-                <button className="phone-primary" onClick={() => setStage(3)}>
+                <button className="phone-primary" onClick={() => selectStage(3)}>
                   Approve sample application <Icon name="check" size={14} />
                 </button>
                 <small className="phone-disclosure">
                   Interactive preview. Nothing is submitted.
                 </small>
+              </div>
+            ) : stage === 4 ? (
+              <div className="phone-content phone-video-plan">
+                <span className="phone-section-label">Morrow / Introduction video</span>
+                <p>A 90-second story, grounded in your experience.</p>
+                {VIDEO_SCRIPT.slice(0, 2).map(([time, title, copy]) => (
+                  <div key={time}>
+                    <small>{time}</small>
+                    <strong>{title}</strong>
+                    <p>{copy}</p>
+                  </div>
+                ))}
+                <a href="#features" className="phone-primary">
+                  Explore video preparation <Icon name="arrowUpRight" size={13} />
+                </a>
+              </div>
+            ) : stage === 5 ? (
+              <div className="phone-content phone-chat-preview">
+                <div className="phone-chat-question">How is my search going?</div>
+                <div>
+                  <span className="phone-mark">
+                    <Icon name="arrowUpRight" size={14} />
+                  </span>
+                  <p>
+                    In this sample career, you have four shortlisted roles, one application to
+                    review, and a video introduction to prepare. Bramble has a sample application
+                    confirmation.
+                  </p>
+                  <small>Illustrative assistant response</small>
+                </div>
+                <button className="phone-primary" onClick={() => selectStage(1)}>
+                  Review the application <Icon name="arrowUpRight" size={13} />
+                </button>
+              </div>
+            ) : stage === 6 ? (
+              <div className="phone-content phone-application-list">
+                {[
+                  ['Northstar', 'Senior Product Designer', 'Ready for review'],
+                  ['Morrow', 'Lead Product Designer', 'Video requested'],
+                  ['Fieldstone', 'Product Designer', 'Prepared'],
+                  ['Bramble', 'Senior Experience Designer', 'Sample applied'],
+                ].map(([company, role, status]) => (
+                  <button key={company} onClick={() => selectStage(company === 'Morrow' ? 4 : 1)}>
+                    <strong>{company}</strong>
+                    <span>{role}</span>
+                    <small>{status}</small>
+                  </button>
+                ))}
               </div>
             ) : (
               <div className="phone-content">
@@ -440,21 +575,21 @@ export function CompanionShowcase() {
                   <Icon name="clock" size={17} />
                   <p>Your next step is already on the radar.</p>
                 </div>
-                <button className="phone-primary" onClick={() => setStage(0)}>
+                <button className="phone-primary" onClick={() => selectStage(0)}>
                   Replay the journey <Icon name="arrowUpRight" size={13} />
                 </button>
               </div>
             )}
             <div className="phone-bottom-nav">
-              <span>
+              <button onClick={() => selectStage(0)} aria-pressed={stage === 0}>
                 <Icon name="home" size={16} /> Today
-              </span>
-              <span>
+              </button>
+              <button onClick={() => selectStage(5)} aria-pressed={stage === 5}>
                 <DeskIcon name="chat" size={16} /> Assistant
-              </span>
-              <span>
+              </button>
+              <button onClick={() => selectStage(6)} aria-pressed={stage === 6}>
                 <Icon name="briefcase" size={16} /> Applications
-              </span>
+              </button>
             </div>
             <div className="phone-home-indicator" />
           </div>
@@ -493,7 +628,14 @@ export function OutreachShowcase() {
           </div>
           <div className="source-connector" />
           <div className="contact-record">
-            <span className="contact-avatar">PS</span>
+            <img
+              className="contact-avatar"
+              src="/photos/contact-portrait.jpg"
+              alt="Illustrative stock portrait for a fictional contact"
+              width={40}
+              height={40}
+              loading="lazy"
+            />
             <div>
               <strong>Priya Shah</strong>
               <span>Design Lead / Northstar</span>
@@ -573,10 +715,10 @@ export function OutreachShowcase() {
         <div className="gmail-connection-picker">
           <div role="group" aria-label="Gmail connection method">
             <button aria-pressed={path === 'google'} onClick={() => setPath('google')}>
-              Direct Google OAuth
+              <img src="/brands/gmail.svg" alt="" width={20} height={20} /> Direct Google OAuth
             </button>
             <button aria-pressed={path === 'composio'} onClick={() => setPath('composio')}>
-              Composio
+              <img src="/brands/composio.svg" alt="" width={20} height={20} /> Composio
             </button>
           </div>
           <div className="gmail-consent" aria-live="polite">
@@ -636,51 +778,7 @@ export function BackgroundShowcase() {
         </ul>
       </div>
       <Enter side="right" className="background-runs">
-        <div className="background-top">
-          <span>
-            <i /> Career autopilot
-          </span>
-          <span>Daily · 5 application limit</span>
-        </div>
-        <div className="background-run-summary">
-          <strong>
-            A morning’s work,
-            <br />
-            already organized.
-          </strong>
-          <span>Sample run / Alex’s career</span>
-        </div>
-        {[
-          ['Review target sources', '128 roles reviewed · 4 shortlisted', 'Complete'],
-          [
-            'Tailor the Northstar application',
-            'Resume and cover letter prepared',
-            'Ready for review',
-          ],
-          ['Prepare the Morrow video', '90-second script and recording checklist', 'Needs you'],
-          ['Apply to Bramble', 'Sample confirmation recorded', 'Complete'],
-        ].map(([title, detail, status], i) => (
-          <div className="background-run-row" key={title}>
-            <span className={status === 'Complete' ? 'done' : ''}>
-              <Icon name={status === 'Complete' ? 'check' : 'clock'} size={15} />
-            </span>
-            <div>
-              <strong>{title}</strong>
-              <p>{detail}</p>
-            </div>
-            <em>{status}</em>
-          </div>
-        ))}
-        <div className="background-notification">
-          <Icon name="bell" size={20} />
-          <div>
-            <strong>Pursuit has an update for you.</strong>
-            <p>
-              Your Northstar application is ready. Morrow needs a short introduction video—we’ve
-              prepared a script to help.
-            </p>
-          </div>
-        </div>
+        <ActivityLedger />
       </Enter>
     </section>
   );

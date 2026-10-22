@@ -17,7 +17,7 @@ void main(){
  float wave=sin(p.x*1.4+time*.14)*.022;
  float curve=.16+.14*p.x*p.x+wave+pointer.y*.006;
  float d=p.y-curve;
- vec3 lime=vec3(.82,.96,.38),blue=vec3(.39,.75,.98);
+ vec3 lime=vec3(.82,.96,.38),blue=vec3(.82,.82,.80);
  float shift=smoothstep(-.8,.85,p.x);
  vec3 hue=mix(lime,blue,shift);
  float line=exp(-abs(d)*380.);

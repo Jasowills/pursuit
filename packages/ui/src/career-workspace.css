@@ -1,9 +1,9 @@
 .career-workspace {
   --cw-bg: #080808;
   --cw-panel: #101010;
-  --cw-line: #282a25;
-  --cw-text: #eeeee7;
-  --cw-muted: #999e90;
+  --cw-line: #282828;
+  --cw-text: #ececec;
+  --cw-muted: #989898;
   --cw-lime: #d5f578;
   display: grid;
   grid-template-columns: 222px minmax(440px, 1fr) 360px;
@@ -29,7 +29,7 @@
   cursor: pointer;
   min-height: 36px;
   border: 1px solid var(--cw-line);
-  background: #171914;
+  background: #171717;
   color: var(--cw-text);
   border-radius: 6px;
   padding: 7px 11px;
@@ -39,8 +39,8 @@
   gap: 8px;
 }
 .career-workspace button:hover:enabled {
-  background: #242a1b;
-  border-color: #58633e;
+  background: #232323;
+  border-color: #535353;
 }
 .career-workspace button:disabled {
   opacity: 0.45;
@@ -79,15 +79,15 @@
 }
 .career-workspace textarea,
 .career-workspace input:not([type='checkbox']) {
-  border: 1px solid #3c4133;
-  background: #10120d;
+  border: 1px solid #3b3b3b;
+  background: #101010;
   border-radius: 5px;
   padding: 10px 12px;
-  color: #eeeee7;
+  color: #ececec;
   resize: vertical;
 }
 .career-workspace ::selection {
-  color: #10140a;
+  color: #0f0f0f;
   background: #d5f578;
 }
 .cw-sidebar {
@@ -114,7 +114,7 @@
   display: grid;
   place-items: center;
   background: #d5f578;
-  color: #101409;
+  color: #0f0f0f;
   border-radius: 7px;
   width: 28px;
   height: 28px;
@@ -135,10 +135,10 @@
   display: grid;
   place-items: center;
   border-radius: 7px;
-  background: #262b1e;
-  color: #d6e3bc;
+  background: #252525;
+  color: #d2d2d2;
   font-size: 10px;
-  border: 1px solid #414a31;
+  border: 1px solid #3f3f3f;
   flex: none;
 }
 .cw-account strong {
@@ -149,15 +149,15 @@
 .cw-account small {
   display: block;
   font-size: 9px;
-  color: #8e9781;
+  color: #8d8d8d;
   margin-top: 3px;
 }
 .career-workspace .cw-new {
   width: 100%;
   justify-content: start;
-  background: #20251a;
-  border-color: #414a30;
-  color: #dfe9cc;
+  background: #202020;
+  border-color: #3e3e3e;
+  color: #dcdcdc;
   font-size: 11px;
   margin-bottom: 20px;
   min-height: 37px;
@@ -171,19 +171,19 @@
   justify-content: start;
   border: 0;
   background: none;
-  color: #9ba38e;
+  color: #999999;
   min-height: 41px;
   padding-inline: 11px;
   font-size: 11px;
 }
 .cw-sidebar nav button[aria-current] {
-  background: #2b331e;
-  color: #e1f5b4;
+  background: #292929;
+  color: #d9d9d9;
   font-weight: 550;
 }
 .cw-sidebar nav button > span {
   margin-left: auto;
-  background: #3b4627;
+  background: #383838;
   border-radius: 4px;
   padding: 0 6px;
   font-size: 9px;
@@ -196,7 +196,7 @@
 }
 .cw-nav-caption {
   font-size: 8px;
-  color: #7f8b71;
+  color: #7e7e7e;
   letter-spacing: 0.1em;
   padding: 0 11px 7px;
 }
@@ -208,7 +208,7 @@
   padding: 17px 7px 0;
   margin-top: 13px;
   font-size: 9px;
-  color: #949e85;
+  color: #929292;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -251,15 +251,15 @@
   gap: 13px;
 }
 .cw-topbar > div:first-child > span {
-  color: #858e78;
+  color: #848484;
 }
 .cw-topbar b {
   font-weight: 400;
-  color: #4b5440;
+  color: #4a4a4a;
 }
 .cw-topbar strong {
   font-weight: 500;
-  color: #d1d8c5;
+  color: #cfcfcf;
 }
 .cw-topbar > div > button {
   border: 0;
@@ -278,7 +278,7 @@
   right: 8px;
 }
 .cw-preview-label {
-  color: #858e78;
+  color: #848484;
   font-size: 9px;
 }
 .cw-body {
@@ -304,7 +304,7 @@
 .cw-conversation-heading > span:last-child {
   margin-left: auto;
   font-size: 9px;
-  color: #818b73;
+  color: #808080;
 }
 .cw-thread {
   min-height: 325px;
@@ -322,15 +322,15 @@
   display: grid;
   place-items: center;
   font-size: 8px;
-  background: #1e2614;
-  border: 1px solid #414d2c;
+  background: #1d1d1d;
+  border: 1px solid #3e3e3e;
   color: #d5f578;
   border-radius: 6px;
 }
 .cw-user .cw-message-avatar {
   background: #22231f;
-  border-color: #41463a;
-  color: #d3d8c9;
+  border-color: #404040;
+  color: #d1d1d1;
 }
 .cw-message > div {
   padding-top: 2px;
@@ -341,21 +341,21 @@
   font-size: 10px;
   font-weight: 500;
   margin-bottom: 9px;
-  color: #cbd7b7;
+  color: #c8c8c8;
 }
 .cw-message p {
-  color: #b2b9a6;
+  color: #b0b0b0;
   font-size: 12px;
   line-height: 1.95;
   white-space: pre-wrap;
 }
 .cw-user p {
-  color: #e0e4d7;
+  color: #dedede;
 }
 .cw-inline-role {
   margin: 0 0 27px 39px;
-  border: 1px solid #424e2d;
-  background: #12170d;
+  border: 1px solid #3f3f3f;
+  background: #121212;
   border-radius: 7px;
   padding: 18px;
 }
@@ -367,11 +367,11 @@
 .cw-company {
   width: 32px;
   height: 32px;
-  border: 1px solid #485b31;
+  border: 1px solid #474747;
   display: grid;
   place-items: center;
-  background: #28341b;
-  color: #e1efcb;
+  background: #282828;
+  color: #dedede;
   font-size: 13px;
   font-weight: 550;
   border-radius: 6px;
@@ -384,7 +384,7 @@
 }
 .cw-inline-role div > div > span {
   display: block;
-  color: #96a584;
+  color: #959595;
   font-size: 9px;
   margin-top: 4px;
 }
@@ -401,15 +401,15 @@
 }
 .career-workspace .cw-inline-role > button {
   font-size: 10px;
-  color: #e3f2cc;
-  background: #252f18;
-  border-color: #536739;
+  color: #e0e0e0;
+  background: #242424;
+  border-color: #515151;
   min-height: 34px;
 }
 .cw-chat-composer {
-  border: 1px solid #505d3d;
+  border: 1px solid #4e4e4e;
   border-radius: 9px;
-  background: #11150d;
+  background: #111111;
   overflow: hidden;
   margin-top: 24px;
   box-shadow: 0 8px 28px #0004;
@@ -423,28 +423,28 @@
   padding: 18px !important;
   font-size: 12px;
   outline-offset: -4px !important;
-  color: #e1e7d5;
+  color: #dfdfdf;
 }
 .cw-chat-composer textarea::placeholder {
-  color: #929e80;
+  color: #909090;
 }
 .cw-chat-composer > div {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 13px;
-  border-top: 1px solid #2c3621;
+  border-top: 1px solid #2c2c2c;
 }
 .cw-chat-composer > div > span {
   display: flex;
   gap: 6px;
   align-items: center;
   font-size: 9px;
-  color: #9eae86;
+  color: #9b9b9b;
 }
 .cw-chat-composer label:not(.cw-sr-only) {
   font-size: 8px;
-  color: #8d9f75;
+  color: #8b8b8b;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -452,7 +452,7 @@
 }
 .cw-chat-composer button {
   background: #d5f578;
-  color: #10150a;
+  color: #101010;
   width: 31px;
   min-height: 31px;
   padding: 6px;
@@ -469,8 +469,8 @@
   padding: 5px 8px;
   min-height: 29px;
   background: none;
-  color: #8c9979;
-  border-color: #2c3423;
+  color: #8a8a8a;
+  border-color: #2c2c2c;
 }
 .cw-welcome {
   display: flex;
@@ -515,7 +515,7 @@
 .cw-record-summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-block: 1px solid #303626;
+  border-block: 1px solid #2f2f2f;
   margin-bottom: 22px;
 }
 .cw-record-summary > div {
@@ -524,15 +524,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  border-right: 1px solid #303626;
+  border-right: 1px solid #2f2f2f;
   font-size: 10px;
-  color: #a8b498;
+  color: #a7a7a7;
 }
 .cw-record-summary > div:last-child {
   border: 0;
 }
 .cw-record-summary strong {
-  color: #e4edda;
+  color: #e4e4e4;
   font-size: 22px;
   font-weight: 500;
 }
@@ -545,14 +545,14 @@
   align-items: start;
   justify-content: start;
   text-align: left;
-  background: #0d100a;
-  border-color: #2b3520;
+  background: #0d0d0d;
+  border-color: #2b2b2b;
   padding: 18px 14px;
   gap: 13px;
 }
 .career-workspace .cw-job.selected {
-  border-color: #6a8048;
-  background: #151d0e;
+  border-color: #666666;
+  background: #151515;
 }
 .cw-job > div {
   flex: 1;
@@ -566,47 +566,47 @@
 .cw-job div > span {
   font-size: 9px;
   display: block;
-  color: #9fae8c;
+  color: #9e9e9e;
   margin-top: 4px;
 }
 .cw-job p {
   font-size: 10px;
   margin-top: 10px;
-  color: #8e9e7c;
+  color: #8d8d8d;
   line-height: 1.7;
 }
 .cw-badge {
   font-size: 8px;
-  border: 1px solid #455c2d;
+  border: 1px solid #454545;
   border-radius: 4px;
   color: #d5f578;
-  background: #202f13;
+  background: #212121;
   padding: 3px 6px;
   white-space: nowrap;
 }
 .cw-badge-Applied {
-  color: #bce2f8;
-  border-color: #35586e;
-  background: #10222c;
+  color: #dddddd;
+  border-color: #545454;
+  background: #1f1f1f;
 }
 .cw-badge-Video-needed {
-  color: #efe3b9;
-  border-color: #66582d;
-  background: #27210e;
+  color: #d9d9d9;
+  border-color: #4e4e4e;
+  background: #1d1d1d;
 }
 .cw-empty {
   font-size: 12px !important;
   padding: 26px 0;
   line-height: 1.9 !important;
-  color: #a6b496 !important;
+  color: #a5a5a5 !important;
 }
 .cw-empty > svg {
-  color: #a8bd88;
+  color: #a4a4a4;
   margin-bottom: 17px;
 }
 .cw-add-role {
-  background: #12180c;
-  border: 1px solid #465c2e;
+  background: #121212;
+  border: 1px solid #454545;
   padding: 20px;
   border-radius: 7px;
   margin-bottom: 20px;
@@ -620,7 +620,7 @@
   gap: 7px;
   font-size: 11px;
   margin-bottom: 14px;
-  color: #becdaf;
+  color: #bebebe;
 }
 .cw-add-role > div {
   display: flex;
@@ -647,7 +647,7 @@
   justify-content: start;
   text-align: left;
   padding: 16px;
-  background: #10150c;
+  background: #101010;
 }
 .cw-document-list button > div {
   flex: 1;
@@ -660,27 +660,27 @@
 .cw-document-list span {
   display: block;
   font-size: 9px;
-  color: #8f9f7d;
+  color: #8e8e8e;
   margin-top: 5px;
 }
 .cw-outreach-stages {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  border-bottom: 1px solid #323a28;
+  border-bottom: 1px solid #313131;
   padding-bottom: 20px;
   margin-bottom: 26px;
 }
 .cw-outreach-stages > span {
   font-size: 9px;
-  color: #a7b78f;
+  color: #a4a4a4;
   display: flex;
   gap: 7px;
   align-items: center;
 }
 .cw-outreach-stages b {
   font-size: 9px;
-  border: 1px solid #425631;
+  border: 1px solid #434343;
   width: 20px;
   height: 20px;
   display: grid;
@@ -706,44 +706,44 @@
 .cw-contact div > span {
   font-size: 10px;
   display: block;
-  color: #a9ba92;
+  color: #a7a7a7;
 }
 .cw-contact small {
   font-size: 8px;
-  color: #83996c;
+  color: #838383;
   display: block;
   margin-top: 5px;
 }
 .cw-email {
-  border: 1px solid #3c4a2e;
-  background: #11180c;
+  border: 1px solid #3c3c3c;
+  background: #121212;
   border-radius: 7px;
   overflow: hidden;
 }
 .cw-email > div {
   display: flex;
   gap: 20px;
-  border-bottom: 1px solid #2c3b20;
+  border-bottom: 1px solid #2d2d2d;
   padding: 12px 17px;
   font-size: 10px;
-  color: #c3d4b0;
+  color: #c2c2c2;
 }
 .cw-email > div > span {
-  color: #859b6c;
+  color: #848484;
   min-width: 40px;
 }
 .cw-email > p {
   padding: 22px;
   font-size: 12px;
   line-height: 1.95;
-  color: #c2cdb8;
+  color: #c2c2c2;
 }
 .cw-email > footer {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 13px 17px;
-  border-top: 1px solid #2c3b20;
+  border-top: 1px solid #2d2d2d;
   color: #d5f578;
   font-size: 9px;
 }
@@ -758,7 +758,7 @@
   align-items: center;
   margin-top: 28px;
   padding: 20px;
-  border: 1px solid #384429;
+  border: 1px solid #373737;
   border-radius: 6px;
 }
 .cw-gmail-mark {
@@ -816,7 +816,7 @@
   align-items: start;
   gap: 14px;
   padding: 22px 0;
-  border-bottom: 1px solid #2b3820;
+  border-bottom: 1px solid #2c2c2c;
   color: #d5f578;
 }
 .cw-background-task > div {
@@ -825,19 +825,19 @@
 .cw-background-task strong {
   display: block;
   font-size: 12px;
-  color: #d4dec8;
+  color: #d3d3d3;
   font-weight: 500;
 }
 .cw-background-task span {
   display: block;
   font-size: 10px;
-  color: #92a77b;
+  color: #919191;
   margin-top: 8px;
 }
 .cw-background-task em {
   font-style: normal;
   font-size: 9px;
-  color: #b1ce94;
+  color: #b1b1b1;
 }
 .cw-policy-note {
   display: flex;
@@ -847,7 +847,7 @@
 }
 .cw-policy-note p {
   font-size: 10px;
-  color: #9aaf83;
+  color: #999999;
 }
 .cw-inspector {
   border-left: 1px solid var(--cw-line);
@@ -869,7 +869,7 @@
 }
 .cw-inspector > header span {
   font-size: 8px;
-  color: #8e9e7c;
+  color: #8d8d8d;
 }
 .cw-inspector-tabs {
   display: flex;
@@ -883,13 +883,13 @@
   font-size: 9px;
   background: none;
   border-color: transparent;
-  color: #8d9c7b;
+  color: #8c8c8c;
   padding: 4px;
 }
 .career-workspace .cw-inspector-tabs button[aria-pressed='true'] {
-  background: #28321c;
+  background: #272727;
   color: #d5f578;
-  border-color: #43592c;
+  border-color: #434343;
 }
 .cw-inspector-body {
   padding: 22px 20px;
@@ -909,13 +909,13 @@
   display: block;
   font-size: 11px;
   font-weight: 500;
-  color: #c2d3ad;
+  color: #c1c1c1;
   margin-top: 15px;
 }
 .cw-fit {
   padding: 19px;
-  border: 1px solid #43582d;
-  background: #1c2711;
+  border: 1px solid #434343;
+  background: #1c1c1c;
   border-radius: 6px;
   margin-top: 25px;
 }
@@ -925,7 +925,7 @@
 }
 .cw-fit p {
   font-size: 10px;
-  color: #b7cba1;
+  color: #b6b6b6;
   margin-top: 9px;
   line-height: 1.9;
 }
@@ -939,12 +939,12 @@
 .cw-role-details p {
   font-size: 10px;
   margin-top: 10px;
-  color: #9eac8f;
+  color: #9e9e9e;
   line-height: 1.9;
 }
 .cw-attachments {
   margin-top: 24px;
-  border-top: 1px solid #303c24;
+  border-top: 1px solid #303030;
   padding-top: 20px;
 }
 .cw-attachments > h3 {
@@ -955,8 +955,8 @@
   justify-content: start;
   margin-top: 8px;
   font-size: 10px;
-  background: #171e11;
-  border-color: #3a492b;
+  background: #171717;
+  border-color: #3a3a3a;
   min-height: 40px;
 }
 .cw-attachments button svg:last-child {
@@ -964,7 +964,7 @@
 }
 .career-workspace .cw-approve {
   background: #d5f578;
-  color: #131a09;
+  color: #121212;
   border-color: #d5f578;
   width: 100%;
   font-size: 11px;
@@ -974,7 +974,7 @@
 .cw-action-note {
   display: block;
   text-align: center;
-  color: #8c9f75;
+  color: #8b8b8b;
   font-size: 8px;
   margin-top: 10px;
 }
@@ -984,7 +984,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 9px;
-  color: #a6b990;
+  color: #a5a5a5;
   margin-bottom: 16px;
 }
 .cw-document-control label {
@@ -999,7 +999,7 @@
 }
 .cw-paper {
   background: #fafaf6;
-  color: #2c3027;
+  color: #2c2c2c;
   border: 1px solid #dddeda;
   border-radius: 2px;
   padding: 30px 27px;
@@ -1008,18 +1008,18 @@
   font-family: Arial, sans-serif;
 }
 .cw-paper > header {
-  border-bottom: 1px solid #bfc4b8;
+  border-bottom: 1px solid #bebebe;
   padding-bottom: 15px;
 }
 .cw-paper h3 {
-  color: #20261a;
+  color: #202020;
   font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.03em;
 }
 .cw-paper header > p {
   font-size: 11px;
-  color: #4c5644;
+  color: #4d4d4d;
   margin-top: 6px;
   font-weight: 500;
 }
@@ -1027,7 +1027,7 @@
   display: block;
   font-size: 7px;
   line-height: 1.8;
-  color: #69745d;
+  color: #696969;
   margin-top: 9px;
   overflow-wrap: anywhere;
 }
@@ -1038,15 +1038,15 @@
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #556048;
-  border-bottom: 1px solid #dde0d6;
+  color: #545454;
+  border-bottom: 1px solid #dcdcdc;
   padding-bottom: 6px;
   margin-bottom: 9px;
   font-weight: 650;
 }
 .cw-paper section p,
 .cw-paper li {
-  color: #4e5944;
+  color: #4e4e4e;
   font-size: 8px;
   line-height: 1.9;
 }
@@ -1058,7 +1058,7 @@
   justify-content: space-between;
   gap: 10px;
   font-size: 8px;
-  color: #2d3723;
+  color: #2d2d2d;
 }
 .cw-resume-job strong {
   font-weight: 650;
@@ -1069,7 +1069,7 @@
 }
 .cw-resume-job em {
   font-size: 7px;
-  color: #6c785e;
+  color: #6b6b6b;
   display: block;
   margin-top: 3px;
   font-style: normal;
@@ -1083,28 +1083,28 @@
   margin: 4px 0;
 }
 .cw-highlight {
-  background: #e9f4c8;
-  box-shadow: 0 0 0 3px #e9f4c8;
+  background: #e2e2e2;
+  box-shadow: 0 0 0 3px #e2e2e2;
 }
 .cw-letter {
-  background: #f8f8f1;
-  color: #303727;
+  background: #f6f6f6;
+  color: #2f2f2f;
   padding: 28px;
-  border: 1px solid #d9ddcf;
+  border: 1px solid #d7d7d7;
 }
 .cw-letter > span {
   font-size: 8px;
-  color: #747f65;
+  color: #737373;
 }
 .cw-letter h2 {
-  color: #2d3821;
+  color: #2d2d2d;
   font-size: 20px;
   margin: 16px 0 22px;
 }
 .cw-letter p {
   font-family: Georgia, serif;
   font-size: 12px;
-  color: #4b5840;
+  color: #4c4c4c;
   line-height: 2;
   white-space: pre-wrap;
 }
@@ -1126,7 +1126,7 @@
 }
 .cw-script-part {
   padding: 20px 0;
-  border-bottom: 1px solid #334327;
+  border-bottom: 1px solid #343434;
 }
 .cw-script-part > span {
   font-size: 9px;
@@ -1138,7 +1138,7 @@
 }
 .cw-script-part p {
   font-size: 10px;
-  color: #a4b790;
+  color: #a4a4a4;
   margin-top: 10px;
   line-height: 1.95;
 }
@@ -1155,7 +1155,7 @@
   gap: 7px;
   font-size: 10px;
   line-height: 1.8;
-  color: #a9ba96;
+  color: #a8a8a8;
   margin: 12px 0;
 }
 .cw-notification {
@@ -1164,8 +1164,8 @@
   bottom: 22px;
   z-index: 50;
   width: 352px;
-  background: #202a16;
-  border: 1px solid #697e4a;
+  background: #202020;
+  border: 1px solid #666666;
   border-radius: 10px;
   padding: 17px;
   display: flex;
@@ -1182,14 +1182,14 @@
 }
 .cw-notification strong {
   display: block;
-  color: #e4f1d0;
+  color: #e2e2e2;
   font-size: 11px;
   font-weight: 550;
 }
 .cw-notification p {
   font-size: 10px;
   margin-top: 7px;
-  color: #b5c8a0;
+  color: #b4b4b4;
   line-height: 1.8;
 }
 .career-workspace .cw-notification > button {
@@ -1198,7 +1198,7 @@
   width: 20px;
   border: 0;
   background: none;
-  color: #9eaf8b;
+  color: #9d9d9d;
 }
 .career-workspace .cw-notification div > button {
   min-height: 29px;
@@ -1212,9 +1212,9 @@
 .cw-feedback {
   font-size: 11px;
   padding: 13px 24px;
-  color: #d5e5be;
-  background: #232f16;
-  border-bottom: 1px solid #516a35;
+  color: #d3d3d3;
+  background: #232323;
+  border-bottom: 1px solid #505050;
   display: flex;
   align-items: center;
   gap: 18px;
@@ -1313,9 +1313,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 14px;
-    border-bottom: 1px solid #3b4d2b;
+    border-bottom: 1px solid #3c3c3c;
     gap: 8px;
-    background: #151d0e;
+    background: #151515;
   }
   .cw-mobile-nav button {
     justify-content: start;
@@ -1455,7 +1455,7 @@
 .career-workspace .cw-recent button {
   justify-content: start;
   font-size: 10px;
-  color: #99aa85;
+  color: #989898;
   background: none;
   border: 0;
   min-height: 37px;
@@ -1484,7 +1484,7 @@
 }
 
 .cw-saved-work {
-  border-block: 1px solid #3b4f29;
+  border-block: 1px solid #3c3c3c;
   padding: 22px 0;
 }
 .cw-saved-work h2 {
@@ -1494,6 +1494,59 @@
 .cw-saved-work p {
   font-size: 12px;
   padding: 12px 0;
-  border-bottom: 1px solid #26391a;
+  border-bottom: 1px solid #282828;
   white-space: pre-wrap;
+}
+
+/* Neutral product material, matching the user's black harness direction. */
+.career-workspace {
+  --cw-line: #262626;
+  --cw-text: #eee;
+  --cw-muted: #a0a0a0;
+}
+.career-workspace button {
+  background: #161616;
+  border-color: #2c2c2c;
+}
+.career-workspace button:hover:enabled {
+  background: #242424;
+  border-color: #444;
+}
+.cw-sidebar {
+  background: #0b0b0b;
+}
+.cw-sidebar nav button[aria-current],
+.cw-sidebar nav button[aria-pressed='true'] {
+  background: #252525;
+  color: #eee;
+}
+.cw-notification {
+  background: #171717;
+  border-color: #353535;
+  box-shadow: 0 15px 45px #0009;
+}
+.cw-composer,
+.cw-inline-role,
+.cw-fit,
+.cw-role-card {
+  background: #101010;
+  border-color: #303030;
+}
+.career-workspace button.cw-primary {
+  background: #d5f578;
+  border-color: #d5f578;
+  color: #141414;
+}
+.career-workspace .cw-chat-composer button {
+  background: #d5f578;
+  border-color: #d5f578;
+  color: #111;
+}
+.career-workspace .cw-chat-composer button:hover:enabled {
+  background: #e3ffa0;
+  border-color: #e3ffa0;
+}
+.career-workspace .cw-sidebar-lower > button {
+  background: transparent;
+  border: 0;
 }

@@ -13,6 +13,8 @@ import {
 import './landing-dark.css';
 import './career-story.css';
 import './source-story.css';
+import './neutral-refinement.css';
+import { FooterWordmark } from './_components/footer-wordmark';
 import { SourceStory, WatchersShowcase } from './_components/source-story';
 import { HeroDownload } from './_components/platform-download';
 
@@ -281,9 +283,7 @@ export default function HomePage() {
               </a>
             </nav>
           </div>
-          <div className="footer-large-word" aria-hidden="true" data-animated="true">
-            pursuit<span>.</span>
-          </div>
+          <FooterWordmark />
           <div className="footer-colophon">
             <span>© {new Date().getFullYear()} Pursuit</span>
             <span>

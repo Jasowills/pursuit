@@ -3,5 +3,6 @@
   "date": "2026-10-22",
   "origin": "Playwright screenshot of the actual Pursuit desktop React renderer at http://127.0.0.1:1420/?tour=1, 1536x1050, reduced motion",
   "state": "Explicit fictional sample workspace, in-memory records, no IPC fixtures or native saves",
-  "limitations": "Renderer capture, not native OS chrome, live inference, notification delivery or application submission proof. Sample workspace banner is visible."
+  "limitations": "Renderer capture, not native OS chrome, live inference, notification delivery or application submission proof. Sample workspace banner is visible.",
+  "appearance": "Neutral black/gray surfaces; lime primary action/mark. Updated 2026-10-22 after annotation feedback."
 }
