@@ -1,0 +1,45 @@
+name: Desktop foundation
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'apps/desktop/**'
+      - 'packages/local-store/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/desktop-alpha.yml'
+permissions:
+  contents: read
+jobs:
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel, windows-latest, ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Linux webview dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:local-store
+      - run: cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --locked
+      - run: pnpm --filter @pursuit/desktop typecheck
+      - name: Build native executable (internal, unsigned)
+        run: pnpm --filter @pursuit/desktop desktop build --no-bundle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pursuit-internal-${{ matrix.os }}
+          path: |
+            apps/desktop/src-tauri/target/release/pursuit-desktop
+            apps/desktop/src-tauri/target/release/pursuit-desktop.exe
+          if-no-files-found: error

@@ -6,15 +6,7 @@ import { useState } from 'react';
 import { apiFetch, useResource, ApiError } from '@/lib/api-client';
 import { ALLOWED_APPLICATION_TRANSITIONS } from '@pursuit/shared';
 import type { ApplicationStatus, Application, ApplicationEventItem } from '@pursuit/shared';
-import {
-  PageHeader,
-  Loading,
-  ErrorBox,
-  StatusPill,
-  Card,
-  Field,
-  inputClass,
-} from '../../_components/ui';
+import { PageHeader, Loading, ErrorBox, StatusPill, Card, Field, inputClass } from '../../_components/ui';
 
 interface DetailResponse {
   application: Application;
@@ -68,104 +60,136 @@ export default function ApplicationDetailPage() {
     <>
       <Link
         href="/app/applications"
-        className="text-sm text-[var(--muted-foreground)] underline hover:text-[var(--foreground)]"
+        className="link-underline inline-flex min-h-[44px] items-center text-[12px] font-medium text-[color:var(--muted-foreground)]"
       >
         ← Applications
       </Link>
+
       <PageHeader
-        title={`${app.job_title || 'Job'} — ${app.company_name || 'company'}`}
-        subtitle={id}
+        eyebrow={`Case file / ${app.company_name || 'Company'}`}
+        title={app.job_title || 'Application'}
+        subtitle={`Record ${id}`}
       />
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid items-start gap-6 md:grid-cols-[0.9fr_1.1fr]">
         <Card>
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">State</h2>
+          <div className="flex items-start justify-between gap-4 border-b border-[var(--border)] pb-4">
+            <div>
+              <p className="panel-title">Current state</p>
+              <p className="mt-2 font-serif text-[30px] leading-none tracking-[-0.03em]">
+                {app.status.replaceAll('_', ' ')}
+              </p>
+            </div>
             <StatusPill status={app.status} />
           </div>
+
           {app.submitted_at && (
-            <p className="mt-2 text-xs text-[var(--muted-foreground)]">
-              Submitted {new Date(app.submitted_at).toLocaleString()} · confirmation:{' '}
-              <code className="font-mono">{app.confirmation_ref}</code>
-            </p>
+            <div className="border-b border-[var(--border)] py-3">
+              <p className="eyebrow">Submitted</p>
+              <p className="mt-1 text-[12px] text-[color:var(--muted-foreground)]">
+                {new Date(app.submitted_at).toLocaleString()} · confirmation{' '}
+                <code className="font-mono text-[11px] text-[color:var(--ink)]">{app.confirmation_ref}</code>
+              </p>
+            </div>
           )}
+
           {app.source_url && (
             <a
               href={app.source_url}
               target="_blank"
               rel="noreferrer noopener"
-              className="mt-2 block text-xs underline"
+              className="link-underline mt-4 inline-block text-[12px] font-medium"
             >
               Open posting ↗
             </a>
           )}
 
-          <h3 className="mt-4 text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
-            Legal transitions
-          </h3>
+          <h3 className="label mt-6">Legal transitions</h3>
           {legalTargets.length === 0 ? (
-            <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+            <p className="text-[13px] leading-relaxed text-[color:var(--muted-foreground)]">
               Terminal state — no further transitions.
             </p>
           ) : (
-            <div className="mt-2 space-y-2">
+            <div className="border-t border-[var(--border)]">
               {legalTargets.map((to) => (
-                <div key={to} className="flex items-center gap-2">
-                  <button
-                    onClick={() => transition(to)}
-                    disabled={busy}
-                    className="h-9 min-h-[44px] flex-1 rounded-[10px] border border-[var(--border)] px-3 text-left text-sm transition-colors duration-150 hover:bg-[var(--hover)] disabled:opacity-60"
-                  >
-                    → {to.replaceAll('_', ' ').toLowerCase()}
-                  </button>
-                </div>
-              ))}
-              {legalTargets.includes('SUBMITTED') && (
-                <Field
-                  label="Confirmation reference (required for SUBMITTED)"
-                  hint="Paste the real confirmation ID/email reference from the application site. Fabricated submissions are rejected."
+                <button
+                  key={to}
+                  onClick={() => transition(to)}
+                  disabled={busy}
+                  className="case-row case-row-hover w-full text-left disabled:opacity-50"
                 >
-                  <input
-                    value={confirmationRef}
-                    onChange={(e) => setConfirmationRef(e.target.value)}
-                    className={inputClass}
-                    placeholder="e.g. confirmation email ID"
-                  />
-                </Field>
-              )}
+                  <span className="text-[13px] font-medium">
+                    → {to.replaceAll('_', ' ').toLowerCase()}
+                  </span>
+                  <span className="mono-meta">advance</span>
+                </button>
+              ))}
             </div>
           )}
-          {error && (
-            <p
-              role="alert"
-              className="mt-3 rounded-[var(--radius-md)] border border-[#f4c7c3] bg-[#fdf3f2] px-3 py-2 text-sm text-[#a50e0e]"
-            >
-              {error}
-            </p>
+
+          {legalTargets.includes('SUBMITTED') && (
+            <div className="mt-4">
+              <Field
+                label="Confirmation reference (required for SUBMITTED)"
+                hint="Paste the real confirmation ID/email reference from the application site. Fabricated submissions are rejected."
+              >
+                <input
+                  value={confirmationRef}
+                  onChange={(e) => setConfirmationRef(e.target.value)}
+                  className={inputClass}
+                  placeholder="e.g. confirmation email ID"
+                />
+              </Field>
+            </div>
           )}
-          {busy && <p className="mt-2 text-xs text-[var(--muted)]">Applying transition…</p>}
+
+          {error && (
+            <div role="alert" className="notice notice-danger mt-4">
+              <span className="notice-label">Transition rejected</span>
+              <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">{error}</p>
+            </div>
+          )}
+
+          {busy && <p className="mono-meta mt-3">Applying transition…</p>}
         </Card>
 
         <Card>
-          <h2 className="text-sm font-semibold">Timeline</h2>
-          <ol className="mt-3 space-y-3">
-            {detail.data.events.map((ev) => (
-              <li key={ev.id} className="border-l-2 border-[var(--border)] pl-3 text-sm">
-                <p className="font-medium">
-                  {ev.from_status ? `${ev.from_status} → ` : ''}
-                  {ev.to_status}
-                </p>
-                <p className="text-xs text-[var(--muted-foreground)]">
-                  {new Date(ev.created_at).toLocaleString()} · {ev.actor}
-                  {ev.reason ? ` · ${ev.reason}` : ''}
-                </p>
-                {ev.evidence_key && (
-                  <p className="font-mono text-[11px] text-[var(--muted-foreground)]">
-                    evidence: {ev.evidence_key}
+          <div className="flex items-end justify-between gap-4 border-b border-[var(--border)] pb-3">
+            <h2 className="panel-title">Timeline</h2>
+            <span className="mono-meta">{detail.data.events.length} events</span>
+          </div>
+          <ol className="mt-4">
+            {detail.data.events.length === 0 ? (
+              <li className="text-[13px] text-[color:var(--muted-foreground)]">No recorded events.</li>
+            ) : (
+              detail.data.events.map((ev) => (
+                <li
+                  key={ev.id}
+                  className="relative border-l border-[var(--border)] pb-5 pl-5 last:pb-0"
+                >
+                  <span
+                    aria-hidden
+                    className="absolute -left-[3px] top-1.5 h-1.5 w-1.5 bg-[var(--signal)]"
+                  />
+                  <p className="font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--muted)]">
+                    {new Date(ev.created_at).toLocaleString()}
                   </p>
-                )}
-              </li>
-            ))}
+                  <p className="mt-1 font-serif text-[19px] leading-tight tracking-[-0.02em]">
+                    {ev.from_status ? `${ev.from_status} → ` : ''}
+                    {ev.to_status}
+                  </p>
+                  <p className="mt-1 text-[11px] leading-relaxed text-[color:var(--muted-foreground)]">
+                    Actor: {ev.actor}
+                    {ev.reason ? ` · ${ev.reason}` : ''}
+                  </p>
+                  {ev.evidence_key && (
+                    <p className="mt-1 break-all font-mono text-[10px] text-[color:var(--muted)]">
+                      evidence: {ev.evidence_key}
+                    </p>
+                  )}
+                </li>
+              ))
+            )}
           </ol>
         </Card>
       </div>

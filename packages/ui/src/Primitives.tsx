@@ -57,7 +57,7 @@ export function TabsBar({
           <TabsPrimitive.Trigger
             key={t.id}
             value={t.id}
-            className="rounded-t-[var(--radius-sm)] px-3 py-2 text-sm font-medium text-[var(--muted)] transition-colors duration-150 data-[state=active]:border-b-2 data-[state=active]:border-[var(--foreground)] data-[state=active]:text-[var(--foreground)] min-h-[44px]"
+            className="min-h-[44px] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--muted)] transition-colors duration-150 data-[state=active]:border-b-2 data-[state=active]:border-[var(--signal)] data-[state=active]:text-[color:var(--ink)]"
           >
             {t.label}
           </TabsPrimitive.Trigger>
@@ -98,16 +98,19 @@ export function DataTable<T extends { id: string }>({
     );
   }
   return (
-    <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-[var(--border)]">
+    <div className="overflow-x-auto border border-[var(--border)]">
       <table className="w-full border-collapse text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead>
-          <tr className="border-b border-[var(--border)] bg-[var(--surface)] text-left">
+          <tr className="border-b border-[var(--ink)] bg-[var(--surface)] text-left">
             {columns.map((c) => (
               <th
                 key={c.key}
                 scope="col"
-                className={cn('px-4 py-3 font-medium text-[var(--muted-foreground)]', c.className)}
+                className={cn(
+                  'px-4 py-3 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--muted-foreground)]',
+                  c.className,
+                )}
               >
                 {c.header}
               </th>
@@ -118,7 +121,7 @@ export function DataTable<T extends { id: string }>({
           {rows.map((row) => (
             <tr
               key={row.id}
-              className="border-b border-[var(--border)] last:border-0 transition-colors duration-150 hover:bg-[var(--hover)]"
+              className="border-b border-[var(--border)] transition-colors duration-150 last:border-0 hover:bg-[var(--hover)]"
             >
               {columns.map((c) => (
                 <td key={c.key} className={cn('px-4 py-3 align-top', c.className)}>
@@ -145,33 +148,22 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] p-10 text-center">
-      <p className="font-medium text-[var(--foreground)]">{title}</p>
-      <p className="mx-auto mt-1 max-w-sm text-sm text-[var(--muted)]">{body}</p>
+    <div className="empty-state">
+      <p className="eyebrow mb-3">No records</p>
+      <p className="font-serif text-[22px] text-[color:var(--foreground)]">{title}</p>
+      <p className="mx-auto mt-1 max-w-sm text-sm text-[color:var(--muted)]">{body}</p>
       {action ? <div className="mt-4">{action}</div> : null}
     </div>
   );
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return (
-    <div
-      aria-hidden
-      className={cn(
-        'animate-pulse rounded-[var(--radius-sm)] bg-[var(--hover)]',
-        className ?? 'h-4 w-full',
-      )}
-    />
-  );
+  return <div aria-hidden className={cn('skeleton', className ?? 'h-4 w-full')} />;
 }
 
 export function LoadingState({ label }: { label: string }) {
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      className="flex items-center gap-3 py-8 text-sm text-[var(--muted)]"
-    >
+    <div role="status" aria-live="polite" className="flex items-center gap-3 py-8 text-sm text-[color:var(--muted)]">
       <span
         aria-hidden
         className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[var(--muted)] border-t-transparent"
@@ -191,14 +183,12 @@ export function ErrorState({
   retry?: () => void;
 }) {
   return (
-    <div
-      role="alert"
-      className="rounded-[var(--radius-lg)] border border-[#fecaca] bg-[#fef2f2] p-6"
-    >
-      <p className="font-medium text-[var(--danger)]">{title}</p>
-      {detail ? <p className="mt-1 text-sm text-[var(--muted-foreground)]">{detail}</p> : null}
+    <div role="alert" className="notice notice-danger">
+      <span className="notice-label">Request failed</span>
+      <p className="font-medium">{title}</p>
+      {detail ? <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">{detail}</p> : null}
       {retry ? (
-        <button onClick={retry} className="mt-3 underline underline-offset-2 text-sm" type="button">
+        <button onClick={retry} className="link-underline mt-3 text-sm" type="button">
           Try again
         </button>
       ) : null}

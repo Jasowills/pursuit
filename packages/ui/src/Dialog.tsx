@@ -20,16 +20,16 @@ export function DialogContent({
 }) {
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40 transition-opacity duration-150" />
-      <DialogPrimitive.Content className="fixed left-1/2 top-1/2 z-50 max-h-[85vh] w-[min(560px,calc(100vw-32px))] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-raised)] p-6 shadow-[var(--shadow-panel)] outline-none">
-        <DialogPrimitive.Title className="text-lg font-semibold">{title}</DialogPrimitive.Title>
+      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[color-mix(in_srgb,var(--ink)_55%,transparent)] transition-opacity duration-150" />
+      <DialogPrimitive.Content className="panel fixed left-1/2 top-1/2 z-50 max-h-[85vh] w-[min(600px,calc(100vw-32px))] -translate-x-1/2 -translate-y-1/2 overflow-y-auto border-[var(--ink)] outline-none">
+        <DialogPrimitive.Title className="panel-heading">{title}</DialogPrimitive.Title>
         {description ? (
-          <DialogPrimitive.Description className="mt-1 text-sm text-[var(--muted)]">
+          <DialogPrimitive.Description className="mt-1 text-sm text-[color:var(--muted)]">
             {description}
           </DialogPrimitive.Description>
         ) : null}
         <div className="mt-4">{children}</div>
-        <div className="mt-6 flex justify-end gap-2">
+        <div className="mt-6 flex justify-end gap-2 border-t border-[var(--border)] pt-4">
           {footer}
           <DialogPrimitive.Close asChild>
             <Button variant="ghost">{closeLabel}</Button>

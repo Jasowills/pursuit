@@ -1,0 +1,164 @@
+use super::*;
+use std::io::{Read, Write};
+#[test]
+#[ignore = "Runs installed OpenCode against a local synthetic inference fixture; no model credentials or paid inference"]
+fn installed_runtime_generation_and_interrupt() {
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let address = listener.local_addr().unwrap();
+    let requests = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let observed = requests.clone();
+    std::thread::spawn(move || {
+        for index in 0..2 {
+            let (mut stream, _) = listener.accept().unwrap();
+            stream
+                .set_read_timeout(Some(Duration::from_secs(15)))
+                .unwrap();
+            let mut reader = BufReader::new(stream.try_clone().unwrap());
+            let mut length = 0;
+            let mut authorized = false;
+            loop {
+                let mut line = String::new();
+                reader.read_line(&mut line).unwrap();
+                if line
+                    .trim()
+                    .eq_ignore_ascii_case("authorization: Bearer synthetic-not-a-real-key")
+                {
+                    authorized = true;
+                }
+                if line == "\r\n" {
+                    break;
+                }
+                if let Some(value) = line.to_lowercase().strip_prefix("content-length:") {
+                    length = value.trim().parse::<usize>().unwrap();
+                }
+            }
+            assert!(
+                authorized,
+                "Provider credential did not arrive through the runtime environment"
+            );
+            assert!(length > 0 && length < 1_000_000);
+            let mut body = vec![0; length];
+            reader.read_exact(&mut body).unwrap();
+            let body: Value = serde_json::from_slice(&body).unwrap();
+            assert!(
+                body.get("tools")
+                    .is_none_or(|tools| tools.as_array().is_some_and(|tools| tools.is_empty())),
+                "The tool-disabled agent exposed tools"
+            );
+            assert_eq!(body["max_tokens"], 256);
+            observed.fetch_add(1, Ordering::SeqCst);
+            stream.write_all(b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nConnection: close\r\n\r\n").unwrap();
+            let chunk = json!({"id":"chatcmpl-fixture","object":"chat.completion.chunk","created":0,"model":"fixture-model","choices":[{"index":0,"delta":{"role":"assistant","content":if index==0{"ready from local fixture"}else{"partial fixture response"}},"finish_reason":null}]});
+            stream
+                .write_all(format!("data: {chunk}\n\n").as_bytes())
+                .unwrap();
+            stream.flush().unwrap();
+            if index == 1 {
+                std::thread::sleep(Duration::from_secs(10));
+            }
+            let finish = json!({"id":"chatcmpl-fixture","object":"chat.completion.chunk","created":0,"model":"fixture-model","choices":[{"index":0,"delta":{},"finish_reason":"stop"}]});
+            let _ = stream.write_all(format!("data: {finish}\n\ndata: [DONE]\n\n").as_bytes());
+        }
+    });
+    let tmp = tempfile::tempdir().unwrap();
+    let mut configured = config();
+    configured["policies"].as_array_mut().unwrap().extend([
+        json!({"action":"provider.use","resource":"*","effect":"deny"}),
+        json!({"action":"provider.use","resource":"pursuit","effect":"allow"}),
+    ]);
+    configured["providers"] = json!({"pursuit":{"name":"Synthetic local test only","env":["PURSUIT_MODEL_KEY"],"package":"@opencode/ai/providers/openai-compatible","settings":{"baseURL":format!("http://{address}/v1")},"models":{"fixture-model":{"name":"Fixture model","body":{"max_tokens":256}}}}});
+    let instance = Instance::spawn_config(
+        tmp.path().join("runtime"),
+        "fixture".into(),
+        "fixture-model".into(),
+        configured,
+        Some(Zeroizing::new("synthetic-not-a-real-key".into())),
+    )
+    .unwrap();
+    assert!(
+        !std::fs::read_to_string(instance.directory.join("config/opencode/opencode.json"))
+            .unwrap()
+            .contains("synthetic-not-a-real-key")
+    );
+    instance.watch(|| {});
+    for _ in 0..100 {
+        if instance.connected.load(Ordering::SeqCst) {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    assert!(instance.connected.load(Ordering::SeqCst));
+    let first = instance
+        .create_session("Synthetic completion check")
+        .unwrap();
+    instance
+        .call(
+            &format!("/api/session/{first}/prompt"),
+            Some(json!({"text":"Reply ready using no tools.","resume":true})),
+        )
+        .unwrap();
+    let mut completed = false;
+    for _ in 0..100 {
+        let view = instance.view(&first).unwrap();
+        if view.state == "completed" {
+            assert!(view
+                .messages
+                .iter()
+                .any(|m| m.role == "assistant" && m.text.contains("ready from local fixture")));
+            completed = true;
+            break;
+        }
+        if view.state == "failed" {
+            panic!("Controlled runtime generation failed");
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    assert!(completed, "No completed runtime response");
+    let second = instance
+        .create_session("Synthetic interrupt check")
+        .unwrap();
+    instance
+        .call(
+            &format!("/api/session/{second}/prompt"),
+            Some(json!({"text":"Reply slowly using no tools.","resume":true})),
+        )
+        .unwrap();
+    for _ in 0..100 {
+        if requests.load(Ordering::SeqCst) >= 2 {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    assert_eq!(requests.load(Ordering::SeqCst), 2);
+    let mut partial = false;
+    for _ in 0..30 {
+        let view = instance.view(&second).unwrap();
+        if view.state == "running"
+            && view
+                .messages
+                .iter()
+                .any(|m| m.role == "assistant_live" && m.text.contains("partial fixture response"))
+        {
+            partial = true;
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    assert!(
+        partial,
+        "Live partial output was not observable before interrupt"
+    );
+    let result = instance
+        .call(&format!("/api/session/{second}/interrupt"), Some(json!({})))
+        .unwrap();
+    assert_eq!(result["interrupted"], true);
+    let mut interrupted = false;
+    for _ in 0..50 {
+        if instance.view(&second).unwrap().state == "interrupted" {
+            interrupted = true;
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    assert!(interrupted);
+}

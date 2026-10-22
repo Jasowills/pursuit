@@ -139,6 +139,7 @@ export function mapAgentRun(
     status: row['status'] as AgentRun['status'],
     runtime: row['runtime'] as AgentRun['runtime'],
     model_provider: (row['modelProvider'] as string | null) ?? undefined,
+    proposal: (row['proposal'] as string | null) ?? undefined,
     initiator: String(row['initiator']),
     budget_tokens: (row['budgetTokens'] as number | null) ?? undefined,
     steps: steps.map((s) => ({

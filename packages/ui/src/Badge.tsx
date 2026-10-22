@@ -7,22 +7,15 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const toneClasses: Record<NonNullable<BadgeProps['tone']>, string> = {
-  neutral: 'bg-[var(--hover)] text-[var(--muted-foreground)] border-[var(--border)]',
-  success: 'bg-[#f0fdf4] text-[var(--success)] border-[#bbf7d0]',
-  warning: 'bg-[#fefce8] text-[var(--warning)] border-[#fde68a]',
-  danger: 'bg-[#fef2f2] text-[var(--danger)] border-[#fecaca]',
+  neutral: 'stamp-muted',
+  success: 'stamp-success',
+  warning: 'stamp-warning',
+  danger: 'stamp-danger',
 };
 
 export function Badge({ className, tone = 'neutral', children, ...props }: BadgeProps) {
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium',
-        toneClasses[tone],
-        className,
-      )}
-      {...props}
-    >
+    <span className={cn('stamp', toneClasses[tone], className)} {...props}>
       {children}
     </span>
   );

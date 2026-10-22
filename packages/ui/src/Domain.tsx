@@ -32,14 +32,14 @@ export function JobCard({
     <Card className="flex flex-col gap-3">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <p className="text-xs uppercase tracking-wide text-[var(--muted)]">{job.company_name}</p>
+          <p className="text-xs uppercase tracking-wide text-[color:var(--muted)]">{job.company_name}</p>
           <h4 className="mt-0.5 text-base font-semibold">{job.title}</h4>
         </div>
         <StatusIndicator
           record={match ? { eligibility: match.eligibility as never } : { status: 'UNKNOWN' }}
         />
       </div>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm text-[var(--muted-foreground)]">
+      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm text-[color:var(--muted-foreground)]">
         <dt className="font-medium">Location</dt>
         <dd>{job.location ?? '—'}</dd>
         <dt className="font-medium">Remote</dt>
@@ -48,7 +48,7 @@ export function JobCard({
         <dd>{job.compensation ?? 'Not disclosed'}</dd>
       </dl>
       {match ? (
-        <p className="font-mono text-xs text-[var(--muted)]">
+        <p className="font-mono text-xs text-[color:var(--muted)]">
           fit {match.fit_score}/100 — {match.fit_rationale}
           {match.hard_failures.length > 0
             ? ` | hard failures: ${match.hard_failures.join('; ')}`
@@ -70,7 +70,7 @@ export function JobCard({
           href={job.source_url}
           target="_blank"
           rel="noreferrer noopener"
-          className="inline-flex min-h-[44px] items-center px-2 text-sm text-[var(--muted-foreground)] underline underline-offset-2"
+          className="inline-flex min-h-[44px] items-center px-2 text-sm text-[color:var(--muted-foreground)] underline underline-offset-2"
         >
           Source link
         </a>
@@ -90,25 +90,25 @@ export function ApplicationTimeline({
 }) {
   return (
     <Card>
-      <p className="font-mono text-xs text-[var(--muted)]">application {application.id}</p>
+      <p className="font-mono text-xs text-[color:var(--muted)]">application {application.id}</p>
       <div className="mt-3">
         <StatusIndicator record={{ status: application.status }} />
       </div>
       {application.status !== 'SUBMITTED' ? (
-        <p className="mt-2 text-sm text-[var(--warning)]">
+        <p className="mt-2 text-sm text-[color:var(--warning)]">
           Not yet submitted. Final submission always requires your approval of the exact payload.
         </p>
       ) : null}
       <ol className="mt-4 space-y-3">
         {events.length === 0 ? (
-          <li className="text-sm text-[var(--muted)]">No recorded events yet.</li>
+          <li className="text-sm text-[color:var(--muted)]">No recorded events yet.</li>
         ) : null}
         {events.map((e) => (
           <li key={e.id} className="border-l-2 border-[var(--border)] pl-3">
             <p className="text-sm font-medium">
               {e.from_status ? `${e.from_status} → ${e.to_status}` : e.to_status}
             </p>
-            <p className="font-mono text-xs text-[var(--muted)]">
+            <p className="font-mono text-xs text-[color:var(--muted)]">
               {e.created_at} · actor {e.actor}
               {e.evidence_key ? ` · evidence ${e.evidence_key}` : ''}
             </p>
@@ -181,7 +181,7 @@ export function ApprovalCard({
           </Button>
         </div>
       ) : null}
-      <p className="mt-3 text-xs text-[var(--muted)]">
+      <p className="mt-3 text-xs text-[color:var(--muted)]">
         Approval is single-use and binds the exact payload above. Any modification invalidates it.
       </p>
     </Card>
@@ -201,11 +201,11 @@ export function WatcherCard({ watcher, onToggle }: { watcher: Watcher; onToggle?
     <Card className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2">
         <Badge tone={tone as 'neutral' | 'warning' | 'success'}>{state}</Badge>
-        <span className="font-mono text-xs text-[var(--muted)]">
+        <span className="font-mono text-xs text-[color:var(--muted)]">
           {watcher.kind.toLowerCase().replace(/_/g, ' ')}
         </span>
       </div>
-      <p className="font-mono text-xs break-all text-[var(--muted-foreground)]">
+      <p className="font-mono text-xs break-all text-[color:var(--muted-foreground)]">
         {watcher.source_url}
       </p>
       <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
@@ -244,10 +244,10 @@ export function ResumeVersionCard({
         <Badge tone={version.status === 'APPROVED' ? 'success' : 'neutral'}>
           {version.status.toLowerCase().replace(/_/g, ' ')}
         </Badge>
-        <span className="font-mono text-xs text-[var(--muted)]">{version.template_version}</span>
+        <span className="font-mono text-xs text-[color:var(--muted)]">{version.template_version}</span>
       </div>
       <p className="text-sm font-medium">{version.label}</p>
-      <p className="text-xs text-[var(--muted)]">
+      <p className="text-xs text-[color:var(--muted)]">
         Created {new Date(version.created_at).toLocaleString()}
         {version.is_submitted ? ' · submitted for an application' : ''}
       </p>
@@ -269,7 +269,7 @@ export function AgentRunTimeline({ run }: { run: AgentRun }) {
     <Card className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2">
         <Badge>{run.status.toLowerCase().replace(/_/g, ' ')}</Badge>
-        <span className="font-mono text-xs text-[var(--muted)]">runtime: {run.runtime}</span>
+        <span className="font-mono text-xs text-[color:var(--muted)]">runtime: {run.runtime}</span>
       </div>
       <p className="text-sm">{run.goal}</p>
       {run.steps.length === 0 ? (
@@ -279,7 +279,7 @@ export function AgentRunTimeline({ run }: { run: AgentRun }) {
           {run.steps.map((s, i) => (
             <li key={`${s.id ?? i}`} className="border-l-2 border-[var(--border)] pl-3">
               <p className="font-mono text-xs font-medium">{s.tool}</p>
-              <p className="font-mono text-[11px] text-[var(--muted)] break-all">
+              <p className="font-mono text-[11px] text-[color:var(--muted)] break-all">
                 {s.arguments_redacted}
               </p>
               <p className="text-xs">
@@ -296,7 +296,7 @@ export function AgentRunTimeline({ run }: { run: AgentRun }) {
         </ol>
       )}
       {run.usage ? (
-        <p className="font-mono text-xs text-[var(--muted)]">
+        <p className="font-mono text-xs text-[color:var(--muted)]">
           tokens in {run.usage.input} / out {run.usage.output} · cost {run.usage.cost}
         </p>
       ) : null}
@@ -322,8 +322,8 @@ export function NotificationItem({
       }`}
     >
       <span className="text-sm font-medium">{notification.title}</span>
-      <span className="text-sm text-[var(--muted)]">{notification.body}</span>
-      <span className="font-mono text-[11px] text-[var(--muted)]">{notification.created_at}</span>
+      <span className="text-sm text-[color:var(--muted)]">{notification.body}</span>
+      <span className="font-mono text-[11px] text-[color:var(--muted)]">{notification.created_at}</span>
     </button>
   );
 }

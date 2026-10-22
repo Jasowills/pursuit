@@ -4,16 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { apiFetch, useResource } from '@/lib/api-client';
 import type { Application, Job } from '@pursuit/shared';
-import {
-  PageHeader,
-  Loading,
-  ErrorBox,
-  Empty,
-  StatusPill,
-  Card,
-  Field,
-  inputClass,
-} from '../_components/ui';
+import { PageHeader, Loading, ErrorBox, Empty, StatusPill } from '../_components/ui';
 
 interface AppsResponse {
   items: Application[];
@@ -60,50 +51,68 @@ export default function ApplicationsPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Section 03 / Applications"
         title="Applications"
         subtitle="Every application is a durable state machine — transitions are legal, auditable, and SUBMITTED always carries confirmation evidence."
       />
 
-      {apps.error ? (
-        <ErrorBox error={apps.error} retry={apps.reload} />
-      ) : apps.loading ? (
-        <Loading />
-      ) : (apps.data?.items.length ?? 0) === 0 ? (
-        <Empty>No applications yet. Start one from a job below.</Empty>
-      ) : (
-        <ul className="space-y-2">
-          {apps.data?.items.map((a) => (
-            <li key={a.id}>
-              <Link
-                href={`/app/applications/${a.id}`}
-                className="flex items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-raised)] p-3 text-sm transition-colors duration-150 hover:bg-[var(--hover)]"
-              >
-                <span className="min-w-0">
-                  <span className="block truncate font-medium">
-                    {a.job_title} ·{' '}
-                    <span className="text-[var(--muted-foreground)]">{a.company_name}</span>
-                  </span>
-                  <span className="text-xs text-[var(--muted)]">
-                    updated {new Date(a.updated_at).toLocaleString()}
-                  </span>
-                </span>
-                <StatusPill status={a.status} />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <section>
+        <div className="flex items-end justify-between gap-4 border-b border-[var(--ink)] pb-2">
+          <h2 className="panel-title">Your records</h2>
+          <span className="mono-meta">{apps.data?.items.length ?? 0} files</span>
+        </div>
 
-      <section className="mt-8">
-        <h2 className="mb-2 text-sm font-semibold">Start an application</h2>
+        {apps.error ? (
+          <div className="mt-4">
+            <ErrorBox error={apps.error} retry={apps.reload} />
+          </div>
+        ) : apps.loading ? (
+          <Loading />
+        ) : (apps.data?.items.length ?? 0) === 0 ? (
+          <Empty>No applications yet. Start one from a job below.</Empty>
+        ) : (
+          <ul>
+            {apps.data?.items.map((a, index) => (
+              <li key={a.id}>
+                <Link href={`/app/applications/${a.id}`} className="case-row">
+                  <span className="flex min-w-0 items-start gap-4">
+                    <span className="index-num pt-1">{String(index + 1).padStart(2, '0')}</span>
+                    <span className="min-w-0">
+                      <span className="case-row-title">
+                        {a.job_title} ·{' '}
+                        <span className="font-normal text-[color:var(--muted-foreground)]">
+                          {a.company_name}
+                        </span>
+                      </span>
+                      <span className="case-row-meta">
+                        updated {new Date(a.updated_at).toLocaleString()}
+                      </span>
+                    </span>
+                  </span>
+                  <StatusPill status={a.status} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="mt-10">
+        <div className="flex items-end justify-between gap-4 border-b border-[var(--ink)] pb-2">
+          <h2 className="panel-title">Start an application</h2>
+          <span className="mono-meta">Jobs without a file</span>
+        </div>
+
         {jobs.error ? (
-          <ErrorBox error={jobs.error} retry={jobs.reload} />
+          <div className="mt-4">
+            <ErrorBox error={jobs.error} retry={jobs.reload} />
+          </div>
         ) : jobs.loading ? (
           <Loading />
         ) : unapplied.length === 0 ? (
           <Empty>
             Every known job already has an application (or none exist yet) — add jobs under{' '}
-            <Link href="/app/jobs" className="underline">
+            <Link href="/app/jobs" className="link-underline">
               Jobs
             </Link>
             .
@@ -111,27 +120,31 @@ export default function ApplicationsPage() {
         ) : (
           <>
             {error && (
-              <p
-                role="alert"
-                className="mb-2 rounded-[var(--radius-md)] border border-[#f4c7c3] bg-[#fdf3f2] px-3 py-2 text-sm text-[#a50e0e]"
-              >
-                {error}
-              </p>
+              <div role="alert" className="notice notice-danger mt-4">
+                <span className="notice-label">Could not start application</span>
+                <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">{error}</p>
+              </div>
             )}
-            <ul className="space-y-2">
-              {unapplied.map(({ job }) => (
-                <li
-                  key={job.id}
-                  className="flex items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-raised)] p-3 text-sm"
-                >
-                  <span className="min-w-0 truncate">
-                    {job.title} ·{' '}
-                    <span className="text-[var(--muted-foreground)]">{job.company_name}</span>
+            <ul className="mt-1">
+              {unapplied.map(({ job, match }) => (
+                <li key={job.id} className="case-row">
+                  <span className="min-w-0">
+                    <span className="case-row-title">
+                      {job.title} ·{' '}
+                      <span className="font-normal text-[color:var(--muted-foreground)]">
+                        {job.company_name}
+                      </span>
+                    </span>
+                    <span className="case-row-meta">
+                      {match
+                        ? `${match.eligibility.replaceAll('_', ' ')} · fit ${match.fit_score}/100`
+                        : 'No eligibility analysis recorded'}
+                    </span>
                   </span>
                   <button
                     onClick={() => createFor(job.id)}
                     disabled={busyId === job.id}
-                    className="h-9 min-h-[44px] shrink-0 rounded-[10px] bg-[var(--primary)] px-3 text-xs font-medium text-[color:var(--primary-foreground)] transition-colors duration-150 hover:bg-[#333] disabled:opacity-60"
+                    className="btn btn-outline btn-sm shrink-0"
                   >
                     {busyId === job.id ? 'Creating…' : 'Start application'}
                   </button>

@@ -4,11 +4,15 @@
  * SSE event stream for cross-client sync (DEC-05).
  */
 import 'reflect-metadata';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './http-error.filter';
 
 async function bootstrap(): Promise<void> {
+  const envFile = resolve(__dirname, '../../../.env');
+  if (existsSync(envFile)) process.loadEnvFile(envFile);
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn', 'log'],
   });

@@ -45,14 +45,14 @@ export class CareersService {
 
   async getProfile(userId: string, tenantId: string): Promise<CareerProfileContract> {
     const row = await this.db.db.careerProfile.findFirst({
-      where: { tenantId },
+      where: { tenantId, userId },
       include: { experiences: true, education: true, skills: true, projects: true },
     });
     const full =
       row ??
       (await this.db.db.careerProfile.create({ data: { tenantId, userId } }).then(() =>
         this.db.db.careerProfile.findFirstOrThrow({
-          where: { tenantId },
+          where: { tenantId, userId },
           include: { experiences: true, education: true, skills: true, projects: true },
         }),
       ))!;
@@ -85,35 +85,25 @@ export class CareersService {
         });
       }
     }
-    if (existing) {
-      const company = await this.db.db.company.findUnique({ where: { id: existing.companyId } });
-      const match = await this.db.db.jobMatch.findUnique({
-        where: { tenantId_jobId: { tenantId, jobId: existing.id } },
-      });
-      return {
-        job: mapJob(existing, company ?? { name: input.company_name }, fingerprint),
-        match: match ? mapJobMatch(match) : null,
-        deduped: true,
-      };
-    }
-
     let company = await this.db.db.company.findFirst({ where: { name: input.company_name } });
     company ??= await this.db.db.company.create({ data: { name: input.company_name } });
 
-    const job = await this.db.db.job.create({
-      data: {
-        companyId: company.id,
-        title: input.title,
-        location: input.location ?? null,
-        remoteRestrictions: input.remote_restrictions ?? null,
-        compensation: input.compensation ?? null,
-        canonicalUrl,
-        descriptionHash: input.description
-          ? createHash('sha256').update(input.description).digest('hex')
-          : null,
-      },
-    });
-    if (input.description ?? input.posting_id) {
+    const job =
+      existing ??
+      (await this.db.db.job.create({
+        data: {
+          companyId: company.id,
+          title: input.title,
+          location: input.location ?? null,
+          remoteRestrictions: input.remote_restrictions ?? null,
+          compensation: input.compensation ?? null,
+          canonicalUrl,
+          descriptionHash: input.description
+            ? createHash('sha256').update(input.description).digest('hex')
+            : null,
+        },
+      }));
+    if (!existing && (input.description ?? input.posting_id)) {
       await this.db.db.jobSnapshot.create({
         data: {
           jobId: job.id,
@@ -147,26 +137,33 @@ export class CareersService {
         { title: input.title, description: input.description ?? null },
         { skills: [], role_families: (profileRow.roleFamilies as never) ?? [] },
       );
-      const matchRow = await this.db.db.jobMatch.create({
-        data: {
-          tenantId,
-          jobId: job.id,
-          eligibility: el.eligibility,
-          eligibilityEvidence: el.eligibility_evidence,
-          hardFailures: el.hard_failures,
-          fitScore: fit.score,
-          fitRationale: el.eligibility_evidence.join('; ') || fit.rationale,
-        },
+      const matchData = {
+        tenantId,
+        jobId: job.id,
+        eligibility: el.eligibility,
+        eligibilityEvidence: el.eligibility_evidence,
+        hardFailures: el.hard_failures,
+        fitScore: fit.score,
+        fitRationale: el.eligibility_evidence.join('; ') || fit.rationale,
+      };
+      const matchRow = await this.db.db.jobMatch.upsert({
+        where: { tenantId_jobId: { tenantId, jobId: job.id } },
+        create: matchData,
+        update: {},
       });
       match = mapJobMatch(matchRow);
     }
 
-    await this.db.emit(tenantId, 'job.intake', `job:${job.id}`, { job_id: job.id, deduped: false });
-    return { job: mapJob(job, company, fingerprint), match, deduped: false };
+    await this.db.emit(tenantId, 'job.intake', `job:${job.id}`, {
+      job_id: job.id,
+      deduped: Boolean(existing),
+    });
+    return { job: mapJob(job, company, fingerprint), match, deduped: Boolean(existing) };
   }
 
   async listJobs(tenantId: string) {
     const rows = await this.db.db.job.findMany({
+      where: { matches: { some: { tenantId } } },
       include: { company: true, matches: { where: { tenantId } } },
       orderBy: { createdAt: 'desc' },
       take: 100,
@@ -420,6 +417,7 @@ export class CareersService {
         data: {
           status: finalStatus,
           finishedAt: new Date(),
+          proposal: info.proposal ?? null,
           budgetTokens: info.usage ? info.usage.input + info.usage.output : undefined,
         },
       });
@@ -519,17 +517,17 @@ export class CareersService {
 
   /* notifications ----------------------------------------------------------- */
 
-  async listNotifications(tenantId: string) {
+  async listNotifications(tenantId: string, userId: string) {
     const rows = await this.db.db.notification.findMany({
-      where: { tenantId },
+      where: { tenantId, userId },
       orderBy: { createdAt: 'desc' },
       take: 50,
     });
     return rows;
   }
 
-  async markNotificationRead(tenantId: string, id: string) {
-    const row = await this.db.db.notification.findFirst({ where: { id, tenantId } });
+  async markNotificationRead(tenantId: string, id: string, userId: string) {
+    const row = await this.db.db.notification.findFirst({ where: { id, tenantId, userId } });
     if (!row) throw new NotFoundException({ error: 'notification_not_found' });
     if (!row.readAt) {
       await this.db.db.notification.update({ where: { id: row.id }, data: { readAt: new Date() } });

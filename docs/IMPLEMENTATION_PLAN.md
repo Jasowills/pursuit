@@ -1,5 +1,7 @@
 # Pursuit — Implementation Plan
 
+> **2026-10-22 planning update:** The approved desktop-first target and current dependency sequence are in [DESKTOP_IMPLEMENTATION_PLAN.md](DESKTOP_IMPLEMENTATION_PLAN.md). The milestones below remain the historical web/API implementation baseline; their completed checks do not establish desktop, Connect or automatic-application readiness.
+
 Authoritative sources: `docs/specifications/*`. This plan translates them into milestones and acceptance criteria. Status column: `[x]` done & verified, `[~]` in progress, `[ ]` not started.
 
 ## Milestone M0 — Foundations (DELIVERY_PLAN Phase 0)

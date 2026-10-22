@@ -1,5 +1,18 @@
 # Pursuit
 
+[Star on GitHub](https://github.com/Jasowills/pursuit) · [Contribute](CONTRIBUTING.md)
+
+The desktop-first developer alpha now includes a dark harness, Career Identity review, secure model settings and managed OpenCode draft sessions. See [desktop build status](docs/DESKTOP_BUILD_STATUS.md), [runtime guide](docs/DESKTOP_AGENT_RUNTIME.md), and the [implementation plan](docs/DESKTOP_IMPLEMENTATION_PLAN.md). Public signed installers and automatic application submission are not available yet.
+
+Career autopilot is a core product goal. The current background worker researches configured Greenhouse boards and can prepare drafts using your tested model connection. Automatic applications and offline push/email alerts are not implemented. See [autopilot capabilities and remaining work](docs/AUTOPILOT.md).
+
+The current workflow slice adds per-user BYOM connections, two Gmail connection
+paths, prepared materials, and real-app landing media. See
+[implementation status](docs/WORKFLOW_IMPLEMENTATION_STATUS.md) for the verified
+boundary and remaining launch work, and [connection setup](docs/CONNECTION_SETUP.md)
+for model, Composio and direct Google configuration. The M1 inventory below describes
+the original baseline.
+
 **Your next opportunity doesn't wait. Neither should you.**
 
 Pursuit is a personal career automation platform: it tracks target roles, scores
@@ -178,3 +191,7 @@ pnpm format:check     # prettier
 ## License
 
 Private — all rights reserved. No license is granted for redistribution.
+
+## Desktop development
+
+The local-first desktop foundation lives in `apps/desktop`. Run `pnpm dev:desktop` for the native Tauri app or see [desktop build status](docs/DESKTOP_BUILD_STATUS.md) for prerequisites, checks and remaining alpha gates. The existing web app remains available during migration.

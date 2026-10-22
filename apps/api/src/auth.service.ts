@@ -26,7 +26,7 @@ export class AuthService {
   constructor(private readonly dbw: DbService) {}
 
   get devLoginEnabled(): boolean {
-    return process.env['ENABLE_DEV_LOGIN'] !== 'false';
+    return process.env['NODE_ENV'] !== 'production' && process.env['ENABLE_DEV_LOGIN'] !== 'false';
   }
 
   /** In-memory rate limiter for the login endpoint (10/min/IP). */

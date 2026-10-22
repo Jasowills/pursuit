@@ -30,6 +30,7 @@ model Tenant {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  autopilotConfigs AutopilotConfig[]
   memberships    Membership[]
   careerProfiles CareerProfile[]
   companies      CompanyPreference[]
@@ -59,6 +60,7 @@ model User {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
+  autopilotConfigs AutopilotConfig[]
   memberships   Membership[]
   sessions      Session[]
   devices       Device[]
@@ -622,6 +624,7 @@ model AgentRun {
   status        String    @default("QUEUED")
   runtime       String    @default("dev")
   modelProvider String?   @map("model_provider")
+  proposal      String?
   budgetTokens  Int?      @map("budget_tokens")
   startedAt     DateTime? @map("started_at")
   finishedAt    DateTime? @map("finished_at")
@@ -714,6 +717,44 @@ model ConnectedAccount {
   @@map("connected_accounts")
 }
 
+// Owned by a user as well as a tenant: teammates never inherit model or Gmail access.
+model UserConnection {
+  id          String   @id @default(uuid())
+  tenantId    String   @map("tenant_id")
+  userId      String   @map("user_id")
+  provider    String
+  ciphertext  String
+  models      Json     @default("[]")
+  model       String?
+  testedAt    DateTime? @map("tested_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, userId, provider])
+  @@map("user_connections")
+}
+
+model WorkflowDraft {
+  automationKey String? @unique @map("automation_key")
+  id          String   @id @default(uuid())
+  tenantId    String   @map("tenant_id")
+  userId      String   @map("user_id")
+  jobId       String   @map("job_id")
+  connectionId String  @map("connection_id")
+  model       String
+  sourceResume String  @map("source_resume")
+  content     Json
+  status      String   @default("DRAFT")
+  approvalHash String? @map("approval_hash")
+  expiresAt   DateTime? @map("expires_at")
+  receipt     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId, userId, createdAt])
+  @@map("workflow_drafts")
+}
+
 model Notification {
   id        String    @id @default(uuid())
   tenantId  String    @map("tenant_id")
@@ -760,4 +801,47 @@ model OutboxEvent {
 
   @@index([tenantId, createdAt])
   @@map("outbox_events")
+}
+
+// Persistent, per-user background research. Application execution remains capability gated.
+model AutopilotConfig {
+  mode String @default("research")
+  id String @id @default(uuid())
+  tenantId String @map("tenant_id")
+  userId String @map("user_id")
+  enabled Boolean @default(false)
+  boards Json @default("[]")
+  keywords Json @default("[]")
+  intervalMinutes Int @default(360) @map("interval_minutes")
+  maxDrafts Int @default(3) @map("max_drafts")
+  minFit Int @default(40) @map("min_fit")
+  connectionId String? @map("connection_id")
+  resume String @default("")
+  revision Int @default(1)
+  nextRunAt DateTime? @map("next_run_at")
+  leaseToken String? @map("lease_token")
+  leaseUntil DateTime? @map("lease_until")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  runs AutopilotRun[]
+  @@unique([tenantId, userId])
+  @@index([enabled, nextRunAt])
+  @@map("autopilot_configs")
+}
+
+model AutopilotRun {
+  id String @id @default(uuid())
+  configId String @map("config_id")
+  status String @default("RUNNING")
+  discovered Int @default(0)
+  prepared Int @default(0)
+  skipped Int @default(0)
+  summary Json @default("[]")
+  startedAt DateTime @default(now()) @map("started_at")
+  finishedAt DateTime? @map("finished_at")
+  config AutopilotConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  @@index([configId, startedAt])
+  @@map("autopilot_runs")
 }

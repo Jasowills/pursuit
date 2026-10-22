@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: process.env.NEXT_BUILD_DIR ?? '.next',
   reactStrictMode: true,
+  devIndicators: false,
   // monorepo: pin tracing root to the workspace (multiple lockfiles warning)
   outputFileTracingRoot: process.cwd() + '/../..',
   // API is a separate NestJS app; browser calls it directly (CORS configured there)

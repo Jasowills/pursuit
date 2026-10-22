@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-21",
+  "source": "CUA screenshots of the real redesigned local app, composed as a guided screenshot tour with ffmpeg",
+  "account": "Fictional Demo Operator",
+  "scenes": [
+    {
+      "screen": "overview",
+      "seconds": 5,
+      "caption": "Keep your search in view"
+    },
+    {
+      "screen": "opportunities",
+      "seconds": 6,
+      "caption": "Review each role and its eligibility evidence"
+    },
+    {
+      "screen": "workflow",
+      "seconds": 6,
+      "caption": "Prepare materials with your own model"
+    },
+    {
+      "screen": "connections",
+      "seconds": 6,
+      "caption": "Connect your model and Gmail account"
+    }
+  ],
+  "does_not_demonstrate": [
+    "live model inference",
+    "OAuth consent completion",
+    "email delivery",
+    "automated browser submission"
+  ],
+  "hero_poster": {
+    "file": "hero-workspace.png",
+    "source": "Real loaded overview, seeded fictional records, no mocked network"
+  }
+}

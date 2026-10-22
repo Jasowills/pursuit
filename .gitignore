@@ -2,6 +2,7 @@
 node_modules/
 dist/
 .next/
+.next-*/
 .out/
 .expo/
 web-dist/
@@ -24,3 +25,17 @@ logs/
 
 # OS
 .DS_Store
+
+# native desktop build outputs
+**/target/
+apps/desktop/src-tauri/gen/
+*.sqlite-wal
+*.sqlite-shm
+
+# local design and browser verification artifacts
+.pnpm-store/
+.validation/
+.impeccable/review/
+.impeccable/build/
+.impeccable/mocks/
+__pycache__/

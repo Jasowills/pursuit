@@ -2,28 +2,24 @@ import { forwardRef, type ButtonHTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from './utils';
 
-const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-md)] font-medium transition-colors duration-150 ease-out disabled:pointer-events-none disabled:opacity-50 aria-busy:cursor-wait min-h-[44px]',
-  {
-    variants: {
-      variant: {
-        primary: 'bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[#333]',
-        secondary: 'bg-[var(--hover)] text-[var(--foreground)] hover:bg-[#e8e8eb]',
-        outline:
-          'border border-[var(--border)] bg-transparent text-[var(--foreground)] hover:bg-[var(--hover)]',
-        ghost: 'bg-transparent text-[var(--foreground)] hover:bg-[var(--hover)]',
-        destructive: 'bg-[var(--danger)] text-white hover:bg-[#991b1b]',
-        icon: 'h-10 w-10 min-h-[44px] p-0',
-      },
-      size: {
-        sm: 'h-9 min-h-[36px] px-3 text-sm',
-        md: 'h-11 min-h-[44px] px-4 text-sm',
-        lg: 'h-12 min-h-[48px] px-6 text-base',
-      },
+const buttonVariants = cva('btn disabled:pointer-events-none', {
+  variants: {
+    variant: {
+      primary: 'btn-primary',
+      secondary: 'btn-outline',
+      outline: 'btn-outline',
+      ghost: 'btn-ghost',
+      destructive: 'btn-danger',
+      icon: 'btn-outline h-11 w-11 min-h-[44px] p-0',
     },
-    defaultVariants: { variant: 'primary', size: 'md' },
+    size: {
+      sm: 'btn-sm',
+      md: '',
+      lg: 'text-base',
+    },
   },
-);
+  defaultVariants: { variant: 'primary', size: 'md' },
+});
 
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {

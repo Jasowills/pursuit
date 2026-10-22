@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { apiFetch, useResource, ApiError } from '@/lib/api-client';
 import { ToolName, AUTO_TOOLS, GATED_TOOLS } from '@pursuit/shared';
 import type { ToolName as ToolNameType, AgentRun } from '@pursuit/shared';
@@ -55,23 +56,36 @@ export default function AgentPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Section 04 / Agent"
         title="Agent"
         subtitle="Run the proposal-only agent. Nothing is ever submitted or sent directly — the agent proposes, you decide."
       />
 
-      <Card className="border-[#f5e3c2] bg-[#fdf6ec]">
-        <p className="text-sm">
-          <strong>Current runtime: “dev”.</strong> Deterministic, model-free — every requested tool
-          is exercised through the policy gateway and recorded{' '}
-          <code className="font-mono text-xs">BLOCKED_BY_POLICY</code>, and the run completes with a
-          explicit proposal summary. Real model analysis requires selecting a provider and is still
-          an open decision (see docs/OPEN_QUESTIONS.md).
+      <div className="notice notice-warning">
+        <span className="notice-label">Runtime / dev</span>
+        <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">
+          <strong className="font-semibold">Deterministic and model-free.</strong> Every requested
+          tool is exercised through the policy gateway and recorded{' '}
+          <code className="font-mono text-[11px]">BLOCKED_BY_POLICY</code>, and the run completes
+          with an explicit proposal summary. For model-assisted resume and outreach preparation,
+          connect your own model in Settings and open the{' '}
+          <Link href="/app/workflow" className="link-underline">
+            search workflow
+          </Link>
+          . Isolated per-user OpenCode workers and browser execution are still in development.
         </p>
-      </Card>
+      </div>
 
-      <Card className="mt-4">
-        <h2 className="text-sm font-semibold">Start a run</h2>
-        <form onSubmit={startRun} className="mt-3 space-y-3">
+      <Card className="mt-5">
+        <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[var(--border)] pb-4">
+          <div>
+            <p className="eyebrow">New run / Proposal only</p>
+            <h2 className="panel-heading mt-1">Start a run.</h2>
+          </div>
+          <span className="stamp stamp-warning">No external actions</span>
+        </div>
+
+        <form onSubmit={startRun} className="mt-5 space-y-5">
           <Field label="Goal">
             <input
               required
@@ -83,19 +97,20 @@ export default function AgentPage() {
               placeholder="Find senior engineering roles in my pipeline and draft applications"
             />
           </Field>
+
           <fieldset>
-            <legend className="text-sm font-medium">Allowed tools</legend>
-            <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+            <legend className="label">Allowed tools</legend>
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {ALL_TOOLS.map((t) => {
                 const checked = tools.includes(t);
                 const gated = (GATED_TOOLS as string[]).includes(t);
                 return (
                   <label
                     key={t}
-                    className={`flex min-h-[44px] items-center gap-2 rounded-[var(--radius-md)] border px-3 text-sm ${
+                    className={`flex min-h-[44px] cursor-pointer items-center gap-3 border px-3 py-2 text-[13px] transition-colors ${
                       checked
-                        ? 'border-[var(--foreground)] bg-[var(--hover)]'
-                        : 'border-[var(--border)]'
+                        ? 'border-[var(--ink)] bg-[var(--surface)]'
+                        : 'border-[var(--border)] hover:bg-[var(--hover)]'
                     }`}
                   >
                     <input
@@ -104,96 +119,122 @@ export default function AgentPage() {
                       onChange={() =>
                         setTools(checked ? tools.filter((x) => x !== t) : [...tools, t])
                       }
-                      className="h-4 w-4"
+                      className="h-4 w-4 accent-[var(--signal)]"
                     />
-                    <code className="font-mono text-xs">{t}</code>
-                    {gated && (
-                      <span className="rounded-full border border-[#f5e3c2] bg-[#fdf6ec] px-1.5 py-0.5 text-[10px]">
-                        approval-gated
-                      </span>
-                    )}
+                    <code className="truncate font-mono text-[10px]">{t}</code>
+                    {gated && <span className="stamp stamp-warning ml-auto">gated</span>}
                   </label>
                 );
               })}
             </div>
           </fieldset>
-          <button
-            type="submit"
-            disabled={busy || tools.length === 0}
-            className="h-10 min-h-[44px] rounded-[10px] bg-[var(--primary)] px-5 text-sm font-medium text-[color:var(--primary-foreground)] transition-colors duration-150 hover:bg-[#333] disabled:opacity-60"
-          >
-            {busy ? 'Starting…' : 'Start run'}
-          </button>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="submit"
+              disabled={busy || tools.length === 0}
+              className="btn btn-primary btn-arrow"
+            >
+              {busy ? 'Starting…' : 'Start run'}
+            </button>
+            <span className="mono-meta">
+              {tools.length} tools selected · gateway applies on every step
+            </span>
+          </div>
         </form>
+
         {error && (
-          <p
-            role="alert"
-            className="mt-3 rounded-[var(--radius-md)] border border-[#f4c7c3] bg-[#fdf3f2] px-3 py-2 text-sm text-[#a50e0e]"
-          >
-            {error}
-          </p>
+          <div role="alert" className="notice notice-danger mt-4">
+            <span className="notice-label">Run not started</span>
+            <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">{error}</p>
+          </div>
         )}
       </Card>
 
-      <section className="mt-6">
-        <h2 className="mb-2 text-sm font-semibold">Run history</h2>
+      <section className="mt-10">
+        <div className="flex items-end justify-between gap-4 border-b border-[var(--ink)] pb-2">
+          <h2 className="panel-title">Run history</h2>
+          <span className="mono-meta">{runs.data?.items.length ?? 0} entries</span>
+        </div>
+
         {runs.error ? (
-          <ErrorBox error={runs.error} retry={runs.reload} />
+          <div className="mt-4">
+            <ErrorBox error={runs.error} retry={runs.reload} />
+          </div>
         ) : runs.loading ? (
           <Loading />
         ) : (runs.data?.items.length ?? 0) === 0 ? (
           <Empty>No runs yet.</Empty>
         ) : (
-          <ul className="space-y-3">
+          <div>
             {runs.data?.items.map((r) => (
-              <li key={r.id}>
-                <Card>
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{r.goal}</p>
-                      <p className="text-xs text-[var(--muted)]">
-                        {new Date(r.created_at).toLocaleString()} · {r.runtime}
-                        {r.finished_at
-                          ? ` · finished ${new Date(r.finished_at).toLocaleTimeString()}`
-                          : ''}
-                      </p>
-                    </div>
-                    <StatusPill status={r.status} kind="neutral" />
-                  </div>
-                  <ol className="mt-2 space-y-1">
-                    {r.steps.map((s) => (
-                      <li
-                        key={s.id}
-                        className="flex items-center justify-between gap-2 font-mono text-[11px]"
-                      >
-                        <span className="truncate text-[var(--muted-foreground)]">{s.tool}</span>
-                        <span
-                          className={
-                            s.status === 'BLOCKED_BY_POLICY'
-                              ? 'text-[#8a5a00]'
-                              : s.status === 'SUCCEEDED'
-                                ? 'text-[#18794e]'
-                                : 'text-[#a50e0e]'
-                          }
-                        >
-                          {s.status}
-                        </span>
-                      </li>
-                    ))}
-                  </ol>
-                  {r.steps.some((s) => s.status === 'FAILED') && (
-                    <p className="mt-1 text-[11px] text-[#a50e0e]">
-                      A step failed — the failure is shown verbatim, never retried silently.
+              <article key={r.id} className="border-b border-[var(--border)] py-5">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-serif text-[21px] leading-tight tracking-[-0.02em]">
+                      {r.goal}
                     </p>
-                  )}
-                </Card>
-              </li>
+                    <p className="mono-meta mt-1">
+                      {new Date(r.created_at).toLocaleString()} · runtime {r.runtime}
+                      {r.finished_at
+                        ? ` · finished ${new Date(r.finished_at).toLocaleTimeString()}`
+                        : ''}
+                    </p>
+                  </div>
+                  <StatusPill status={r.status} kind="neutral" />
+                </div>
+
+                {r.proposal && (
+                  <details className="mt-4">
+                    <summary className="cursor-pointer text-sm font-medium">
+                      Read persisted proposal
+                    </summary>
+                    <pre className="mt-3 max-h-96 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-[var(--surface-soft)] p-4 text-xs leading-relaxed">
+                      {r.proposal}
+                    </pre>
+                  </details>
+                )}
+                <div className="mt-4 border-t border-[var(--border)]">
+                  {r.steps.map((s, index) => (
+                    <div
+                      key={s.id}
+                      className="flex items-center justify-between gap-4 border-b border-[var(--border)] py-2 last:border-0"
+                    >
+                      <span className="flex min-w-0 items-center gap-3">
+                        <span className="font-mono text-[8px] text-[color:var(--muted)]">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <span className="truncate font-mono text-[10px] text-[color:var(--ink-soft)]">
+                          {s.tool}
+                        </span>
+                      </span>
+                      <span
+                        className={`font-mono text-[9px] uppercase tracking-[0.08em] ${
+                          s.status === 'BLOCKED_BY_POLICY'
+                            ? 'text-[color:var(--warning)]'
+                            : s.status === 'SUCCEEDED'
+                              ? 'text-[color:var(--success)]'
+                              : 'text-[color:var(--danger)]'
+                        }`}
+                      >
+                        {s.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {r.steps.some((s) => s.status === 'FAILED') && (
+                  <p className="mt-2 text-[11px] leading-relaxed text-[color:var(--danger)]">
+                    A step failed — the failure is shown verbatim, never retried silently.
+                  </p>
+                )}
+              </article>
             ))}
-          </ul>
+          </div>
         )}
       </section>
 
-      <section className="mt-6 space-y-2">
+      <section className="mt-8 space-y-3">
         <Unavailable
           feature="Real model runs"
           detail="The verified OpenCode adapter exists behind AGENT_RUNTIME=opencode, but selecting a non-personal or paid model provider needs a decision recorded in OPEN_QUESTIONS.md — nothing runs without it."

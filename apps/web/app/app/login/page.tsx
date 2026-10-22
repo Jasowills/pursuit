@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { PursuitMark } from '../../_components/header';
 import { apiFetch, setToken, clearToken, ApiError, LoginResponse } from '@/lib/api-client';
 
 /**
@@ -44,24 +45,76 @@ export default function DevLoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-5">
-      <div className="w-full max-w-[400px]">
-        <Link
-          href="/"
-          className="mb-8 flex items-center justify-center gap-2"
-          aria-label="Pursuit home"
-        >
-          <span className="text-xl font-bold tracking-tight">pursuit.</span>
-        </Link>
-        <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface-raised)] p-8 shadow-[var(--shadow-panel)]">
-          <h1 className="text-xl font-bold tracking-tight">Sign in</h1>
-          <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+    <main className="min-h-screen lg:grid lg:grid-cols-[1.05fr_0.95fr]">
+      {/* Left: the casebook's cover. Hidden on small screens to keep the form immediate. */}
+      <section className="ink-section relative hidden flex-col justify-between overflow-hidden p-10 lg:flex xl:p-14">
+        <div className="flex items-center gap-3">
+          <PursuitMark size={28} />
+          <span className="font-serif text-[24px] font-medium leading-none tracking-[-0.035em] text-[color:var(--paper)]">
+            Pursuit<span className="text-[color:var(--signal-bright)]">.</span>
+          </span>
+        </div>
+
+        <div className="max-w-[520px] py-16">
+          <p className="eyebrow eyebrow-signal">Access / Dev sign-in</p>
+          <h1 className="mt-6 font-serif text-[clamp(44px,5.4vw,76px)] font-normal leading-[0.95] tracking-[-0.045em] text-[color:var(--paper)]">
+            The casebook starts with one <em className="accent-italic">truthful</em> record.
+          </h1>
+          <p className="mt-7 max-w-[42ch] text-[15px] leading-relaxed text-[color:var(--muted-foreground)]">
+            This is a personal career operations system. It records what happened, asks before
+            acting, and never invents a qualification or a submission.
+          </p>
+        </div>
+
+        <div className="grid gap-px border border-[var(--border)] bg-[var(--border)] sm:grid-cols-3">
+          {[
+            ['No external account', 'contacted'],
+            ['7-day session', 'stored locally'],
+            ['Nothing is sent', 'without approval'],
+          ].map(([title, detail]) => (
+            <div key={title} className="bg-[var(--ink)] p-4">
+              <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--signal-bright)]">
+                {title}
+              </p>
+              <p className="mt-1 text-[12px] text-[color:var(--muted)]">{detail}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Right: the form. */}
+      <section className="flex min-h-screen items-center justify-center px-5 py-12 sm:px-8">
+        <div className="w-full max-w-[430px]">
+          <div className="mb-10 flex items-center justify-between gap-4 lg:hidden">
+            <Link href="/" className="flex items-center gap-2.5" aria-label="Pursuit home">
+              <PursuitMark size={24} />
+              <span className="font-serif text-[21px] font-medium leading-none tracking-[-0.035em]">
+                Pursuit<span className="text-[color:var(--signal)]">.</span>
+              </span>
+            </Link>
+            <Link href="/" className="mono-meta">
+              Exit ↗
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-[var(--signal)]" aria-hidden />
+            <p className="eyebrow eyebrow-signal">Access request</p>
+          </div>
+          <h1 className="page-title mt-5">Open your casebook.</h1>
+          <p className="mt-4 max-w-[40ch] text-[14px] leading-relaxed text-[color:var(--muted-foreground)]">
             Dev sign-in creates a personal tenant and a 7-day session. Nothing is sent anywhere and
             no external account is contacted.
           </p>
-          <form onSubmit={submit} className="mt-6 space-y-4">
+
+          <div className="mt-6 flex items-center gap-2">
+            <span className="stamp stamp-warning">Development only</span>
+            <span className="mono-meta">No production identity provider</span>
+          </div>
+
+          <form onSubmit={submit} className="mt-8 space-y-5">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium">
+              <label htmlFor="email" className="label">
                 Email
               </label>
               <input
@@ -71,12 +124,13 @@ export default function DevLoginPage() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1.5 h-11 w-full rounded-[10px] border border-[var(--border)] bg-[var(--surface)] px-3 text-sm outline-none focus:border-[var(--foreground)]"
+                className="input"
                 placeholder="you@example.com"
               />
             </div>
+
             <div>
-              <label htmlFor="display-name" className="block text-sm font-medium">
+              <label htmlFor="display-name" className="label">
                 Display name
               </label>
               <input
@@ -87,31 +141,34 @@ export default function DevLoginPage() {
                 autoComplete="name"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="mt-1.5 h-11 w-full rounded-[10px] border border-[var(--border)] bg-[var(--surface)] px-3 text-sm outline-none focus:border-[var(--foreground)]"
+                className="input"
                 placeholder="Your name"
               />
             </div>
+
             {error && (
-              <p
-                role="alert"
-                className="rounded-[var(--radius-md)] border border-[#f4c7c3] bg-[#fdf3f2] px-3 py-2 text-sm text-[#a50e0e]"
-              >
-                {error}
-              </p>
+              <div role="alert" className="notice notice-danger">
+                <span className="notice-label">Sign-in failed</span>
+                <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">{error}</p>
+              </div>
             )}
-            <button
-              type="submit"
-              disabled={busy}
-              className="h-11 min-h-[44px] w-full rounded-[10px] bg-[var(--primary)] text-sm font-medium text-[color:var(--primary-foreground)] transition-colors duration-150 hover:bg-[#333] disabled:opacity-60"
-            >
-              {busy ? 'Signing in…' : 'Continue'}
+
+            <button type="submit" disabled={busy} className="btn btn-primary btn-block btn-arrow">
+              {busy ? 'Opening…' : 'Open the casebook'}
             </button>
           </form>
+
+          <div className="mt-8 border-t border-[var(--border)] pt-5">
+            <p className="text-[11px] leading-relaxed text-[color:var(--muted)]">
+              Dev-only authentication. Production auth providers are not configured in this
+              milestone. If the API is not running on port 4000, sign-in will fail visibly.
+            </p>
+            <Link href="/" className="link-underline mt-4 inline-block text-[12px] font-medium">
+              ← Back to the overview
+            </Link>
+          </div>
         </div>
-        <p className="mt-4 text-center text-xs text-[var(--muted)]">
-          Dev-only authentication. Production auth providers are not configured in this milestone.
-        </p>
-      </div>
+      </section>
     </main>
   );
 }

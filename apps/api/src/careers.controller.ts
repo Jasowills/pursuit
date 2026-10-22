@@ -134,6 +134,7 @@ export class CareersController {
   ) {
     const a = au(req);
     // intakeJob already emits the canonical job.intake outbox event
+    await this.svc.getProfile(a.userId, a.tenantId);
     const result = await this.svc.intakeJob(a.tenantId, body);
     return { ...result, dedupe: result.deduped };
   }
@@ -315,14 +316,14 @@ export class CareersController {
   @Get('notifications')
   async listNotifications(@Req() req: Request) {
     const a = au(req);
-    const rows = await this.svc.listNotifications(a.tenantId);
+    const rows = await this.svc.listNotifications(a.tenantId, a.userId);
     return { items: rows.map((r) => mapNotification(r)) };
   }
 
   @Post('notifications/:id/read')
   async readNotification(@Req() req: Request, @Param('id') id: string) {
     const a = au(req);
-    return this.svc.markNotificationRead(a.tenantId, id);
+    return this.svc.markNotificationRead(a.tenantId, id, a.userId);
   }
 
   /* resume vault (metadata listing; upload/tailoring lands in M2) ---------------- */

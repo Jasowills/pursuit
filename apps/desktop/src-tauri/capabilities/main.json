@@ -1,0 +1,6 @@
+{
+  "identifier": "main",
+  "description": "Local workspace window. No shell, filesystem, HTTP or remote page access.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

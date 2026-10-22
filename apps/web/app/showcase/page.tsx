@@ -3,172 +3,222 @@ import Link from 'next/link';
 import { LandingHeader } from '../_components/header';
 
 /**
- * Living style guide: tokens, type scale, buttons, inputs, cards, badges.
+ * Living style guide: paper, ink, type, stamps, controls, and notice patterns.
  * Single source of truth for visuals — pages compose from these pieces.
  */
 export const metadata: Metadata = { title: 'Showcase' };
 
-function Row({ title, children }: { title: string; children: React.ReactNode }) {
+function Row({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
   return (
-    <section className="mt-10">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">
-        {title}
-      </h2>
-      <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface-raised)] p-6">
-        {children}
+    <section className="mt-12">
+      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[var(--ink)] pb-2">
+        <h2 className="panel-title">{title}</h2>
+        {note && <p className="mono-meta max-w-[46ch]">{note}</p>}
       </div>
+      <div className="pt-6">{children}</div>
     </section>
   );
 }
+
+const COLORS = [
+  ['paper', 'var(--paper)', '#f3eee0'],
+  ['paper-raised', 'var(--paper-raised)', '#faf6ea'],
+  ['paper-deep', 'var(--paper-deep)', '#e9e1cf'],
+  ['ink', 'var(--ink)', '#17150f'],
+  ['signal', 'var(--signal)', '#c23a1b'],
+  ['success', 'var(--success)', '#2d5a3a'],
+  ['warning', 'var(--warning)', '#7c5200'],
+  ['danger', 'var(--danger)', '#9e2b1b'],
+] as const;
 
 export default function ShowcasePage() {
   return (
     <main>
       <LandingHeader />
-      <div className="container-pursuit py-12">
-        <h1 className="text-3xl font-bold tracking-tight">Showcase</h1>
-        <p className="mt-2 max-w-[560px] text-sm text-[var(--muted-foreground)]">
-          The Pursuit design system on one page — tokens, primitives, and patterns. Every dashboard
-          surface composes from these pieces.{' '}
-          <Link href="/app" className="underline">
+      <div className="container-pursuit py-12 md:py-16">
+        <div className="flex items-center gap-3">
+          <span className="h-px w-8 bg-[var(--signal)]" aria-hidden />
+          <p className="eyebrow eyebrow-signal">Design system / Specimen 01</p>
+        </div>
+        <h1 className="hero-h1 mt-5 max-w-[760px] text-[clamp(42px,6vw,78px)]">
+          The casebook, <em>on paper.</em>
+        </h1>
+        <p className="lede mt-5 max-w-[58ch]">
+          Warm stock, ink, hairline rules, and a single vermilion signal. Every dashboard surface
+          composes from these pieces.{' '}
+          <Link href="/app" className="link-underline font-medium">
             Open the dashboard →
           </Link>
         </p>
 
-        <Row title="Color tokens">
-          <div className="grid grid-cols-2 gap-3 text-xs sm:grid-cols-4">
-            {[
-              ['background', 'var(--background)'],
-              ['surface', 'var(--surface)'],
-              ['surface-raised', 'var(--surface-raised)'],
-              ['hover', 'var(--hover)'],
-              ['foreground', 'var(--foreground)'],
-              ['muted-foreground', 'var(--muted-foreground)'],
-              ['muted', 'var(--muted)'],
-              ['border', 'var(--border)'],
-              ['primary', 'var(--primary)'],
-              ['primary-foreground', 'var(--primary-foreground)'],
-            ].map(([name, value]) => (
-              <div key={name} className="flex items-center gap-2">
+        <Row
+          title="01 / Foundations"
+          note="Paper is the canvas. Ink is the voice. Vermilion marks the decision point."
+        >
+          <div className="grid gap-px border border-[var(--border)] bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-4">
+            {COLORS.map(([name, value, hex]) => (
+              <div key={name} className="bg-[var(--paper-raised)] p-4">
                 <span
-                  className="h-8 w-8 shrink-0 rounded-md border border-[var(--border)]"
+                  className="block h-14 border border-[var(--border)]"
                   style={{ background: value }}
                   aria-hidden
                 />
-                <code className="font-mono">{name}</code>
+                <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.08em]">{name}</p>
+                <p className="mono-meta mt-0.5">{hex}</p>
               </div>
             ))}
           </div>
-        </Row>
-
-        <Row title="Type scale">
-          <div className="space-y-4">
-            <p className="hero-h1 text-[44px]">Hero H1 — clamp scale</p>
-            <p className="text-3xl font-bold tracking-tight">Section heading / text-3xl bold</p>
-            <p className="text-base">Body copy / text-base — the standard reading size.</p>
-            <p className="text-sm text-[var(--muted-foreground)]">
-              Secondary text / text-sm muted.
-            </p>
-            <p className="font-mono text-xs text-[var(--muted)]">Mono caption / text-xs mono.</p>
-          </div>
-        </Row>
-
-        <Row title="Buttons">
-          <div className="flex flex-wrap items-center gap-3">
-            <button className="h-11 min-h-[44px] rounded-[10px] bg-[var(--primary)] px-5 text-sm font-medium text-[color:var(--primary-foreground)] transition-colors duration-150 hover:bg-[#333]">
-              Primary action
-            </button>
-            <button className="h-11 min-h-[44px] rounded-[10px] border border-[var(--border)] px-5 text-sm font-medium transition-colors duration-150 hover:bg-[var(--hover)]">
-              Secondary
-            </button>
-            <button className="h-9 min-h-[44px] rounded-[10px] border border-[#d3f2de] bg-[#effcf3] px-3 text-xs font-medium text-[#18794e]">
-              Toggle chip
-            </button>
-            <button
-              disabled
-              className="h-11 min-h-[44px] rounded-[10px] bg-[var(--primary)] px-5 text-sm font-medium text-[color:var(--primary-foreground)] opacity-60"
-            >
-              Disabled
-            </button>
-          </div>
-        </Row>
-
-        <Row title="Inputs">
-          <div className="grid max-w-[520px] gap-3">
-            <label className="block">
-              <span className="block text-sm font-medium">Text input</span>
-              <input
-                className="mt-1.5 h-10 w-full rounded-[10px] border border-[var(--border)] bg-[var(--surface)] px-3 text-sm outline-none focus:border-[var(--foreground)]"
-                placeholder="you@example.com"
-              />
-            </label>
-            <label className="block">
-              <span className="block text-sm font-medium">Textarea</span>
-              <textarea
-                rows={2}
-                className="mt-1.5 w-full rounded-[10px] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:border-[var(--foreground)]"
-                placeholder="Paste the posting text…"
-              />
-            </label>
-          </div>
-        </Row>
-
-        <Row title="Status pills">
-          <div className="flex flex-wrap gap-2 text-xs">
-            {[
-              'DISCOVERED',
-              'VERIFIED',
-              'QUALIFIED',
-              'APPLYING',
-              'SUBMITTED',
-              'FAILED',
-              'REJECTED',
-            ].map((s) => (
-              <span
-                key={s}
-                className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-2.5 py-0.5 font-medium"
-              >
-                {s.replaceAll('_', ' ').toLowerCase()}
-              </span>
-            ))}
-            {['VERIFIED_ELIGIBLE', 'POSSIBLY_ELIGIBLE', 'UNKNOWN', 'INELIGIBLE'].map((s) => {
-              const tone =
-                s === 'VERIFIED_ELIGIBLE'
-                  ? 'border-[#d3f2de] bg-[#effcf3] text-[#18794e]'
-                  : s === 'INELIGIBLE'
-                    ? 'border-[#f4c7c3] bg-[#fdf3f2] text-[#a50e0e]'
-                    : s === 'POSSIBLY_ELIGIBLE'
-                      ? 'border-[#f5e3c2] bg-[#fdf6ec] text-[#8a5a00]'
-                      : 'bg-[var(--surface)] text-[var(--muted-foreground)]';
-              return (
-                <span key={s} className={`rounded-full border px-2.5 py-0.5 font-medium ${tone}`}>
-                  {s.replaceAll('_', ' ').toLowerCase()}
-                </span>
-              );
-            })}
-          </div>
-          <p className="mt-3 text-xs text-[var(--muted-foreground)]">
-            UNKNOWN never renders as a pass — it is its own visible state (PRD rule).
+          <p className="mono-meta mt-3">
+            Squared geometry: radius 0–3px. The only hard shadow is reserved for the hero artefact.
           </p>
         </Row>
 
-        <Row title="Cards & unavailable notice">
-          <div className="grid gap-3 md:grid-cols-2">
-            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] p-4">
-              <h3 className="text-sm font-semibold">Standard card</h3>
-              <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-                Used for jobs, runs, settings sections. 1px border, radius-lg, no heavy shadows.
+        <Row title="02 / Type" note="Newsreader · Instrument Sans · IBM Plex Mono. Self-hosted.">
+          <div className="space-y-6">
+            <p className="font-serif text-[clamp(42px,6vw,78px)] leading-[0.94] tracking-[-0.045em]">
+              A record, <em className="accent-italic">not a feed.</em>
+            </p>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <p className="eyebrow mb-2">Display / Newsreader 420</p>
+                <p className="font-serif text-[38px] leading-[1.02] tracking-[-0.03em]">
+                  Your next move, already in motion.
+                </p>
+              </div>
+              <div>
+                <p className="eyebrow mb-2">Body / Instrument Sans 400</p>
+                <p className="text-[15px] leading-relaxed text-[color:var(--muted-foreground)]">
+                  The interface is deliberately quiet. It should read like a well-set document:
+                  clear hierarchy, generous margins, and nothing competing with the record itself.
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-6 border-t border-[var(--border)] pt-6 md:grid-cols-3">
+              <div>
+                <p className="eyebrow mb-2">Metadata / IBM Plex Mono</p>
+                <p className="mono-meta">CASE 0042 / SUBMITTED / 21 OCT 2026</p>
+              </div>
+              <div>
+                <p className="eyebrow mb-2">Small / 12</p>
+                <p className="text-[12px] leading-relaxed text-[color:var(--muted-foreground)]">
+                  Secondary explanation and field hints.
+                </p>
+              </div>
+              <div>
+                <p className="eyebrow mb-2">Micro / 10</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--muted)]">
+                  Section labels and stamps
+                </p>
+              </div>
+            </div>
+          </div>
+        </Row>
+
+        <Row title="03 / Buttons" note="Minimum 48px primary height; 44px for small. Offset hover, no pill radii.">
+          <div className="flex flex-wrap items-center gap-3">
+            <button className="btn btn-primary btn-arrow">Primary action</button>
+            <button className="btn btn-outline">Secondary</button>
+            <button className="btn btn-ghost">Ghost</button>
+            <button className="btn btn-danger">Destructive</button>
+            <button disabled className="btn btn-primary">
+              Disabled
+            </button>
+            <button className="btn btn-outline btn-sm">Small action</button>
+          </div>
+        </Row>
+
+        <Row title="04 / Stamps" note="Status is text first. Color reinforces; it never carries the meaning alone.">
+          <div className="flex flex-wrap gap-2">
+            <span className="stamp stamp-muted">Discovered</span>
+            <span className="stamp stamp-signal">Verified</span>
+            <span className="stamp stamp-warning">Possibly eligible</span>
+            <span className="stamp stamp-success">Qualified</span>
+            <span className="stamp stamp-danger">Ineligible</span>
+            <span className="stamp stamp-solid">Submitted</span>
+          </div>
+          <p className="mt-3 text-[12px] text-[color:var(--muted-foreground)]">
+            UNKNOWN never renders as a pass — it is its own visible state.
+          </p>
+        </Row>
+
+        <Row title="05 / Inputs" note="48px baseline, square corners, vermilion focus ring.">
+          <div className="grid max-w-[720px] gap-4 md:grid-cols-2">
+            <label className="block">
+              <span className="label">Text input</span>
+              <input className="input" placeholder="you@example.com" />
+            </label>
+            <label className="block">
+              <span className="label">Select</span>
+              <select className="input" defaultValue="remote">
+                <option value="remote">Remote (worldwide)</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+            </label>
+            <label className="block md:col-span-2">
+              <span className="label">Textarea</span>
+              <textarea className="input" rows={3} placeholder="Paste the posting text…" />
+            </label>
+          </div>
+        </Row>
+
+        <Row title="06 / Panels & notices" note="One hairline border. No floating cards, no stacked shadows.">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="panel">
+              <p className="panel-title">Standard panel</p>
+              <h3 className="panel-heading mt-2">A record surface.</h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-[color:var(--muted-foreground)]">
+                Used for forms, state, and timelines. 1px border, 2px radius, paper-raised stock.
               </p>
             </div>
-            <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4">
-              <p className="flex items-center gap-2 text-sm font-medium">
-                <span aria-hidden>⏳</span>
-                Feature — not available yet
-              </p>
-              <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-                Honest empty/unavailable notice pattern used across the dashboard.
+            <div className="notice notice-warning">
+              <span className="notice-label">Not available in this milestone</span>
+              <p className="text-sm font-semibold">Feature</p>
+              <p className="mt-1 text-[13px] leading-relaxed text-[color:var(--ink-soft)]">
+                Honest unavailable notice used across the dashboard. Nothing is simulated.
               </p>
             </div>
+            <div className="notice notice-danger">
+              <span className="notice-label">Request failed</span>
+              <p className="text-sm font-semibold">The record could not be loaded</p>
+              <p className="mt-1 text-[13px] text-[color:var(--ink-soft)]">Error detail appears here.</p>
+            </div>
+            <div className="notice notice-success">
+              <span className="notice-label">Record added</span>
+              <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">
+                Dedupe runs before a record is created.
+              </p>
+            </div>
+          </div>
+        </Row>
+
+        <Row title="07 / Records" note="Rows, not cards. Rules carry the structure; the content carries the weight.">
+          <div className="stat-strip max-w-[760px]">
+            {[
+              ['Applications', '05'],
+              ['Agent runs', '03'],
+              ['Active watchers', '02'],
+              ['Unread alerts', '01'],
+            ].map(([label, value]) => (
+              <div key={label} className="stat-cell">
+                <p className="stat-label">{label}</p>
+                <p className="stat-value">{value}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 max-w-[760px]">
+            {[
+              ['Senior Platform Engineer', 'Acme Systems · Remote', 'Eligible', 'stamp-success'],
+              ['Staff Product Manager', 'Northstar · Hybrid', 'Possibly', 'stamp-warning'],
+              ['Integration Engineer', 'Relay Labs · Remote', 'Unknown', 'stamp-muted'],
+            ].map(([title, meta, state, tone]) => (
+              <div key={title} className="case-row">
+                <span className="min-w-0">
+                  <span className="case-row-title">{title}</span>
+                  <span className="case-row-meta">{meta}</span>
+                </span>
+                <span className={`stamp ${tone}`}>{state}</span>
+              </div>
+            ))}
           </div>
         </Row>
       </div>

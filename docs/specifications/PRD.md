@@ -91,3 +91,55 @@ Verified qualified opportunities surfaced per week; successful confirmed submiss
 ## Explicit exclusions for first beta
 
 - Fully autonomous final submissions/sends; bypassing anti-bot protections; mass unsolicited messaging; paid sourcing datasets by default; public billing; native calendar writes without permission; scraping private platforms without authorization; guaranteed job outcomes.
+
+---
+
+## Amendment: desktop-first Career Identity and autonomy — 2026-10-22
+
+This amendment evolves the existing PRD and preserves its career workflows, factuality, evidence, accessibility and reliability requirements. It takes precedence over conflicting delivery/authentication wording above. It describes the target product, not a claim that its desktop features are implemented.
+
+### Delivery and ownership
+
+Pursuit becomes a downloadable, local-first career agent harness. Pursuit Desktop is the primary application; Pursuit Core owns local persistence/orchestration/browser/integrations; the website is a product/distribution surface; Pursuit Connect and the Expo mobile companion control a running paired instance. There is no separate hosted career dashboard and no required Pursuit account.
+
+The first usable alpha must support **macOS, Windows and Linux**. Installer/browser/runtime qualification is required for each architecture offered. The desktop must not require users to install developer tools or run Postgres/Redis/Docker. Existing web/API code is reused and migrated; legacy routes and stored data are not removed before parity and a recoverable migration exist.
+
+### Career Identity and writing
+
+Career Identity is the authoritative professional record. Important facts carry typed provenance, confirmation state, evidence, revision and dates; imported/inferred/unknown/contradictory facts remain distinct. High-impact eligibility facts require user confirmation. Residence, citizenship, sponsorship and authorization by jurisdiction are separate facts.
+
+Onboarding progressively covers resume/manual import, fact confirmation, target roles/locations, eligibility, writing personality, optional tools, autonomy and a useful first task. Resume creation from a blank profile is supported alongside import. Preserve originals and immutable tailored versions; validate PDF/DOCX outputs rather than claiming universal ATS compatibility.
+
+Writing Identity supplies user-approved tone/rules/examples. Company/recipient evidence and relevant confirmed experience drive a bounded draft/critique/revision pipeline. No invented metrics or qualifications. Style learning requires user acceptance and is inspectable/removable.
+
+### Agent and provider support
+
+OpenCode remains the initial runtime. Offer existing OpenCode provider configuration and OpenCode-hosted model access as separate connection paths. OpenCode is not itself a model. Provider/model availability, authentication and tool capability are discovered and tested against the installed/pinned runtime. Local Ollama is a qualification target; paid APIs/subscriptions are not included by Pursuit.
+
+The harness exposes structured tasks, actual streamed steps, files, source evidence, browser inspection, authority and results; pause/cancel/restart recovery must be real. No unrestricted coding-agent tool environment is inherited.
+
+### Autonomy decision explicitly supplied by the user
+
+The user selected **bounded automatic applications after explicit setup, with approval for outreach**. This supersedes the earlier blanket prohibition of autonomous final application submissions for users who enable that mode. Guided/manual approval mode remains available and is the default.
+
+Automatic application authority is a versioned, scoped, expiring, revocable grant with source/role/location/document/answer constraints and per-run/day/usage limits. Execution still creates and consumes an exact-payload authorization per application. Unknown facts, unsupported forms, platform access restrictions, sensitive declarations, CAPTCHAs and uncertain outcomes require stopping or user action. A model cannot extend its own permission.
+
+Email/social/outreach sending and follow-ups require explicit approval of the exact recipient/content/artifacts. An application grant never authorizes outreach. Current code remains approval-bound and automatic application mode remains unavailable until the new execution contract passes its tests.
+
+### Research and execution
+
+Preserve ingestion, discovery, company/people research, application tracking, outreach and standing goals as connected workflows. Add public ATS adapters, universal input normalization with evidence, typed answer resolution, supported browser adapters and manual takeover. Do not assume public discovery APIs grant submission rights. All submitted states require confirmation evidence and uncertain submissions are never blindly retried.
+
+### Pursuit Connect
+
+The user selected optional **encrypted internet relay connectivity without a Pursuit account**. Desktop is authoritative; relay forwards opaque encrypted transport. Pair devices with explicit enrollment, revocable keys/capabilities, replay protection, version checks and exact-artifact approval binding. Mobile has snapshots and command/event synchronization, not an independent authoritative career database. Desktop off/sleeping means local execution is unavailable; Connect does not imply cloud execution.
+
+### Website and distribution
+
+Preserve the mark, typography and useful landing sections. Replace hosted authentication/navigation with Product/Features/Models/Connect/Docs/GitHub and download/prerelease actions. Only published validated release artifacts may be offered; OS recommendation always has manual selection. No fictitious installers, live browser views or desktop captures. Preserve the single hero showcase/play experience; deeper workflow exploration can sit below it.
+
+### Acceptance and implementation source
+
+The first useful desktop slice is resume import/create → confirmed Career Identity → writing preferences → model connection → supported job URL → research/eligibility → truthful tailored resume/cover letter/answer packet → preflight review → saved artifacts/evidence. Supported browser submission and bounded automatic execution follow additional gates.
+
+[DESKTOP_CHANGE_IMPACT.md](../DESKTOP_CHANGE_IMPACT.md) records retained/modified/retired/introduced modules. [DESKTOP_IMPLEMENTATION_PLAN.md](../DESKTOP_IMPLEMENTATION_PLAN.md) provides dependencies, contracts, release stages and evidence requirements. Older cloud topology/hosted-auth and per-application-only authority statements are historical where this amendment supersedes them.

@@ -20,7 +20,10 @@
     "db:migrate": "pnpm --filter @pursuit/database migrate",
     "db:seed": "pnpm --filter @pursuit/database seed",
     "db:push": "pnpm --filter @pursuit/database db:push",
-    "agent:smoke": "pnpm --filter @pursuit/agent-core smoke"
+    "agent:smoke": "pnpm --filter @pursuit/agent-core smoke",
+    "dev:desktop": "pnpm --filter @pursuit/desktop desktop:dev",
+    "build:desktop": "pnpm --filter @pursuit/desktop desktop:build",
+    "test:local-store": "cargo test --manifest-path packages/local-store/Cargo.toml"
   },
   "devDependencies": {
     "prettier": "^3.6.0",

@@ -75,21 +75,31 @@ export default function WatchersPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Section 06 / Watchers"
         title="Watchers"
         subtitle="Watch company career pages and search URLs for new or reopened roles."
       />
 
-      <Card className="border-[#f5e3c2] bg-[#fdf6ec]">
-        <p className="text-sm text-[#8a5a00]">
-          <strong>Honest status:</strong> watchers are stored and can be toggled, but checking is
-          not scheduled yet — no robotic execution runs in this milestone, so nothing has been
-          fetched from these URLs automatically. Manual job intake covers discovery for now.
+      <div className="notice notice-warning">
+        <span className="notice-label">Honest status</span>
+        <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">
+          <strong className="font-semibold">Watchers are stored and can be toggled, but checking is
+          not scheduled yet.</strong>{' '}
+          No robotic execution runs in this milestone, so nothing has been fetched from these URLs
+          automatically. Manual job intake covers discovery for now.
         </p>
-      </Card>
+      </div>
 
-      <Card className="mt-4">
-        <h2 className="text-sm font-semibold">New watcher</h2>
-        <form onSubmit={create} className="mt-3 grid gap-3 md:grid-cols-2">
+      <Card className="mt-5">
+        <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[var(--border)] pb-4">
+          <div>
+            <p className="eyebrow">New watcher / stored record</p>
+            <h2 className="panel-heading mt-1">Add a source.</h2>
+          </div>
+          <span className="stamp stamp-muted">No scheduler</span>
+        </div>
+
+        <form onSubmit={create} className="mt-5 grid gap-4 md:grid-cols-2">
           <Field label="Kind">
             <select
               value={form.kind}
@@ -129,58 +139,56 @@ export default function WatchersPage() {
               placeholder="platform, senior, staff"
             />
           </Field>
-          <div className="md:col-span-2">
-            <button
-              type="submit"
-              disabled={busy}
-              className="h-10 min-h-[44px] rounded-[10px] bg-[var(--primary)] px-5 text-sm font-medium text-[color:var(--primary-foreground)] transition-colors duration-150 hover:bg-[#333] disabled:opacity-60"
-            >
+          <div className="md:col-span-2 flex flex-wrap items-center gap-3">
+            <button type="submit" disabled={busy} className="btn btn-primary btn-arrow">
               {busy ? 'Adding…' : 'Add watcher'}
             </button>
+            <span className="mono-meta">Stored only · no fetch will run.</span>
           </div>
         </form>
+
         {error && (
-          <p
-            role="alert"
-            className="mt-3 rounded-[var(--radius-md)] border border-[#f4c7c3] bg-[#fdf3f2] px-3 py-2 text-sm text-[#a50e0e]"
-          >
-            {error}
-          </p>
+          <div role="alert" className="notice notice-danger mt-4">
+            <span className="notice-label">Watcher action failed</span>
+            <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">{error}</p>
+          </div>
         )}
       </Card>
 
-      <section className="mt-6">
-        <h2 className="mb-2 text-sm font-semibold">Your watchers</h2>
+      <section className="mt-10">
+        <div className="flex items-end justify-between gap-4 border-b border-[var(--ink)] pb-2">
+          <h2 className="panel-title">Your watchers</h2>
+          <span className="mono-meta">{watchers.data?.items.length ?? 0} sources</span>
+        </div>
+
         {watchers.error ? (
-          <ErrorBox error={watchers.error} retry={watchers.reload} />
+          <div className="mt-4">
+            <ErrorBox error={watchers.error} retry={watchers.reload} />
+          </div>
         ) : watchers.loading ? (
           <Loading />
         ) : (watchers.data?.items.length ?? 0) === 0 ? (
           <Empty>No watchers yet.</Empty>
         ) : (
-          <ul className="space-y-2">
-            {watchers.data?.items.map((w) => (
-              <li
-                key={w.id}
-                className="flex items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-raised)] p-3 text-sm"
-              >
-                <span className="min-w-0">
-                  <span className="block truncate font-medium">{w.source_url}</span>
-                  <span className="text-xs text-[var(--muted)]">
-                    {w.kind === 'COMPANY_URL'
-                      ? 'company page'
-                      : `keywords: ${w.keywords.join(', ') || 'none'}`}{' '}
-                    · every {w.frequency_minutes} min
-                    {w.error_streak > 0 ? ` · ${w.error_streak} errors` : ''}
+          <ul>
+            {watchers.data?.items.map((w, index) => (
+              <li key={w.id} className="case-row">
+                <span className="flex min-w-0 items-start gap-4">
+                  <span className="index-num pt-1">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="min-w-0">
+                    <span className="case-row-title">{w.source_url}</span>
+                    <span className="case-row-meta">
+                      {w.kind === 'COMPANY_URL'
+                        ? 'company page'
+                        : `keywords: ${w.keywords.join(', ') || 'none'}`}{' '}
+                      · every {w.frequency_minutes} min
+                      {w.error_streak > 0 ? ` · ${w.error_streak} errors` : ''}
+                    </span>
                   </span>
                 </span>
                 <button
                   onClick={() => toggle(w)}
-                  className={`h-9 min-h-[44px] shrink-0 rounded-[10px] border px-3 text-xs font-medium transition-colors duration-150 ${
-                    w.enabled
-                      ? 'border-[#d3f2de] bg-[#effcf3] text-[#18794e] hover:bg-[#e2f7ea]'
-                      : 'border-[var(--border)] text-[var(--muted-foreground)] hover:bg-[var(--hover)]'
-                  }`}
+                  className={`btn btn-sm shrink-0 ${w.enabled ? 'btn-outline' : 'btn-ghost'}`}
                 >
                   {w.enabled ? 'Enabled — disable' : 'Disabled — enable'}
                 </button>
@@ -190,7 +198,7 @@ export default function WatchersPage() {
         )}
       </section>
 
-      <section className="mt-6">
+      <section className="mt-8">
         <Unavailable
           feature="Watcher execution"
           detail="Scheduled fetching (Redis-backed queue + browser worker) lands in M2. Watchers are stored; jobs are not auto-discovered from them yet."

@@ -36,60 +36,73 @@ export default function NotificationsPage() {
   return (
     <>
       <PageHeader
+        eyebrow="Section 08 / Notifications"
         title="Notifications"
         subtitle="Run completions, approval requests, and watcher alerts land here."
       />
 
       {error && (
-        <p
-          role="alert"
-          className="mb-3 rounded-[var(--radius-md)] border border-[#f4c7c3] bg-[#fdf3f2] px-3 py-2 text-sm text-[#a50e0e]"
-        >
-          {error}
-        </p>
+        <div role="alert" className="notice notice-danger mb-4">
+          <span className="notice-label">Action failed</span>
+          <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">{error}</p>
+        </div>
       )}
-      {notes.error ? (
-        <ErrorBox error={notes.error} retry={notes.reload} />
-      ) : notes.loading ? (
-        <Loading />
-      ) : (notes.data?.items.length ?? 0) === 0 ? (
-        <Empty>Nothing yet. Finish an agent run to generate the first notification.</Empty>
-      ) : (
-        <ul className="space-y-2">
-          {notes.data?.items.map((n) => (
-            <li
-              key={n.id}
-              className={`rounded-[var(--radius-lg)] border p-3 text-sm ${n.read_at ? 'border-[var(--border)] bg-[var(--surface)]' : 'border-[var(--border)] bg-[var(--surface-raised)]'}`}
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p
-                    className={`truncate ${n.read_at ? 'font-normal text-[var(--muted-foreground)]' : 'font-medium'}`}
+
+      <section>
+        <div className="flex items-end justify-between gap-4 border-b border-[var(--ink)] pb-2">
+          <h2 className="panel-title">Inbox</h2>
+          <span className="mono-meta">{notes.data?.items.length ?? 0} entries</span>
+        </div>
+
+        {notes.error ? (
+          <div className="mt-4">
+            <ErrorBox error={notes.error} retry={notes.reload} />
+          </div>
+        ) : notes.loading ? (
+          <Loading />
+        ) : (notes.data?.items.length ?? 0) === 0 ? (
+          <Empty>Nothing yet. Finish an agent run to generate the first notification.</Empty>
+        ) : (
+          <ul>
+            {notes.data?.items.map((n) => (
+              <li
+                key={n.id}
+                className={`case-row items-start ${n.read_at ? '' : 'border-l-2 border-l-[var(--signal)] pl-4'}`}
+              >
+                <span className="min-w-0">
+                  <span
+                    className={`block truncate text-[14px] leading-snug ${
+                      n.read_at
+                        ? 'font-normal text-[color:var(--muted-foreground)]'
+                        : 'font-semibold text-[color:var(--ink)]'
+                    }`}
                   >
                     {n.title}
-                  </p>
-                  <p className="mt-0.5 truncate text-xs text-[var(--muted-foreground)]">{n.body}</p>
-                  <p className="mt-1 text-[11px] text-[var(--muted)]">
+                  </span>
+                  <span className="mt-1 block truncate text-[12px] text-[color:var(--muted-foreground)]">
+                    {n.body}
+                  </span>
+                  <span className="mono-meta mt-1 block">
                     {new Date(n.created_at).toLocaleString()}
                     {n.entity_ref ? ` · ${n.entity_ref.split(':')[0]}` : ''}
-                  </p>
-                </div>
+                  </span>
+                </span>
                 {!n.read_at && (
                   <button
                     onClick={() => markRead(n.id)}
                     disabled={busyId === n.id}
-                    className="h-8 min-h-[44px] shrink-0 rounded-[10px] border border-[var(--border)] px-2 text-xs transition-colors duration-150 hover:bg-[var(--hover)] disabled:opacity-60"
+                    className="btn btn-ghost btn-sm shrink-0"
                   >
                     {busyId === n.id ? '…' : 'Mark read'}
                   </button>
                 )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
-      <section className="mt-6">
+      <section className="mt-8">
         <Unavailable
           feature="Push / email delivery of notifications"
           detail="Notifications are in-app only in this milestone. Nothing is emailed or pushed to devices."

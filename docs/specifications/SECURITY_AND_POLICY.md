@@ -34,3 +34,19 @@ Record approvals, versioned content hashes, tool call metadata, exact final dest
 ## Threat model and operational requirements
 
 Consider account takeover, malicious browser pages, phishing job links, OAuth scope abuse, duplicate submissions, recruiter spoofing, document leaks, SSRF, model prompt injection, compromised extensions, token theft, and provider outage. Build abuse controls before public signup. Security review and backup restoration test required before beta use with real Gmail.
+
+---
+
+## Explicit autonomy and desktop amendment — 2026-10-22
+
+The user has authorized the product design to offer **bounded automatic applications after explicit setup; outreach remains approval-bound**. This replaces the older locked rule requiring a fresh manual click for every application when a user explicitly chooses the new automatic mode. It is not authorization to bypass current executable safeguards or send live applications during development.
+
+- Default remains manual/Assisted. Automatic application grants must be scoped, versioned, expiring, revocable and budgeted; enforce them in Core and the browser executor, not in model instructions or a frontend switch.
+- Create/consume a one-use exact-payload authorization for each application effect, retaining grant revision, job/destination, answers, document hashes, attempt ID and receipt/uncertainty evidence.
+- Outreach/email/social sending and follow-ups require exact-message approval; application grants confer no messaging authority.
+- Missing facts, sensitive declarations, unsupported widgets, CAPTCHA/MFA, policy changes and uncertain prior submissions stop execution or require the user.
+- Desktop renderer, untrusted pages, model runtime, local API/IPC, secret store and remote companion are distinct trust boundaries. Never import arbitrary coding-agent permissions/hooks or expose raw runtime RPC remotely.
+- Connect pairing requires explicit device approval, authenticated encrypted transport, replay defense, per-device permissions and revocation. Relay metadata exposure is documented; transport encryption alone is not authenticated pairing.
+- Preserve factuality, isolation, suppression lists, redaction and idempotency rules above. See the [execution authority contract](../DESKTOP_IMPLEMENTATION_PLAN.md#bounded-automatic-application-authority).
+
+This amendment records requirements only; automatic application execution remains unimplemented until its acceptance gates pass.

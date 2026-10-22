@@ -61,3 +61,19 @@ API is source of truth. Every mutable record has `version` or `updatedAt`; optim
 ## Testing
 
 Unit tests for eligibility, dedupe, prompt construction, tool permissions and state machines; integration tests for DB/RLS, OAuth mocks, outbox, queues, document rendering; browser tests against owned mock ATS pages; end-to-end web/mobile smoke tests; chaos tests for crashes between send/click and confirmation; prompt-injection red-team fixtures.
+
+---
+
+## Target architecture amendment — 2026-10-22
+
+The approved target is local-first desktop, superseding the hosted/cloud execution topology above. Existing topology documents the current implementation and must not be erased before migration.
+
+- Tauri 2 is the preferred shell candidate, subject to an all-platform packaging proof; React desktop renderer reuses existing UI/contracts. Next.js remains the public website.
+- A supervised local TypeScript Core owns a SQLite repository and local artifacts, extracted from existing service logic. PostgreSQL remains a legacy migration/test source, not a desktop installation prerequisite.
+- Managed OpenCode runtime, provider connections, typed tools, isolated browser executor and an execution-authority service are separate boundaries.
+- Career Identity facts, Writing Identity and source evidence supply minimal task-specific context.
+- Durable tasks/checkpoints, a side-effect ledger, usage reservations and sequenced workspace events replace assumptions of in-memory execution or timestamp-only synchronization.
+- Optional accountless Connect uses authenticated end-to-end encrypted device channels through a relay. No public unauthenticated local API, no provider secrets in relay, no cloud execution when desktop is off.
+- Bounded application-policy grants and exact manual outreach approvals are separate authority sources. Each effect is still bound to one exact payload/version/attempt and confirmed before successful state changes.
+
+Implementation/migration detail: [desktop plan](../DESKTOP_IMPLEMENTATION_PLAN.md). Technical findings and unproven choices: [desktop/Core/Connect](../research/desktop-core-connect.md), [OpenCode](../research/opencode-runtime-and-models.md).

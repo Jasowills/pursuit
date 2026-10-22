@@ -365,6 +365,7 @@ export const AgentRun = z.object({
   status: AgentRunStatus,
   runtime: z.enum(['dev', 'opencode', 'external']),
   model_provider: z.string().nullish(),
+  proposal: z.string().nullish(),
   initiator: z.string(),
   budget_tokens: z.number().int().nullish(),
   steps: z.array(AgentStepItem).default([]),

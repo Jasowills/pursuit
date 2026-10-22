@@ -14,6 +14,7 @@ import { AppShell } from './_components/shell';
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
   const [state, setState] = useState<'checking' | 'authed' | 'anon'>('checking');
+
   useEffect(() => {
     setState(getToken() ? 'authed' : 'anon');
   }, [pathname]);
@@ -26,21 +27,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <AppShell>
       {state === 'checking' ? (
-        <div className="animate-pulse space-y-3 py-10" aria-busy>
-          <div className="h-8 w-52 rounded bg-[var(--hover)]" />
-          <div className="h-24 rounded-[var(--radius-lg)] bg-[var(--hover)]" />
+        <div role="status" aria-busy className="space-y-3 py-10">
+          <span className="sr-only">Checking session…</span>
+          <div className="skeleton h-4 w-40" />
+          <div className="skeleton h-9 w-72" />
+          <div className="skeleton h-24 w-full" />
         </div>
       ) : state === 'anon' ? (
-        <section className="py-16 text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Sign in required</h1>
-          <p className="mx-auto mt-3 max-w-[420px] text-sm text-[var(--muted-foreground)]">
+        <section className="max-w-[620px] py-12 md:py-20">
+          <p className="eyebrow eyebrow-signal">Protected record</p>
+          <h1 className="page-title mt-4">Sign in required.</h1>
+          <p className="page-subtitle max-w-[46ch]">
             This dashboard is protected. Dev sign-in is the only supported flow in this milestone —
             no production identity provider is connected yet.
           </p>
-          <Link
-            href="/app/login"
-            className="mt-6 inline-flex h-11 min-h-[44px] items-center rounded-[10px] bg-[var(--primary)] px-5 text-sm font-medium text-[color:var(--primary-foreground)] transition-colors duration-150 hover:bg-[#333]"
-          >
+          <Link href="/app/login" className="btn btn-primary btn-arrow mt-7">
             Go to dev sign-in
           </Link>
         </section>
