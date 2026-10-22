@@ -53,8 +53,8 @@ function App() {
       <aside className="sidebar">
         <a className="brand" href="#workspace">
           <svg viewBox="0 0 32 32" aria-hidden="true">
-            <rect width="32" height="32" rx="9" fill="#5445db" />
-            <path d="M9 23 23 9M11 9h12v12" fill="none" stroke="white" strokeWidth="2.5" />
+            <rect width="32" height="32" rx="9" fill="#d5f578" />
+            <path d="M9 23 23 9M11 9h12v12" fill="none" stroke="#10120b" strokeWidth="2.5" />
           </svg>
           pursuit<span>.</span>
         </a>

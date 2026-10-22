@@ -19,15 +19,16 @@ with sync_playwright() as p:
  page.get_by_role('link',name='Agent workspace',exact=True).click()
  page.screenshot(path=str(OUT/'harness-agent.png'),full_page=True)
  page.goto('http://127.0.0.1:3001/');page.wait_for_load_state('networkidle');page.evaluate('document.fonts.ready')
- expect(page.get_by_role('heading',level=1)).to_contain_text('Your next opportunity')
+ expect(page.get_by_role('heading',level=1)).to_contain_text('Your career.')
  for width,height,name in [(1440,1000,'desktop'),(973,968,'user-973'),(390,844,'mobile'),(320,800,'small-mobile')]:
   page.set_viewport_size({'width':width,'height':height});page.reload();page.wait_for_load_state('networkidle');page.evaluate('document.fonts.ready');page.evaluate('scrollTo(0,0)')
   assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),f'Overflow at {width}'
   page.screenshot(path=str(OUT/(name+'.png')),full_page=True)
   page.screenshot(path=str(OUT/(name+'-hero.png')))
   if width in [1440,390]:
-   for section in ['features','autopilot','models','download','connect']:
+   for section in ['how-it-works','features','autopilot','models','download','connect']:
     page.locator('#'+section).scroll_into_view_if_needed();page.screenshot(path=str(OUT/(name+'-'+section+'.png')))
+   page.locator('.new-footer').screenshot(path=str(OUT/(name+'-footer.png')),style='.site-header { visibility:hidden !important; }')
    page.evaluate('scrollTo(0,0)')
   assert page.locator('img').evaluate_all('(imgs)=>imgs.every(i=>i.complete&&i.naturalWidth>0)'), 'Broken image'
   if width<1100:
@@ -36,6 +37,10 @@ with sync_playwright() as p:
    page.keyboard.press('Escape')
    expect(page.get_by_role('button',name='Open menu',exact=True)).to_be_focused()
  page.set_viewport_size({'width':1440,'height':1000})
+ page.locator('.flow-screen').scroll_into_view_if_needed()
+ for label in ['Discover','Prepare','Move forward']:
+  page.get_by_role('button',name='Show '+label+' example',exact=True).click()
+  expect(page.get_by_role('button',name='Show '+label+' example',exact=True)).to_have_attribute('aria-pressed','true')
  page.get_by_role('button',name='Product engineer',exact=True).click()
  expect(page.locator('.tailored')).to_contain_text('Partnered with a 12-person')
  page.get_by_role('button',name='Platform engineer',exact=True).click()

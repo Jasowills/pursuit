@@ -6,6 +6,7 @@ import {
   AutopilotStudy,
   DownloadOptions,
 } from './_components/career-showcase';
+import { OpportunityField, CareerFlow } from './_components/opportunity-field';
 import './landing-dark.css';
 
 const REPO = 'https://github.com/Jasowills/pursuit';
@@ -57,78 +58,80 @@ export default function HomePage() {
     <div className="dark-landing">
       <LandingHeader />
       <main id="main">
-        <section className="dark-hero dark-frame">
-          <div className="hero-copy">
+        <section className="dark-hero">
+          <OpportunityField />
+          <div className="hero-copy dark-frame">
             <h1>
-              Your next opportunity
+              Your career.
               <br />
-              deserves <span>your best.</span>
+              <span>In forward motion.</span>
             </h1>
             <p>
-              A career harness that puts your experience, your AI models, and your entire search in
-              one place. Built to move your career forward. On your terms.
+              An open source career harness for the work between
+              <br className="desktop-break" /> where you are and where you want to be.
             </p>
             <div className="dark-actions">
               <a href="#download" className="dark-button primary">
                 <Icon name="monitor" size={17} /> Get Pursuit <Icon name="arrowUpRight" size={16} />
               </a>
-              <a href="#product" className="dark-button">
-                Explore the harness <Icon name="chevronDown" size={16} />
+              <a href="#how-it-works" className="hero-watch">
+                <span>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 3 8 5-8 5z" />
+                  </svg>
+                </span>{' '}
+                See it in motion
               </a>
             </div>
-            <div className="hero-details">
-              <span>
-                <Icon name="layers" size={13} /> Open source
-              </span>
-              <span>
-                <Icon name="lock" size={13} /> Local-first desktop
-              </span>
-              <span>
-                <Icon name="sparkles" size={13} /> Your own models
-              </span>
+            <p className="hero-alpha-note">Desktop alpha. Your models. Your direction.</p>
+          </div>
+          <div className="hero-path-labels" aria-hidden="true">
+            <span>
+              <Icon name="search" size={14} /> Find your fit
+            </span>
+            <span>
+              <Icon name="file" size={14} /> Make your case
+            </span>
+            <span>
+              <Icon name="arrowUpRight" size={14} /> Move forward
+            </span>
+          </div>
+          <div className="hero-models dark-frame">
+            <span>Made for your model.</span>
+            <div>
+              {providers.map(([name, logo]) => (
+                <a key={name} href="#models" aria-label={`Explore ${name} connection`}>
+                  <img src={`/brands/${logo}`} alt="" width={28} height={28} />
+                  <span>{name}</span>
+                </a>
+              ))}
             </div>
           </div>
-          <div id="product" className="hero-harness">
-            <HarnessShowcase />
-          </div>
         </section>
-        <section className="model-strip dark-frame" aria-label="Model connections">
-          <p>
-            Your intelligence.
-            <br />
-            <strong>Your choice.</strong>
-          </p>
-          <div>
-            {providers.slice(0, 5).map(([name, logo]) => (
-              <span key={name}>
-                <img src={`/brands/${logo}`} alt="" width={25} height={25} />
-                {name}
-              </span>
-            ))}
+        <CareerFlow />
+        <section className="dark-frame product-section" id="product">
+          <div className="section-heading-pair">
+            <h2>
+              A real workspace.
+              <br />
+              <span>For your next chapter.</span>
+            </h2>
+            <div>
+              <p>
+                Career context, model connections, and agent sessions. Together on your desktop.
+              </p>
+              <a href="#download" className="text-link">
+                Explore the developer alpha <Icon name="arrowUpRight" size={15} />
+              </a>
+            </div>
           </div>
-          <a href="#models" aria-label="Explore all model connections">
-            <Icon name="arrowUpRight" size={20} />
-          </a>
-        </section>
-        <section className="dark-section dark-frame story-intro" id="how-it-works">
-          <h2>
-            Less busywork.
-            <br />
-            <span>More next moves.</span>
-          </h2>
-          <div>
-            <p>
-              Job searching shouldn’t feel like running a second job. Pursuit connects the work
-              between finding an opportunity and making your case.
-            </p>
-            <p>
-              Build your career identity once. Bring the model you trust. Keep the research, drafts,
-              decisions, and next steps together.
-            </p>
-            <a className="text-link" href="#features">
-              Meet your career workspace <Icon name="arrowUpRight" size={16} />
-            </a>
-          </div>
+          <HarnessShowcase />
         </section>
         <section className="dark-section dark-frame feature-split" id="features">
           <div className="feature-copy">
@@ -525,31 +528,85 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <footer className="dark-footer dark-frame">
-        <div>
-          <a href="/" className="brand-lockup">
-            <PursuitMark size={27} />
-            <Wordmark />
-          </a>
-          <p>
-            A little less searching.
-            <br />A little closer to what’s next.
-          </p>
-        </div>
-        <nav aria-label="Footer">
-          <a href="#product">The harness</a>
-          <a href="#models">Models</a>
-          <a href="#download">Download</a>
-          <a href={REPO} target="_blank" rel="noreferrer">
-            GitHub <Icon name="arrowUpRight" size={13} />
-          </a>
-          <a href={`${REPO}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noreferrer">
-            Contribute <Icon name="arrowUpRight" size={13} />
-          </a>
-        </nav>
-        <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Pursuit</span>
-          <span>Open source. Built for your next chapter.</span>
+      <footer className="new-footer">
+        <div className="dark-frame">
+          <div className="footer-callout">
+            <h2>
+              Good things
+              <br />
+              don’t find themselves.
+            </h2>
+            <div>
+              <p>Give your next move a place to start.</p>
+              <a href="#download" className="dark-button primary">
+                Get Pursuit <Icon name="arrowUpRight" size={17} />
+              </a>
+            </div>
+          </div>
+          <div className="footer-directory">
+            <div className="footer-about">
+              <a href="/" className="brand-lockup">
+                <PursuitMark size={30} />
+                <Wordmark />
+              </a>
+              <p>
+                Your career, in forward motion.
+                <br />
+                Open source. Local-first. Yours.
+              </p>
+            </div>
+            <nav aria-label="Footer product">
+              <h3>Product</h3>
+              <a href="#product">The harness</a>
+              <a href="#features">Resume tailoring</a>
+              <a href="#autopilot">Career autopilot</a>
+              <a href="#connect">Pursuit Connect</a>
+              <a href="#download">Download</a>
+            </nav>
+            <nav aria-label="Footer resources">
+              <h3>Resources</h3>
+              <a
+                href={`${REPO}/blob/main/docs/DESKTOP_BUILD_STATUS.md`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Documentation <Icon name="arrowUpRight" size={12} />
+              </a>
+              <a href="#models">Model connections</a>
+              <a href="#faq">Questions & answers</a>
+              <a
+                href={`${REPO}/blob/main/docs/specifications/SECURITY_AND_POLICY.md`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Privacy & control <Icon name="arrowUpRight" size={12} />
+              </a>
+            </nav>
+            <nav aria-label="Footer open source">
+              <h3>Build with us</h3>
+              <a href={REPO} target="_blank" rel="noreferrer">
+                GitHub <Icon name="arrowUpRight" size={12} />
+              </a>
+              <a href={`${REPO}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noreferrer">
+                Contribute <Icon name="arrowUpRight" size={12} />
+              </a>
+              <a href={`${REPO}/issues`} target="_blank" rel="noreferrer">
+                Report an issue <Icon name="arrowUpRight" size={12} />
+              </a>
+            </nav>
+          </div>
+          <div className="footer-large-word" aria-hidden="true">
+            pursuit<span>.</span>
+          </div>
+          <div className="footer-colophon">
+            <span>© {new Date().getFullYear()} Pursuit</span>
+            <span>
+              <i /> Built for what’s next.
+            </span>
+            <a href="#main">
+              Back to top <Icon name="arrowUpRight" size={13} />
+            </a>
+          </div>
         </div>
       </footer>
     </div>

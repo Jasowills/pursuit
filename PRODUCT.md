@@ -86,3 +86,7 @@ Verification: 10 local-store tests and 9 default native tests passed. Explicit i
 ## Dark product experience amendment — 2026-10-22
 
 The user selected near-black and lavender for both landing page and desktop harness. This supersedes the prior white-background commitment. Preserve the original mark, self-hosted Geist and precise product voice. Landing acquisition now targets the local-first desktop alpha with source download/build instructions until signed public installers exist. Resume tailoring and bounded automatic applications are prominent, but illustrative previews must never imply that the unfinished desktop packet exporter or ATS executor already works. Pursuit Connect, richer research, writing preferences and social workflows remain clearly planned.
+
+## Forward motion visual replacement — 2026-10-22
+
+The user rejected the lavender landing and asked for true black, a compact three-to-four-color palette, a creative WebGL-capable hero, and public-reference study of T3 Code, Diffusion Studio and Neatlogs. This supersedes the earlier near-black/lavender selection. The current landing and desktop use black, ivory, acid yellow and ice blue; the trajectory mark is recolored rather than replaced. The landing gains a procedural motion field, a post-hero career-brief walkthrough, and a full directory/large-wordmark footer. Product availability and preview disclosures remain unchanged.

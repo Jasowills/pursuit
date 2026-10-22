@@ -11,9 +11,9 @@ export function PursuitMark({
   size?: number;
   variant?: 'brand' | 'white';
 }) {
-  const tile = variant === 'white' ? '#ffffff' : '#3b32d6';
-  const line = variant === 'white' ? '#3b32d6' : '#ffffff';
-  const tip = variant === 'white' ? '#101012' : '#d9f36a';
+  const tile = variant === 'white' ? '#f5f5ef' : '#d5f578';
+  const line = '#10120b';
+  const tip = '#10120b';
 
   return (
     <svg

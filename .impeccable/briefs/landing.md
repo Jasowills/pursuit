@@ -3,16 +3,18 @@
 Mode: Persuade
 Target: apps/web/app/page.tsx
 
-## Direction contract — 2026-10-22
+## Forward motion direction — 2026-10-22
 
-User-confirmed replacement: near-black and lavender, calm, precise, product-led. The same direction extends to the desktop harness. Preserve the original Pursuit mark and self-hosted Geist. This supersedes the old white marketing canvas and four-tab hero.
+The user rejected the prior lavender page. Current brief: true black, three to four core colors, a stronger cinematic hero, and inspiration from T3 Code, Diffusion Studio and Neatlogs, especially Neatlogs' post-hero workflow and fuller footer. The original trajectory mark remains; its color changes with the system. Geist remains the established face. Code-led implementation; no generated composition is used as approval evidence.
 
-Code-led implementation. First viewport: restrained dark navigation, large centered two-line promise, clear Get Pursuit action, one real dark harness renderer capture in a muted plum stage. No synthetic records or inference proof. Capture discloses browser preview and disconnected native storage.
+Core palette: black #000000, ivory #f5f5ef, acid yellow #d5f578, ice blue #7bc8f6. Neutral ramps and low-intensity tints support the four roles. Acid signals action and user control; ice blue signals preparation and connection. No lavender UI remains on landing or desktop. The retained web dashboard remains separately scoped.
 
-Visitor path: harness → resume tailoring → bounded autopilot → Career Identity and sessions → model freedom → Gmail → capability availability → Connect roadmap → privacy → platform/source download → FAQ. Actual desktop, retained web capabilities, and roadmap remain distinguishable. Public installers are not yet published.
+First viewport: full black, large two-line career promise, compact acquisition actions, custom procedural WebGL trajectory field, and provider connections integrated below the field. The graph is decorative and never represents live submissions. Runtime pauses offscreen and when the document is hidden, honors reduced motion, releases GPU resources on unmount, and has a non-WebGL fallback.
 
-Signature interaction: dimensional hero stage settles into the page; the policy walkthrough progresses through research, preparation, application and evidence without external actions. Resume role selection shows grounded illustrative rewrites. Both examples are labeled. Reduced motion remains functional. No customer metrics or testimonials.
+After the hero: a three-stage career brief with scroll-responsive persistent visual context, inspired by the storytelling discipline of Neatlogs rather than copied artwork or code. Fictional roles and sample writing are labeled as illustrative. Mobile keeps all narrative stages readable and offers explicit stage controls. The actual harness capture follows this story as product evidence, with its browser-preview and native-disconnected boundary visible.
 
-Token direction: canvas #0c0c10; raised surfaces #17131d; signal #c3afff; pale text #f0eef7; muted lavender text; fine borders; 7px controls; original indigo mark. Desktop uses matching near-black/lavender values, preserving its Operate structure.
+Full story retained: actual harness → resume tailoring → bounded autopilot → Career Identity and sessions → model freedom → Gmail → capability availability → Connect roadmap → privacy → developer/source download → FAQ → closing invitation and multi-column footer. The footer uses a large Pursuit wordmark with an ice-blue terminal dot.
 
-Responsive requirements: 320, 390, 973 and 1440 widths, accessible mobile menu, keyboard/Escape, image zoom, real download source link, platform qualification states, no sideways page overflow.
+Public signed installers and automatic submission are still unavailable. Source downloads, capability labels and explicit preview disclosures remain honest. No borrowed customer logos, testimonials or usage metrics.
+
+Verification matrix: 1440, 973, 390 and 320 widths; menu keyboard/Escape; scroll-stage controls; resume example; autopilot preview; platform selection; image dialog; FAQ; all images loaded; no horizontal document overflow. Additional runtime checks cover animated and static WebGL, context loss and disabled WebGL. Desktop interaction checks use synthetic IPC only; marketing capture does not.
