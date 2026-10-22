@@ -66,3 +66,7 @@ Reference observation: Neatlogs' public atmosphere story uses a long pinned stag
 ## Watcher order — latest user annotation
 
 Place the company watcher console before its explanation, in both DOM order and desktop columns. Preserve the existing component, companies, contrast and responsive reflow. This is an order correction, not another visual-world redesign.
+
+## Video preparation — latest annotation
+
+Replace the rejected stock portrait/camera frame with an employer brief, the relevant sample project and a selectable four-part script outline. Preserve the established black/neutral product materials, actual sample career facts, script, checklist and fictional-content disclosure. Selecting an outline item highlights its script passage; copying the script provides real browser feedback. No camera access or recording is implied. Retire the unused portrait asset. This is a narrow section redesign, preserving the hero and all other sections.

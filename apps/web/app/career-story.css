@@ -618,43 +618,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 40px;
 }
-.video-preview {
-  aspect-ratio: 16/10;
-  position: relative;
-  border: 1px solid #5b5b5b;
-  background: linear-gradient(145deg, #282828, #0c0c0c);
-  border-radius: 8px;
-  overflow: hidden;
-  display: grid;
-  place-items: center;
-}
-.video-preview > div {
-  color: #b6b6b6;
-  display: grid;
-  justify-items: center;
-  gap: 17px;
-}
-.video-preview > div > span {
-  font-size: 12px;
-  color: #d5d5d5;
-}
-.camera-corners {
-  position: absolute;
-  inset: 20px;
-  border: 1px solid #707070;
-  border-radius: 7px;
-}
-.video-length {
-  position: absolute;
-  bottom: 33px;
-  right: 33px;
-  border: 1px solid #787878;
-  border-radius: 4px;
-  padding: 4px 7px;
-  font-size: 10px;
-  color: #e5e5e5;
-  background: #222222;
-}
 .video-request {
   display: flex;
   gap: 12px;

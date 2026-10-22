@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-22T20:55:58.700275+00:00",
+  "generatedAt": "2026-10-22T23:56:16.464409+00:00",
   "title": "Design System: Pursuit",
   "extensions": {
     "typographyMeta": {
@@ -103,6 +103,10 @@
       {
         "name": "activity-compact",
         "value": "700px"
+      },
+      {
+        "name": "video-selected-passage",
+        "value": "900px"
       }
     ]
   },
@@ -167,7 +171,7 @@
       "Black main workspace, #070707 sidebar and #080808 inspector; simulated demo sourcing and truthful unconnected personal mode",
       "Direct Product link, live outlined GitHub-count pill with unavailable em dash and 700px mobile hiding",
       "Four simulated company watchers: PostHog, Stripe, Linear and Cloudflare; first-party marks; console first in DOM order, desktop left in a 1.15fr 1fr grid and before explanatory copy on mobile",
-      "Pexels 8463168 professional introduction portrait with documented provenance",
+      "Authored video-preparation employer/project brief, four-part outline, selected script passage, clipboard feedback and checklist; retired Pexels 8463168 portrait retains historical provenance only",
       "Six chapter controls meet 44px minimum targets; refreshed actual shared-workspace harness capture",
       "Persistent six-scene scroll camera with paper and approval close-ups, manual frame controls and static reduced-motion fallback",
       "Actual Geist footer glyphs revealed by pen masks with bounded settling bounce",

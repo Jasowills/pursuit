@@ -36,3 +36,5 @@ First-party website requests and public assets only; no authenticated applicatio
 - Cloudflare: `https://www.cloudflare.com/favicon.ico`, served by Cloudflare as a 99×96 PNG, saved as `cloudflare.png`. This identifies the fourth example watcher; it is not a claim of endorsement or live polling.
 - Footer: original SVG pen trajectories replace the spring/fade letters. The paths trace each glyph rather than revealing typed text. Reduced motion renders the completed mark.
 - Green, amber and red identify readiness/completion, review/unknown information and exclusion. They are confined to labeled status badges; neutral black surfaces remain the visual foundation.
+
+- Retired on 2026-10-22: `recording-professional.jpg` was removed after the user rejected the portrait treatment. Video preparation now uses an authored employer/project brief and script outline, with no stock camera illustration.

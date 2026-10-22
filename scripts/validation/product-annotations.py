@@ -51,10 +51,9 @@ with sync_playwright() as p:
     page.locator('.source-approve').click()
     expect(page.locator('.source-scene-layer[data-current=true] .source-delivery')).to_contain_text('did not submit an application')
     page.get_by_role('button', name='Video introduction', exact=True).click()
-    photo = page.locator('.recording-photo')
-    assert photo.evaluate('(el)=>el.complete && el.naturalWidth===1200')
-    expect(photo).to_have_attribute('src', '/photos/recording-professional.jpg')
-    page.locator('#features').screenshot(path=str(OUT / 'professional-video.png'))
+    expect(page.locator('.recording-photo')).to_have_count(0)
+    expect(page.locator('.video-employer-brief')).to_contain_text('B2B reporting workspace')
+    page.locator('#features').screenshot(path=str(OUT / 'video-preparation.png'))
     page.goto('http://127.0.0.1:3001/product-tour')
     page.wait_for_load_state('networkidle')
     page.get_by_role('button', name='Opportunities', exact=False).first.click()
@@ -84,4 +83,4 @@ with sync_playwright() as p:
     assert page.locator('.brand-pen-mask').first.evaluate('(el)=>getComputedStyle(el).animationName') == 'none'
     assert not errors, errors
     browser.close()
-    print('Passed: six steps, five widths, semantic statuses, direct nav, four companies, professional image, pen motion, tour/native sourcing honesty.')
+    print('Passed: six steps, five widths, semantic statuses, direct nav, four companies, video brief, pen motion, tour/native sourcing honesty.')

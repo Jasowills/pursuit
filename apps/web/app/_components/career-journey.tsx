@@ -93,6 +93,33 @@ export function HarnessFeature() {
 export function DocumentWorkshop() {
   const [view, setView] = useState<'resume' | 'letter' | 'video'>('resume');
   const [tailor, setTailor] = useState(true);
+  const [scriptSection, setScriptSection] = useState(0);
+  const [copyStatus, setCopyStatus] = useState('');
+  function selectScriptSection(index: number) {
+    setScriptSection(index);
+    if (matchMedia('(max-width: 900px)').matches) {
+      requestAnimationFrame(() => {
+        const passage = document.querySelector<HTMLElement>(
+          `.video-script-passage[data-section="${index}"]`,
+        );
+        passage?.focus({ preventScroll: true });
+        passage?.scrollIntoView({
+          block: 'center',
+          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        });
+      });
+    }
+  }
+  async function copyScript() {
+    try {
+      await navigator.clipboard.writeText(
+        VIDEO_SCRIPT.map(([time, title, copy]) => `${time} — ${title}\n${copy}`).join('\n\n'),
+      );
+      setCopyStatus('Sample script copied. Replace Alex’s details with your own.');
+    } catch {
+      setCopyStatus('Copy is unavailable in this browser. Select the script text to copy it.');
+    }
+  }
   return (
     <section className="document-section dark-frame" id="features">
       <div className="section-heading-pair">
@@ -206,25 +233,44 @@ export function DocumentWorkshop() {
           <div className="video-workshop">
             <Enter>
               <div className="video-studio">
-                <div className="video-preview">
-                  <span className="camera-corners" />
-                  <img
-                    className="recording-photo"
-                    src="/photos/recording-professional.jpg"
-                    alt="Stock portrait illustrating a professional introduction video; not a Pursuit user"
-                    width={1200}
-                    height={675}
-                    loading="lazy"
-                  />
-                  <span className="recording-label">Introduction video · example frame</span>
-                  <span className="video-length">01:30</span>
-                </div>
-                <div className="video-request">
-                  <Icon name="bell" size={18} />
-                  <div>
-                    <strong>Morrow asks for an introduction video.</strong>
-                    <p>Review the script and choose a project to talk about before recording.</p>
+                <div className="video-employer-brief">
+                  <div className="video-employer-heading">
+                    <span className="video-company-mark">M</span>
+                    <div>
+                      <strong>Morrow</strong>
+                      <span>Lead Product Designer · Sample application</span>
+                    </div>
+                    <span className="video-duration">90 seconds</span>
                   </div>
+                  <h3>A project you can speak about.</h3>
+                  <p>
+                    The application asks for a short introduction. Use one relevant project to
+                    explain how you work.
+                  </p>
+                  <div className="video-project">
+                    <Icon name="file" size={18} />
+                    <div>
+                      <strong>B2B reporting workspace</strong>
+                      <p>Meridian Studio · Discovery through delivery</p>
+                      <span>
+                        Research with customers. Design alongside eight engineers. A clearer
+                        reporting workflow.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="video-outline" role="group" aria-label="Video script sections">
+                  {VIDEO_SCRIPT.map(([time, title], index) => (
+                    <button
+                      key={time}
+                      aria-pressed={scriptSection === index}
+                      onClick={() => selectScriptSection(index)}
+                    >
+                      <span>{time}</span>
+                      <strong>{title}</strong>
+                      <Icon name="arrowUpRight" size={14} />
+                    </button>
+                  ))}
                 </div>
                 <div className="video-checklist">
                   <h4>Your recording checklist</h4>
@@ -248,8 +294,21 @@ export function DocumentWorkshop() {
                 <br />
                 90-second introduction.
               </h3>
-              {VIDEO_SCRIPT.map(([time, title, copy]) => (
-                <div key={time}>
+              <button className="video-copy-script" onClick={copyScript}>
+                <Icon name="file" size={14} />
+                Copy sample script
+              </button>
+              <p className="video-copy-status" role="status">
+                {copyStatus}
+              </p>
+              {VIDEO_SCRIPT.map(([time, title, copy], index) => (
+                <div
+                  className="video-script-passage"
+                  data-section={index}
+                  tabIndex={-1}
+                  data-selected={scriptSection === index}
+                  key={time}
+                >
                   <span>{time}</span>
                   <strong>{title}</strong>
                   <p>{copy}</p>
