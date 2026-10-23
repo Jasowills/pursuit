@@ -215,6 +215,7 @@ export function DownloadOptions() {
   const detected = usePlatform();
   const [choice, setChoice] = useState<Platform | null>(null);
   const platform = choice || detected || 'macOS';
+  const [macChip, setMacChip] = useState<'apple-silicon' | 'intel'>('apple-silicon');
   return (
     <div className="download-options release-downloads">
       <div className="platform-picker" role="group" aria-label="Choose your operating system">
@@ -231,10 +232,25 @@ export function DownloadOptions() {
       <div className="release-download-detail">
         <div>
           <strong>{platform} developer alpha</strong>
+          {platform === 'macOS' && (
+            <label>
+              Mac processor
+              <select
+                aria-label="Mac processor"
+                value={macChip}
+                onChange={(e) => setMacChip(e.target.value as 'apple-silicon' | 'intel')}
+              >
+                <option value="apple-silicon">Apple Silicon (M1 and newer)</option>
+                <option value="intel">Intel</option>
+              </select>
+            </label>
+          )}
           <p>
             {platform === 'macOS'
-              ? 'Unsigned Intel build verified locally. Public signed installers are not published.'
-              : `${platform} installers are not published; platform qualification is outstanding.`}
+              ? `${macChip === 'apple-silicon' ? 'Apple Silicon (arm64)' : 'Intel (x64)'} DMG build target. Choose your processor explicitly; browsers cannot reliably detect Mac hardware.`
+              : platform === 'Windows'
+                ? 'Windows x64 installer build target. Windows ARM is not yet qualified.'
+                : 'Linux x64 DEB and AppImage build targets. Linux ARM is not yet qualified.'}
           </p>
         </div>
         <div className="download-actions">
@@ -247,6 +263,15 @@ export function DownloadOptions() {
           </a>
           <a
             className="dark-button"
+            href="https://github.com/Jasowills/pursuit/actions/workflows/desktop-alpha.yml"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Installer build status
+            <Icon name="arrowUpRight" size={15} />
+          </a>
+          <a
+            className="dark-button"
             href="https://github.com/Jasowills/pursuit/blob/main/docs/DESKTOP_BUILD_STATUS.md"
             target="_blank"
             rel="noreferrer"
@@ -255,38 +280,11 @@ export function DownloadOptions() {
             <Icon name="arrowUpRight" size={15} />
           </a>
         </div>
-        <small>Shared source archive, not an installer. Bring your own model.</small>
-      </div>
-      <div className="companion-download" id="companion-download">
-        <div>
-          <Icon name="phone" size={25} />
-          <div>
-            <h3>Pursuit Connect for your phone.</h3>
-            <p>The companion is not released yet. Explore its source and setup requirements.</p>
-          </div>
-        </div>
-        <div className="companion-platforms">
-          <span>
-            <PlatformLogo platform="macOS" size={19} />
-            iOS <small>Not published</small>
-          </span>
-          <span>
-            <Icon name="phone" size={19} />
-            Android <small>Not published</small>
-          </span>
-        </div>
-        <a
-          className="dark-button"
-          href="https://github.com/Jasowills/pursuit/tree/main/apps/mobile"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Companion source & setup
-          <Icon name="arrowUpRight" size={15} />
-        </a>
         <small>
-          No App Store, Play Store or installable PWA release is available. A QR code will pair a
-          released companion; it cannot install an unfinished app.
+          The source ZIP is not an installer. Unsigned test installers appear as GitHub workflow
+          artifacts after a successful build; downloading artifacts requires GitHub sign-in. Public
+          signed releases are not available. The career engine currently needs Node 22.13+ and a
+          configured Chromium browser. Bring your own model.
         </small>
       </div>
     </div>

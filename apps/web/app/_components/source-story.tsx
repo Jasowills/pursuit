@@ -342,14 +342,6 @@ function SourceScene({
           <StatusBadge tone="attention">Needs you</StatusBadge>
         </div>
       </div>
-      <a className="source-phone-link" href="#companion">
-        <Icon name="phone" size={22} />
-        <div>
-          <strong>Review from your phone</strong>
-          <span>See the companion preview</span>
-        </div>
-        <Icon name="arrowUpRight" size={16} />
-      </a>
       <p className="source-scene-note">
         Sample updates show the intended workflow. No employer or inbox was contacted.
       </p>

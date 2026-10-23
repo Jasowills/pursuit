@@ -5,7 +5,6 @@ import { OpportunityField } from './_components/opportunity-field';
 import {
   HarnessFeature,
   DocumentWorkshop,
-  CompanionShowcase,
   OutreachShowcase,
   BackgroundShowcase,
   ClosingInvitation,
@@ -50,7 +49,7 @@ const questions = [
   ],
   [
     'What is available in the current alpha?',
-    'The interactive tour shows the intended complete career experience using fictional sample data. The desktop alpha provides local career records, model connections, identity review and managed AI draft conversations. Desktop source discovery, Gmail execution, application packets, autonomous submission and the companion are not connected yet. Scheduled research, preparation and approved Gmail outreach exist in the retained web workflow. Public signed installers are not published; source builds are available.',
+    'The desktop alpha stores career records locally, connects to your model, discovers roles from configured sources and prepares source-backed resumes and PDFs. The Ashby executor supports inspecting a form and approving an exact application, with fixture testing completed. Live submissions and clean-machine installs still need qualification. Gmail outreach runs through the separate web workflow. Public signed installers are not published; source builds are available.',
   ],
   [
     'Where does my data go?',
@@ -126,7 +125,6 @@ export default function HomePage() {
         <SourceStory />
         <HarnessFeature />
         <DocumentWorkshop />
-        <CompanionShowcase />
         <BackgroundShowcase />
         <WatchersShowcase />
         <OutreachShowcase />{' '}
@@ -250,7 +248,6 @@ export default function HomePage() {
               <a href="#product">The harness</a>
               <a href="#features">Resume tailoring</a>
               <a href="#autopilot">Career autopilot</a>
-              <a href="#companion">Pursuit Connect</a>
               <a href="#download">Download</a>
             </nav>
             <nav aria-label="Footer resources">

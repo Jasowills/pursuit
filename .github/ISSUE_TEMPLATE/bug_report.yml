@@ -1,0 +1,30 @@
+name: Report a Pursuit bug
+description: Report a crash or a problem with a workflow.
+body:
+  - type: markdown
+    attributes:
+      value: 'Issues are public. Do not include resumes, messages, email addresses, credentials, application answers or private job links. Pursuit does not attach or upload diagnostics automatically.'
+  - type: textarea
+    id: steps
+    attributes:
+      label: What were you doing?
+      description: Describe steps we can repeat, without personal information.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Optional reviewed diagnostics
+      description: Paste the preview from Help & report an issue if you want to share it.
+      render: json
+  - type: textarea
+    id: context
+    attributes:
+      label: Other context
+      description: Include the OS, application version and whether an application or message was in progress. Check its status before retrying.

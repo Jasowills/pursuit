@@ -18,11 +18,11 @@ jobs:
         include:
           - os: macos-15
             target: aarch64-apple-darwin
-            bundles: dmg
+            bundles: app,dmg
             formats: dmg
           - os: macos-15-intel
             target: x86_64-apple-darwin
-            bundles: dmg
+            bundles: app,dmg
             formats: dmg
           - os: windows-latest
             target: x86_64-pc-windows-msvc

@@ -30,3 +30,14 @@ STORY: The visitor sees an inspectable Pursuit workspace, understands proposal-o
 FIRST VIEWPORT: Floating sticky header; centered live status pill; exact 72px H1; 18px subhead; paired CTA; trust line; two floating real product fragments; below, a full-bleed cobalt stage with a browser-framed tabbed workspace that flattens on scroll.
 FORM: Brief-pinned direction, position 1, no roll: Jobmate's product-showcase energy translated through the Pursuit spec and palette; no copied assets, copy, or layout.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
+
+## Closing CTA update, 2026-10-23
+
+This section inherits the current accepted black/ivory/lime landing world. It supersedes this brief's historical light/cobalt direction only for the existing closing section. Audience: a visitor ready to try the workspace or inspect source-alpha setup. Action: get Pursuit or open the fictional tour. Constraints: no installer availability claims, no companion promotion, keyboard and reduced-motion parity.
+
+THESIS: End with a concise invitation and a tactile interaction, leaving room for the footer.
+OWN-WORLD: Existing Geist lettering, neutral ivory ground, ink controls and the Pursuit mark.
+STORY: Pick a starting task; scattered papers settle into one folio; get the source alpha or enter the sample workspace.
+FIRST VIEWPORT: Centered “Your move.”, one-line context, a small physical folio above a continuous three-position trajectory, two clear actions and one availability note.
+FORM: An original application-folio interaction informed by first-party Linear/Raycast CTA restraint. No copied source or visual asset.
+FINISH: Batched desktop/mobile browser inspection, keyboard/reduced-motion checks, mechanical detector and a bounded independent finish review.

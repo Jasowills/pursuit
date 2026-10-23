@@ -1,5 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 mod career_engine;
+mod diagnostics;
 
 mod connections;
 mod live;
@@ -136,6 +137,8 @@ fn main() {
         .manage(managed::ManagedRuntime::default())
         .manage(career_engine::CareerEngineState::default())
         .setup(|app| {
+            // Diagnostics must never prevent opening an otherwise valid workspace.
+            let _ = diagnostics::install(app);
             let folder = app.path().app_data_dir()?;
             std::fs::create_dir_all(&folder)?;
             let store = Store::open(folder.join("workspace.sqlite"))?;
@@ -143,6 +146,9 @@ fn main() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            diagnostics::record_diagnostic,
+            diagnostics::diagnostic_report,
+            diagnostics::clear_diagnostics,
             career_engine::career_engine_settings,
             career_engine::career_engine_pause,
             career_engine::open_career_source,
@@ -179,6 +185,9 @@ fn main() {
         .expect("Pursuit could not start")
         .run(|app, event| {
             if matches!(event, tauri::RunEvent::Exit) {
+                if let Some(log) = app.try_state::<diagnostics::Diagnostics>() {
+                    let _ = log.record("app.exited");
+                }
                 app.state::<career_engine::CareerEngineState>().shutdown();
                 if let Ok(mut runtime) = app.state::<managed::ManagedRuntime>().0.lock() {
                     drop(runtime.take());

@@ -60,7 +60,6 @@ const NAV = [
   ['Workspace', '#product'],
   ['Autopilot', '#autopilot'],
   ['Models', '#models'],
-  ['Companion', '#companion'],
 ] as const;
 
 export function LandingHeader() {

@@ -4,6 +4,7 @@ import { ResumeDocument, COVER_LETTER, VIDEO_SCRIPT, DeskIcon } from '@pursuit/u
 import '@pursuit/ui/career-workspace.css';
 import { Icon } from './icons';
 import { ActivityLedger } from './activity-ledger';
+import { PursuitMark } from './header';
 
 function Enter({
   children,
@@ -113,7 +114,7 @@ export function DocumentWorkshop() {
   async function copyScript() {
     try {
       await navigator.clipboard.writeText(
-        VIDEO_SCRIPT.map(([time, title, copy]) => `${time} — ${title}\n${copy}`).join('\n\n'),
+        VIDEO_SCRIPT.map(([time, title, copy]) => `${time}: ${title}\n${copy}`).join('\n\n'),
       );
       setCopyStatus('Sample script copied. Replace Alex’s details with your own.');
     } catch {
@@ -495,7 +496,7 @@ export function CompanionShowcase() {
                 <div className="phone-fit">
                   <strong>Why this fits</strong>
                   <p>
-                    B2B workflows, customer research and design systems—all part of your Meridian
+                    B2B workflows, customer research and design systems, all part of your Meridian
                     experience.
                   </p>
                 </div>
@@ -809,58 +810,83 @@ export function BackgroundShowcase() {
 }
 
 export function ClosingInvitation() {
-  const [prompt, setPrompt] = useState('Find the work that fits me.');
+  const [step, setStep] = useState(0);
+  const starts = [
+    {
+      label: 'Find a role',
+      title: 'A wider search.',
+      detail: 'Start with the work you want to do.',
+      request: 'Find roles that fit my experience.',
+    },
+    {
+      label: 'Tailor a resume',
+      title: 'Your experience. In focus.',
+      detail: 'See how the same facts fit a different role.',
+      request: 'Help tailor my resume to this role.',
+    },
+    {
+      label: 'Review an application',
+      title: 'One clear next step.',
+      detail: 'Review the role and the material beside it.',
+      request: 'Review my application before I apply.',
+    },
+  ];
+  const selected = starts[step]!;
   return (
-    <section className="closing-invitation">
-      <div className="closing-grid" aria-hidden="true" />
-      <div className="dark-frame">
-        <div className="closing-copy">
-          <h2>
-            Start with
-            <br />a role you want.
-          </h2>
-          <p>Try a question or a job posting in the product tour.</p>
-          <form action="/product-tour">
-            <label htmlFor="closing-prompt">Your next move</label>
-            <div>
-              <input
-                id="closing-prompt"
-                name="request"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                maxLength={250}
-              />
-              <button type="submit" aria-label="Explore Pursuit with this request">
-                <Icon name="arrowUpRight" size={23} />
-              </button>
+    <section className="next-move" aria-labelledby="next-move-title" data-step={step}>
+      <div className="dark-frame next-move-inner">
+        <div className="next-move-heading">
+          <h2 id="next-move-title">Your move.</h2>
+          <p>Start with one role. Put the rest in order.</p>
+        </div>
+        <div className="next-move-stage">
+          <div className="next-move-sheets" aria-hidden="true">
+            <div className="move-sheet move-sheet-back">
+              <span>THE SEARCH</span>
+              <i />
+              <i />
+              <i />
             </div>
-            <span>Open the interactive product tour · no account needed</span>
-          </form>
-          <a className="closing-download" href="#download">
-            Build your workspace <Icon name="arrowUpRight" size={17} />
+            <div className="move-sheet move-sheet-middle">
+              <span>YOUR EXPERIENCE</span>
+              <i />
+              <i />
+              <i />
+            </div>
+            <div className="move-sheet move-sheet-front">
+              <PursuitMark size={32} />
+              <strong>{selected.title}</strong>
+              <span>Ready to look closer.</span>
+              <i />
+              <i />
+            </div>
+          </div>
+          <div className="next-move-track" role="group" aria-label="Choose where to start">
+            {starts.map((start, i) => (
+              <button key={start.label} aria-pressed={step === i} onClick={() => setStep(i)}>
+                <span className="move-track-dot" aria-hidden="true" />
+                {start.label}
+              </button>
+            ))}
+          </div>
+          <p className="next-move-caption" aria-live="polite">
+            {selected.detail}
+          </p>
+        </div>
+        <div className="next-move-actions">
+          <a href="#download" className="dark-button primary">
+            Get Pursuit <Icon name="arrowUpRight" size={18} />
+          </a>
+          <a
+            href={`/product-tour?request=${encodeURIComponent(selected.request)}`}
+            className="next-move-tour"
+          >
+            Explore the workspace <Icon name="arrowUpRight" size={17} />
           </a>
         </div>
-        <div className="closing-art" aria-hidden="true">
-          <div className="closing-orbit" />
-          <div className="closing-letter">
-            <span>APPLICATION DRAFT</span>
-            <strong>Alex Morgan</strong>
-            <p>Product Designer</p>
-            <div />
-            <div />
-            <div />
-            <small>Resume and cover letter for review.</small>
-          </div>
-          <div className="closing-ping">
-            <span>
-              <Icon name="check" size={16} />
-            </span>
-            <div>
-              <strong>Ready for review</strong>
-              <p>Check the documents before the next step.</p>
-            </div>
-          </div>
-        </div>
+        <p className="next-move-note">
+          Source alpha. The tour uses a fictional career and submits nothing.
+        </p>
       </div>
     </section>
   );

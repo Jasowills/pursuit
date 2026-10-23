@@ -827,3 +827,59 @@ button.secondary:hover:enabled {
   border: 0;
   border-radius: 6px;
 }
+
+.desktop-diagnostics,
+.desktop-recovery {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px;
+  color: #eee;
+}
+.desktop-diagnostics p,
+.desktop-recovery p {
+  color: #b8b8b8;
+  line-height: 1.7;
+}
+.desktop-diagnostics label {
+  display: block;
+  margin: 20px 0;
+}
+.desktop-diagnostics input[type='checkbox'] {
+  margin-right: 10px;
+}
+.desktop-diagnostics textarea {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #080808;
+  color: #ddd;
+  resize: vertical;
+}
+.diagnostics-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.desktop-diagnostics button,
+.desktop-recovery button {
+  min-height: 44px;
+  padding: 10px 16px;
+  margin: 4px;
+  border: 1px solid #484848;
+  border-radius: 7px;
+  background: #202020;
+  color: #eee;
+  cursor: pointer;
+}
+.desktop-diagnostics button:focus-visible,
+.desktop-recovery button:focus-visible {
+  outline: 2px solid #d5f578;
+  outline-offset: 3px;
+}
+.desktop-diagnostics button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

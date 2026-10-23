@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
+import {
+  CrashBoundary,
+  DiagnosticsPanel,
+  installErrorCapture,
+  recordDiagnostic,
+} from './diagnostics';
 import { EngineSetup } from './engine-setup';
 import { listen } from '@tauri-apps/api/event';
 import type { EngineClient, EngineProgress } from '@pursuit/career-engine/contracts';
@@ -19,8 +25,11 @@ import { AgentWorkspace } from './agent';
 function App() {
   const [book, setBook] = useState<CareerBook>(EMPTY_BOOK);
   const [tour, setTour] = useState(new URLSearchParams(location.search).get('tour') === '1');
-  const [settings, setSettings] = useState<'identity' | 'models' | 'agent' | 'engine' | null>(null);
+  const [settings, setSettings] = useState<
+    'identity' | 'models' | 'agent' | 'engine' | 'diagnostics' | null
+  >(null);
   const [error, setError] = useState('');
+  const [loadFailed, setLoadFailed] = useState(false);
   const [engineWorking, setEngineWorking] = useState(false);
   const [engineProgress, setEngineProgress] = useState<EngineProgress>();
   const engineQueue = useRef<Promise<unknown>>(Promise.resolve());
@@ -46,6 +55,7 @@ function App() {
         try {
           return await invoke('career_engine_call', { requestId, request });
         } catch (error) {
+          recordDiagnostic('engine.failed');
           throw new Error(String(error).replace(/_/g, ' '));
         } finally {
           await Promise.resolve(unlisten()).catch(() => {});
@@ -96,12 +106,20 @@ function App() {
         setReady(true);
       })
       .catch((e) => {
+        recordDiagnostic('storage.failed');
+        setLoadFailed(true);
         setError(String(e));
         setReady(true);
       });
   }, []);
   async function save(next: CareerBook) {
-    await invoke('save_career_book', { body: JSON.stringify(next) });
+    if (loadFailed) throw new Error('Reopen the saved workspace before making changes.');
+    try {
+      await invoke('save_career_book', { body: JSON.stringify(next) });
+    } catch (e) {
+      recordDiagnostic('storage.failed');
+      throw e;
+    }
     setBook(next);
   }
   async function ask(text: string, includeFacts: boolean, partial: (v: string) => void) {
@@ -144,6 +162,18 @@ function App() {
       'The session is still unresolved. Inspect it in Agent workspace before sending another request.',
     );
   }
+  if (loadFailed)
+    return (
+      <main className="desktop-recovery">
+        <h1>Your saved workspace could not be opened.</h1>
+        <p>
+          Editing is paused to protect your existing records. Restart Pursuit to try loading them
+          again.
+        </p>
+        <button onClick={() => window.location.reload()}>Retry opening workspace</button>
+        <DiagnosticsPanel />
+      </main>
+    );
   if (!ready) return <div className="desktop-loading">Opening your local career workspace…</div>;
   return (
     <>
@@ -177,6 +207,7 @@ function App() {
             )}
           </>
         )}
+        <button onClick={() => setSettings('diagnostics')}>Help & report an issue</button>
         {error && <span role="alert">{error}</span>}
       </div>
       <CareerWorkspace
@@ -216,30 +247,36 @@ function App() {
             role="dialog"
             aria-modal="true"
             aria-label={
-              settings === 'identity'
-                ? 'Career Identity'
-                : settings === 'models'
-                  ? 'Models & connections'
-                  : settings === 'engine'
-                    ? 'Sourcing & execution setup'
-                    : 'Agent workspace'
-            }
-          >
-            <header>
-              <strong>
-                {settings === 'identity'
+              settings === 'diagnostics'
+                ? 'Help & diagnostics'
+                : settings === 'identity'
                   ? 'Career Identity'
                   : settings === 'models'
                     ? 'Models & connections'
                     : settings === 'engine'
                       ? 'Sourcing & execution setup'
-                      : 'Agent workspace'}
+                      : 'Agent workspace'
+            }
+          >
+            <header>
+              <strong>
+                {settings === 'diagnostics'
+                  ? 'Help & diagnostics'
+                  : settings === 'identity'
+                    ? 'Career Identity'
+                    : settings === 'models'
+                      ? 'Models & connections'
+                      : settings === 'engine'
+                        ? 'Sourcing & execution setup'
+                        : 'Agent workspace'}
               </strong>
               <button aria-label="Close settings" onClick={() => settingsDialog.current?.close()}>
                 <DeskIcon name="close" />
               </button>
             </header>
-            {tour ? (
+            {settings === 'diagnostics' ? (
+              <DiagnosticsPanel />
+            ) : tour ? (
               <div className="desktop-settings-preview">
                 <h2>Your context. Your choice.</h2>
                 <p>
@@ -274,8 +311,11 @@ function App() {
     </>
   );
 }
+installErrorCapture();
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <CrashBoundary>
+      <App />
+    </CrashBoundary>
   </React.StrictMode>,
 );
