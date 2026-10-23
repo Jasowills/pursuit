@@ -2,11 +2,26 @@ import { it, expect } from 'vitest';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { ApplicationQueue } from '@pursuit/application';
 import { CareerEngine } from '../src/index.js';
 import { structureResume, tailor, digest } from '@pursuit/tailoring';
 import { renderResumePdf } from '@pursuit/tailoring/pdf';
 import type { ApplicationAdapter, Form } from '@pursuit/application';
 import type { EngineSnapshot, SourcedOpportunity } from '../src/contracts.js';
+it('reports the actual execution policy after another connection pauses the queue', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'pursuit-engine-policy-'));
+  const engine = new CareerEngine(dir, { executionEnabled: true });
+  const queue = new ApplicationQueue(join(dir, 'applications.sqlite'));
+  try {
+    await engine.dispatch({ action: 'application.policy', enabled: true, dailyLimit: 17 });
+    queue.policy(false, 17);
+    expect(engine.snapshot().policy).toEqual({ enabled: false, dailyLimit: 17 });
+  } finally {
+    queue.close();
+    engine.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
 const url = 'https://jobs.ashbyhq.com/fixture/qa-role';
 const form: Form = {
   url,

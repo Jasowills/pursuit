@@ -154,7 +154,7 @@ export class CareerEngine {
         .runs()
         .slice(0, 20)
         .map((r: any) => ({ ...r, diagnostics: JSON.parse(r.diagnostics) })),
-      policy: this.setting('policy', { enabled: false, dailyLimit: 100 }),
+      policy: this.queue.executionPolicy(),
       plans: this.queue.list().map((r) => {
         const { payload, ...summary } = this.plan(String(r.id));
         return { ...summary, jobUrl: payload.jobUrl };
@@ -369,7 +369,7 @@ export class CareerEngine {
       case 'application.lookup': {
         const url = canonicalJobUrl(this.opportunity(req.jobId).discovery.url);
         const row = await this.queue.find('local-user', url);
-        const policy = this.setting('policy', { enabled: false, dailyLimit: 100 });
+        const policy = this.queue.executionPolicy();
         if (!row) return { policy, plan: null };
         const reviewed = (await this.dispatch({ action: 'application.review', id: row.id })) as {
           plan: ExecutionPlan;
@@ -391,16 +391,14 @@ export class CareerEngine {
         return this.plan(req.id);
       }
       case 'application.pause': {
-        const policy = this.setting('policy', { enabled: false, dailyLimit: 100 });
+        const policy = this.queue.executionPolicy();
         this.queue.policy(false, policy.dailyLimit);
-        this.put('policy', { ...policy, enabled: false });
         return { enabled: false, dailyLimit: policy.dailyLimit };
       }
       case 'application.policy': {
         if (req.enabled && !this.options.executionEnabled)
           throw Error('enable_application_execution_in_setup');
         this.queue.policy(req.enabled, req.dailyLimit);
-        this.put('policy', { enabled: req.enabled, dailyLimit: req.dailyLimit });
         return this.snapshot();
       }
       case 'application.run': {

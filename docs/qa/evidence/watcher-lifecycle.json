@@ -1,0 +1,14 @@
+{
+  "observedAt": "2026-10-23T14:59:47.021Z",
+  "scope": "Actual discovery CLI subprocess, disposable SQLite, one read-only Linear Ashby public-board poll, SIGTERM and independent database reopen. No models, browser logins, applications or user data.",
+  "source": "https://api.ashbyhq.com/posting-api/job-board/linear",
+  "poll_status": "complete",
+  "observed_roles": 34,
+  "read_and_startup_ms": 1827,
+  "shutdown_ms": 859,
+  "clean_exit": true,
+  "persisted_after_reopen": true,
+  "next_poll_in_future": true,
+  "no_running_run_after_shutdown": true,
+  "limitations": "One public source on one host. Not indefinite uptime, multi-host synchronization, source recall, auto-applying or a desktop supervisor qualification."
+}

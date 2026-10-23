@@ -27,7 +27,7 @@ export class ApplicationQueue {
       .run(now);
     this.db
       .prepare(
-        "UPDATE apply_jobs SET state='DRAFT',approval=NULL,last_error='interrupted_preparation' WHERE state='PREPARING' AND lease_until < ?",
+        "UPDATE apply_jobs SET state='DRAFT',approval=NULL,approval_until=NULL,lease=NULL,lease_until=NULL,last_error='interrupted_preparation' WHERE state='PREPARING' AND lease_until < ?",
       )
       .run(now);
     this.db
@@ -43,15 +43,35 @@ export class ApplicationQueue {
   policy(enabled: boolean, dailyLimit = 100) {
     if (!Number.isInteger(dailyLimit) || dailyLimit < 1 || dailyLimit > 100)
       throw new Error('invalid_daily_limit');
-    this.db
-      .prepare('UPDATE apply_policy SET enabled=?,daily_limit=? WHERE id=1')
-      .run(Number(enabled), dailyLimit);
-    if (!enabled)
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
       this.db
-        .prepare(
-          "UPDATE apply_jobs SET state='DRAFT',approval=NULL WHERE state IN ('AUTHORIZED','PREPARING')",
-        )
-        .run();
+        .prepare('UPDATE apply_policy SET enabled=?,daily_limit=? WHERE id=1')
+        .run(Number(enabled), dailyLimit);
+      if (!enabled)
+        this.db
+          .prepare(
+            "UPDATE apply_jobs SET state='DRAFT',approval=NULL,approval_until=NULL,lease=NULL,lease_until=NULL WHERE state IN ('AUTHORIZED','PREPARING')",
+          )
+          .run();
+      this.db.exec('COMMIT');
+    } catch (error) {
+      this.db.exec('ROLLBACK');
+      throw error;
+    }
+  }
+  executionPolicy(): { enabled: boolean; dailyLimit: number } {
+    const row = this.db.prepare('SELECT enabled,daily_limit FROM apply_policy WHERE id=1').get() as
+      { enabled: number; daily_limit: number } | undefined;
+    if (
+      !row ||
+      ![0, 1].includes(row.enabled) ||
+      !Number.isInteger(row.daily_limit) ||
+      row.daily_limit < 1 ||
+      row.daily_limit > 100
+    )
+      throw new Error('invalid_saved_execution_policy');
+    return { enabled: row.enabled === 1, dailyLimit: row.daily_limit };
   }
   async find(personId: string, jobUrl: string) {
     const identity = await digest(personId + '\0' + canonicalUrl(jobUrl));
@@ -129,9 +149,7 @@ export class ApplicationQueue {
   }
   ready(id: string) {
     const row = this.get(id);
-    const p = this.db
-      .prepare('SELECT enabled,daily_limit FROM apply_policy WHERE id=1')
-      .get() as any;
+    const p = this.executionPolicy();
     const count = this.db
       .prepare('SELECT count(*) AS n FROM apply_attempts WHERE day=?')
       .get(new Date().toISOString().slice(0, 10)) as any;
@@ -140,7 +158,7 @@ export class ApplicationQueue {
       row.state === 'AUTHORIZED' &&
       row.approval === row.payload_hash &&
       row.approval_until > new Date().toISOString() &&
-      Number(count.n) < p.daily_limit,
+      Number(count.n) < p.dailyLimit,
     );
   }
   private claim(id: string) {
@@ -154,11 +172,11 @@ export class ApplicationQueue {
         .run(new Date().toISOString());
       this.db
         .prepare(
-          "UPDATE apply_jobs SET state='DRAFT',approval=NULL,last_error='interrupted_preparation' WHERE state='PREPARING' AND lease_until < ?",
+          "UPDATE apply_jobs SET state='DRAFT',approval=NULL,approval_until=NULL,lease=NULL,lease_until=NULL,last_error='interrupted_preparation' WHERE state='PREPARING' AND lease_until < ?",
         )
         .run(new Date().toISOString());
       const row = this.get(id);
-      const policy = this.db.prepare('SELECT * FROM apply_policy WHERE id=1').get() as any;
+      const policy = this.executionPolicy();
       const day = new Date().toISOString().slice(0, 10);
       const count = this.db
         .prepare('SELECT count(*) AS n FROM apply_attempts WHERE day=?')
@@ -174,7 +192,7 @@ export class ApplicationQueue {
         row.approval !== row.payload_hash ||
         !row.approval_until ||
         row.approval_until < new Date().toISOString() ||
-        Number(count.n) >= policy.daily_limit
+        Number(count.n) >= policy.dailyLimit
       ) {
         this.db.exec('COMMIT');
         return null;

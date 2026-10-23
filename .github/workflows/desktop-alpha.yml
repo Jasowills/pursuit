@@ -54,7 +54,13 @@ jobs:
       - name: Linux webview and bundler dependencies
         if: runner.os == 'Linux'
         timeout-minutes: 12
-        run: sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update && sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev patchelf xdg-utils
+        run: |
+          # The hosted Jammy image's Azure HTTP mirror exceeded the bounded
+          # install window while downloading WebKit dependencies. Keep APT's
+          # signature checks and timeouts; use Ubuntu's main HTTPS mirror.
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list
+          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update
+          sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install -y --no-install-recommends libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev patchelf xdg-utils
       - run: pnpm install --frozen-lockfile
       - name: Build workspace dependencies
         run: pnpm --filter '@pursuit/desktop^...' build

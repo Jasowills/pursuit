@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-23",
+  "overall_verdict": "NOT_READY",
+  "scope": "Durable source/application ownership and state consistency. Not an integrated unattended application service.",
+  "reproduced_before_fix": [
+    "disabled_source_run_left_running",
+    "saving_enabled_source_revoked_live_claim",
+    "late_paused_worker_overwrote_revised_draft_status",
+    "harness_showed_duplicate_stale_execution_policy",
+    "source_claim_write_failure_left_orphaned_lease_in_isolated_32603a8_copy"
+  ],
+  "tests": {
+    "discovery": 73,
+    "application": 17,
+    "coordinator": 12,
+    "intercepted_browser_flows": 2,
+    "retained_api": 59,
+    "native": 19,
+    "native_opt_in_ignored": 7,
+    "workspace_typecheck_tasks": 20,
+    "isolated_packaged_worker": "pass"
+  },
+  "fault_injection": "Temporary SQLite triggers and independent SQLite connections with async adapter gates; no production data.",
+  "actual_watcher": "../evidence/watcher-lifecycle.json",
+  "installer_baseline": {
+    "commit": "32603a8799027f62d7335cedcb06e82bda81f79c",
+    "run": "https://github.com/Jasowills/pursuit/actions/runs/39972776226",
+    "mac_apple_silicon": "success",
+    "mac_intel": "success",
+    "windows_x64": "success",
+    "linux_x64": "failed before compilation: Ubuntu Azure HTTP dependency download exceeded 12-minute step budget",
+    "main_ci": "success"
+  },
+  "linux_repair": "Main Ubuntu HTTPS mirror and --no-install-recommends; unchanged signature verification, retries and timeout. Not yet qualified until a fresh matrix passes.",
+  "limits": [
+    "No live employer submissions or Google account",
+    "No paid inference",
+    "New source changes need fresh native build qualification",
+    "Independent SQLite connection tests are not multi-host or long-duration stress tests"
+  ]
+}

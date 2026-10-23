@@ -8,8 +8,8 @@
     "source_persists_across_processes": "pass",
     "unsupported_action_rejected": "pass"
   },
-  "cold_process_samples_ms": [3402, 4372, 5624, 5337, 4559, 5140],
-  "median_ms": 4849.5,
-  "max_ms": 5624,
+  "cold_process_samples_ms": [909, 729, 839, 699, 784, 773],
+  "median_ms": 778.5,
+  "max_ms": 909,
   "limitations": "Small local process-startup measurements only; not a production throughput, RSS, browser resource or network-load qualification."
 }

@@ -70,7 +70,88 @@ describe('durable sourcing', () => {
     s.setEnabled(source().id, false);
     expect(() => s.commit(claim, poll([job()]))).toThrow('source_lease_lost');
     expect(s.jobs()).toHaveLength(0);
+    expect(s.runs()[0]?.status).toBe('interrupted');
+    expect(s.runs()[0]?.finished_at).toBeTruthy();
     s.close();
+  });
+  it('does not revoke an active poll when the existing enabled value is saved again', () => {
+    const s = setup();
+    const claim = s.claim(source().id)!;
+    s.setEnabled(source().id, true);
+    expect(s.claim(source().id)).toBeNull();
+    s.commit(claim, poll([job()]));
+    expect(s.jobs()).toHaveLength(1);
+    s.close();
+  });
+  it('rolls back a claim if its durable run record cannot be written', () => {
+    const s = setup();
+    s.db.exec(
+      "CREATE TEMP TRIGGER refuse_run BEFORE INSERT ON discovery_runs BEGIN SELECT RAISE(ABORT, 'fixture_write_failure'); END;",
+    );
+    expect(() => s.claim(source().id)).toThrow();
+    expect(
+      s.db.prepare('SELECT lease FROM discovery_sources WHERE id=?').get(source().id)?.lease,
+    ).toBeNull();
+    expect(s.runs()).toHaveLength(0);
+    s.db.exec('DROP TRIGGER refuse_run');
+    expect(s.claim(source().id)).not.toBeNull();
+    s.close();
+  });
+  it('rolls back a disabled-source transition if its run history cannot be updated', () => {
+    const s = setup();
+    const claim = s.claim(source().id)!;
+    s.db.exec(
+      "CREATE TEMP TRIGGER refuse_finish BEFORE UPDATE ON discovery_runs BEGIN SELECT RAISE(ABORT, 'fixture_write_failure'); END;",
+    );
+    expect(() => s.setEnabled(source().id, false)).toThrow();
+    expect(s.sources()[0].config.enabled).toBe(true);
+    s.db.exec('DROP TRIGGER refuse_finish');
+    s.commit(claim, poll([job()]));
+    expect(s.jobs()).toHaveLength(1);
+    s.close();
+  });
+  it('rolls back source failure/backoff if its durable run history cannot be written', () => {
+    const s = setup();
+    const claim = s.claim(source().id)!;
+    const before = s.sources()[0];
+    s.db.exec(
+      "CREATE TEMP TRIGGER refuse_failure BEFORE UPDATE ON discovery_runs BEGIN SELECT RAISE(ABORT, 'fixture_write_failure'); END;",
+    );
+    expect(() => s.fail(claim, 'fixture_failure')).toThrow();
+    expect(s.sources()[0].last_error).toBe(before.last_error);
+    expect(s.sources()[0].next_poll).toBe(before.next_poll);
+    s.db.exec('DROP TRIGGER refuse_failure');
+    s.fail(claim, 'fixture_failure');
+    expect(s.runs()[0]?.status).toBe('failed');
+    s.close();
+  });
+  it('claims and recovers expired polls across independent SQLite connections', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'pursuit-source-workers-'));
+    const path = join(dir, 'test.sqlite');
+    const a = new DiscoveryStore(path),
+      b = new DiscoveryStore(path);
+    try {
+      a.addSource(source());
+      const old = a.claim(source().id, new Date(Date.now() - 16 * 60000))!;
+      const current = b.claim(source().id)!;
+      expect(a.claim(source().id)).toBeNull();
+      expect(() => a.commit(old, poll([job({ description: 'stale' })]))).toThrow(
+        'source_lease_lost',
+      );
+      b.commit(current, poll([job({ description: 'current' })]));
+      expect(a.jobs()[0].job.description).toBe('current');
+      expect(
+        a
+          .runs()
+          .map((r) => r.status)
+          .sort(),
+      ).toEqual(['complete', 'interrupted']);
+      expect(a.runs().every((r) => r.finished_at)).toBe(true);
+    } finally {
+      a.close();
+      b.close();
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
   it('rolls back the entire poll on source identity mismatch', () => {
     const s = setup();

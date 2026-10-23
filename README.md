@@ -38,17 +38,17 @@ See [setup and exact boundaries](docs/TAILORING_AND_APPLICATION_ENGINE.md), [exe
 
 ## What works today
 
-| Capability                                  | Desktop                                                               | Retained web/API                                              |
-| ------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Career facts, preferences and local records | SQLite career book and identity                                       | Tenant-scoped Postgres profile and records                    |
-| Assistant conversation                      | Managed, tool-denied OpenCode with BYOM; Ollama verified locally      | Earlier agent adapter/prototype                               |
-| Job intake                                  | Bounded public-source search; save sourced or pasted postings         | Manual intake; multi-ATS/Himalayas/page importer              |
-| Resume and cover-letter drafting            | Reviewed source selection and saved PDF export                        | Source-backed packets, original documents and saved PDFs      |
-| Watchers                                    | No watcher executor                                                   | Configuration CRUD; no polling executor                       |
-| Scheduled work                              | No background sourcing/application worker                             | Research/preparation; optional exact-plan Ashby worker        |
-| Automatic applications                      | Gated local Ashby executor; individually approved, not live-qualified | Gated Ashby executor; fixture-qualified, not live-qualified   |
-| Gmail                                       | Not connected to native workspace                                     | Direct Google OAuth or Composio; exact saved-message approval |
-| Mobile companion                            | No pairing/relay transport                                            | Expo prototype; no released phone companion                   |
+| Capability                                  | Desktop                                                                             | Retained web/API                                              |
+| ------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Career facts, preferences and local records | SQLite career book and identity                                                     | Tenant-scoped Postgres profile and records                    |
+| Assistant conversation                      | Managed, tool-denied OpenCode; local wiring tested, freeform quality unqualified    | Earlier agent adapter/prototype                               |
+| Job intake                                  | Bounded public-source search; save sourced or pasted postings                       | Manual intake; multi-ATS/Himalayas/page importer              |
+| Resume and cover-letter drafting            | Reviewed source selection and saved PDF export                                      | Source-backed packets, original documents and saved PDFs      |
+| Watchers                                    | On-request source polling; separate read-only CLI watcher, no app supervisor        | Configuration CRUD; no polling executor                       |
+| Scheduled work                              | No integrated unattended application service; CLI source monitor can run separately | Research/preparation; optional exact-plan Ashby worker        |
+| Automatic applications                      | Gated local Ashby executor; individually approved, not live-qualified               | Gated Ashby executor; fixture-qualified, not live-qualified   |
+| Gmail                                       | Not connected to native workspace                                                   | Direct Google OAuth or Composio; exact saved-message approval |
+| Mobile companion                            | No pairing/relay transport                                                          | Expo prototype; no released phone companion                   |
 
 The queue enforces a ceiling of up to 100 attempts per UTC day; this does not guarantee 100 eligible or completed applications. Broad global discovery and the optional user-hosted always-on worker still require further integration and qualification. Indeed/Glassdoor and arbitrary job-board scraping are not implemented. There is no universal applicant-tracking-system submission adapter.
 
@@ -124,9 +124,18 @@ Follow the complete [connection walkthrough](docs/CONNECTION_SETUP.md), or run `
 
 `AUTOPILOT_WORKER_ENABLED=false` disables the retained API polling worker. Existing modes research configured Greenhouse boards and optionally prepare drafts using a verified model. They do not submit job applications. Watcher configuration is separate and currently has no executor. See [autopilot implementation](docs/AUTOPILOT.md).
 
+The separate discovery CLI supports read-only monitoring of its configured sources:
+
+```sh
+# After building @pursuit/discovery. Choose an explicit database for this process.
+PURSUIT_DISCOVERY_DB=/absolute/path/to/discovery.sqlite node packages/discovery/dist/cli.js watch
+```
+
+This process respects saved source schedules and backoff, handles SIGINT/SIGTERM, and never submits applications or calls a model. It runs only while that process and its host remain active. There is no desktop-managed service, remote synchronization or application daemon behind this command. A real public-source lifecycle check observed 34 Linear roles and verified shutdown/reopen persistence in a disposable database. See [worker recovery evidence](docs/qa/adversary-2026-10-23/worker-recovery.md) for the exact scope and remaining operational work.
+
 ## Companion development and downloads
 
-There is no App Store, Play Store or installable PWA release, and no implemented accountless encrypted relay/pairing transport. A landing-page phone animation is an illustrative product preview.
+Companion is deferred to V2 and hidden from the landing page. There is no App Store, Play Store or installable PWA release, and no implemented accountless encrypted relay/pairing transport.
 
 ```sh
 pnpm --filter @pursuit/mobile start

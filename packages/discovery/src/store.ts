@@ -30,12 +30,33 @@ export class DiscoveryStore {
     this.db.close();
   }
   setEnabled(id: string, enabled: boolean) {
-    const row = this.db.prepare('SELECT config FROM discovery_sources WHERE id=?').get(id) as any;
-    if (!row) throw new Error('source_not_found');
-    const source = Source.parse({ ...JSON.parse(row.config), enabled });
-    this.db
-      .prepare('UPDATE discovery_sources SET config=?,lease=NULL,lease_until=NULL WHERE id=?')
-      .run(JSON.stringify(source), id);
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
+      const row = this.db.prepare('SELECT config FROM discovery_sources WHERE id=?').get(id) as any;
+      if (!row) throw new Error('source_not_found');
+      const previous = Source.parse(JSON.parse(row.config));
+      if (previous.enabled && enabled) {
+        this.db.exec('COMMIT');
+        return;
+      }
+      const source = Source.parse({ ...previous, enabled });
+      this.db
+        .prepare('UPDATE discovery_sources SET config=?,lease=NULL,lease_until=NULL WHERE id=?')
+        .run(JSON.stringify(source), id);
+      this.db
+        .prepare(
+          "UPDATE discovery_runs SET status='interrupted',finished_at=?,diagnostics=? WHERE source_id=? AND status='running'",
+        )
+        .run(
+          new Date().toISOString(),
+          JSON.stringify([enabled ? 'source_reenabled' : 'source_disabled']),
+          id,
+        );
+      this.db.exec('COMMIT');
+    } catch (error) {
+      this.db.exec('ROLLBACK');
+      throw error;
+    }
   }
   addSource(input: unknown) {
     const source = Source.parse(input);
@@ -61,31 +82,52 @@ export class DiscoveryStore {
     sourceId: string,
     now = new Date(),
   ): { source: Source; token: string; runId: string } | null {
-    const token = randomUUID();
-    const updated = this.db
-      .prepare(
-        'UPDATE discovery_sources SET lease=?,lease_until=? WHERE id=? AND (lease_until IS NULL OR lease_until < ?)',
-      )
-      .run(token, new Date(now.getTime() + 15 * 60_000).toISOString(), sourceId, now.toISOString());
-    if (!updated.changes) return null;
-    const row = this.db
-      .prepare('SELECT config FROM discovery_sources WHERE id=?')
-      .get(sourceId) as any;
-    const source = Source.parse(JSON.parse(row.config));
-    if (!source.enabled) {
-      this.release(sourceId, token);
-      return null;
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
+      const row = this.db
+        .prepare('SELECT config FROM discovery_sources WHERE id=?')
+        .get(sourceId) as any;
+      if (!row) {
+        this.db.exec('COMMIT');
+        return null;
+      }
+      const source = Source.parse(JSON.parse(row.config));
+      if (!source.enabled) {
+        this.db.exec('COMMIT');
+        return null;
+      }
+      const token = randomUUID();
+      const updated = this.db
+        .prepare(
+          'UPDATE discovery_sources SET lease=?,lease_until=? WHERE id=? AND (lease_until IS NULL OR lease_until < ?)',
+        )
+        .run(
+          token,
+          new Date(now.getTime() + 15 * 60_000).toISOString(),
+          sourceId,
+          now.toISOString(),
+        );
+      if (!updated.changes) {
+        this.db.exec('COMMIT');
+        return null;
+      }
+      const runId = randomUUID();
+      this.db
+        .prepare(
+          "UPDATE discovery_runs SET status='interrupted',finished_at=? WHERE source_id=? AND status='running'",
+        )
+        .run(now.toISOString(), sourceId);
+      this.db
+        .prepare(
+          "INSERT INTO discovery_runs(id,source_id,started_at,status) VALUES(?,?,?,'running')",
+        )
+        .run(runId, sourceId, now.toISOString());
+      this.db.exec('COMMIT');
+      return { source, token, runId };
+    } catch (error) {
+      this.db.exec('ROLLBACK');
+      throw error;
     }
-    const runId = randomUUID();
-    this.db
-      .prepare(
-        "UPDATE discovery_runs SET status='interrupted',finished_at=? WHERE source_id=? AND status='running'",
-      )
-      .run(now.toISOString(), sourceId);
-    this.db
-      .prepare("INSERT INTO discovery_runs(id,source_id,started_at,status) VALUES(?,?,?,'running')")
-      .run(runId, sourceId, now.toISOString());
-    return { source, token, runId };
   }
   private release(id: string, token: string) {
     this.db
@@ -152,7 +194,7 @@ export class DiscoveryStore {
       ).toISOString();
       this.db
         .prepare(
-          'UPDATE discovery_sources SET last_success=?,last_error=NULL,failures=0,next_poll=? WHERE id=? AND lease=?',
+          'UPDATE discovery_sources SET last_success=?,last_error=NULL,failures=0,next_poll=?,lease=NULL,lease_until=NULL WHERE id=? AND lease=?',
         )
         .run(poll.observedAt, next, claim.source.id, claim.token);
       this.db
@@ -172,31 +214,40 @@ export class DiscoveryStore {
       this.db.exec('ROLLBACK');
       throw e;
     }
-    this.release(claim.source.id, claim.token);
   }
   fail(claim: { source: Source; token: string; runId: string }, code: string) {
-    const now = new Date();
-    const row = this.db
-      .prepare('SELECT failures,lease FROM discovery_sources WHERE id=?')
-      .get(claim.source.id) as any;
-    if (row?.lease !== claim.token) return;
-    const attempts = Number(row.failures) + 1;
-    const delay = Math.min(24 * 60, 15 * 2 ** Math.min(attempts, 7));
-    this.db
-      .prepare(
-        'UPDATE discovery_sources SET failures=?,last_error=?,next_poll=? WHERE id=? AND lease=?',
-      )
-      .run(
-        attempts,
-        code,
-        new Date(now.getTime() + delay * 60_000).toISOString(),
-        claim.source.id,
-        claim.token,
-      );
-    this.db
-      .prepare("UPDATE discovery_runs SET finished_at=?,status='failed',diagnostics=? WHERE id=?")
-      .run(now.toISOString(), JSON.stringify([code]), claim.runId);
-    this.release(claim.source.id, claim.token);
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
+      const now = new Date();
+      const row = this.db
+        .prepare('SELECT failures,lease FROM discovery_sources WHERE id=?')
+        .get(claim.source.id) as any;
+      if (row?.lease !== claim.token) {
+        this.db.exec('COMMIT');
+        return;
+      }
+      const attempts = Number(row.failures) + 1;
+      const delay = Math.min(24 * 60, 15 * 2 ** Math.min(attempts, 7));
+      this.db
+        .prepare(
+          'UPDATE discovery_sources SET failures=?,last_error=?,next_poll=? WHERE id=? AND lease=?',
+        )
+        .run(
+          attempts,
+          code,
+          new Date(now.getTime() + delay * 60_000).toISOString(),
+          claim.source.id,
+          claim.token,
+        );
+      this.db
+        .prepare("UPDATE discovery_runs SET finished_at=?,status='failed',diagnostics=? WHERE id=?")
+        .run(now.toISOString(), JSON.stringify([code]), claim.runId);
+      this.release(claim.source.id, claim.token);
+      this.db.exec('COMMIT');
+    } catch (error) {
+      this.db.exec('ROLLBACK');
+      throw error;
+    }
   }
   jobs(options: { status?: string; query?: string; limit?: number } = {}): any[] {
     this.db

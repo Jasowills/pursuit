@@ -139,6 +139,42 @@ it('pause revokes pending authorizations', async () => {
   expect(queue.get(row.id).state).toBe('DRAFT');
   queue.close();
 });
+it('a paused worker cannot overwrite a subsequently revised draft', async () => {
+  const { queue, row } = await setup();
+  queue.authorize(row.id, row.payload_hash);
+  let started!: () => void, resume!: () => void;
+  const filling = new Promise<void>((r) => {
+    started = r;
+  });
+  const blocked = new Promise<void>((r) => {
+    resume = r;
+  });
+  let submitted = false;
+  const first = queue.run(
+    row.id,
+    pdf,
+    adapter({
+      fill: async () => {
+        started();
+        await blocked;
+      },
+      submit: async () => {
+        submitted = true;
+        throw Error('must_not_submit');
+      },
+    }),
+  );
+  await filling;
+  queue.policy(false);
+  await queue.revise(row.id, { ...row.payload, answers: { name: 'Reviewed correction' } });
+  resume();
+  await first;
+  expect(submitted).toBe(false);
+  expect(queue.get(row.id).state).toBe('DRAFT');
+  expect(queue.get(row.id).last_error).toBeNull();
+  expect(queue.get(row.id).payload.answers.name).toBe('Reviewed correction');
+  queue.close();
+});
 
 it('does not submit when authorization expires while filling the form', async () => {
   vi.useFakeTimers();

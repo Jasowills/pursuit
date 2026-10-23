@@ -2,24 +2,24 @@
 
 Updated 2026-10-23. [Executed sourcing checks](qa/DISCOVERY_REPORT.md) and [engine boundaries](DISCOVERY_ENGINE.md). Landing visibility is separate from shipping a capability. See [pipeline decisions](CAREER_PIPELINE_DECISIONS.md) and [workspace boundaries](CAREER_WORKSPACE.md).
 
-| Capability                                       | Landing surface                       | Current implementation                                                                                           |
-| ------------------------------------------------ | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Broad job discovery and qualification            | Post-hero scroll walkthrough          | Headless engine, retained importer and native bounded search with evidence-backed shortlist                      |
-| Company watchers and role alerts                 | Dedicated Company watchers section    | Retained web watcher CRUD; generic/native polling not implemented; landing alert is a simulation                 |
-| Career facts, preferences and context            | Career Identity section               | Native confirmed facts/provenance; richer search plan proposed                                                   |
-| Natural-language career assistant                | Actual harness capture and tour       | Native managed model conversations and model-free local counts                                                   |
-| Job intake                                       | Harness/tour                          | Native local persistent posting records                                                                          |
-| Grounded resume tailoring and version comparison | Full document workshop + scroll story | Reviewed source import, selection, PDF storage/export; current native packet only, full history outstanding      |
-| Cover letters                                    | Document workshop                     | Grounded letters in three tones with user motivation; deeper prose rewriting outstanding                         |
-| Video requirements and preparation               | Document workshop, background task    | Sample script/checklist; automatic requirement detection proposed                                                |
-| Bounded automatic applications                   | Scroll journey and background work    | Gated Ashby API/worker and native review/submit controls; fixture-qualified, live forms outstanding              |
-| Background work and notifications                | Background and companion              | Retained research/drafts and exact-plan Ashby worker; native worker/push outstanding                             |
-| Cold outreach and contact evidence               | Outreach pipeline/draft               | Published company evidence, native manual contact drafts; approved web Gmail sending; native sending outstanding |
-| Direct Gmail and Composio                        | Gmail connection selector             | Retained web implementations; native migration outstanding                                                       |
-| BYOM, OpenCode and Ollama                        | Provider row and model section        | Native settings/runtime; provider-specific live qualification still required                                     |
-| Phone review/approve/completion                  | Interactive companion preview         | Expo shell exists; pairing/relay/production companion not implemented                                            |
-| Cross-platform desktop acquisition               | OS-aware hero and download chooser    | Source download available; local unsigned macOS Intel build verified; public installers not published            |
-| Open source contribution                         | Navbar stars and footer               | Public repository and contribution guide                                                                         |
+| Capability                                       | Landing surface                       | Current implementation                                                                                                           |
+| ------------------------------------------------ | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Broad job discovery and qualification            | Post-hero scroll walkthrough          | Headless engine, retained importer and native bounded search with evidence-backed shortlist                                      |
+| Company watchers and role alerts                 | Dedicated Company watchers section    | Native on-request source polling; standalone read-only CLI watcher. No desktop service or retained watcher executor              |
+| Career facts, preferences and context            | Career Identity section               | Native confirmed facts/provenance; richer search plan proposed                                                                   |
+| Natural-language career assistant                | Actual harness capture and tour       | Native managed model conversations and model-free local counts                                                                   |
+| Job intake                                       | Harness/tour                          | Native local persistent posting records                                                                                          |
+| Grounded resume tailoring and version comparison | Full document workshop + scroll story | Reviewed source import, selection, PDF storage/export; current native packet only, full history outstanding                      |
+| Cover letters                                    | Document workshop                     | Grounded letters in three tones with user motivation; deeper prose rewriting outstanding                                         |
+| Video requirements and preparation               | Document workshop, background task    | Sample script/checklist; automatic requirement detection proposed                                                                |
+| Bounded automatic applications                   | Scroll journey and background work    | Gated Ashby API/worker and native review/submit controls; fixture-qualified, live forms outstanding                              |
+| Background work and notifications                | Background work                       | Retained research/drafts and exact-plan Ashby worker; native worker/push outstanding                                             |
+| Cold outreach and contact evidence               | Outreach pipeline/draft               | Published company evidence, native manual contact drafts; approved web Gmail sending; native sending outstanding                 |
+| Direct Gmail and Composio                        | Gmail connection selector             | Retained web implementations; native migration outstanding                                                                       |
+| BYOM, OpenCode and Ollama                        | Provider row and model section        | Native settings/runtime; provider-specific live qualification still required                                                     |
+| Phone review/approve/completion                  | Hidden; deferred to V2                | Expo shell exists; pairing/relay/production companion not implemented                                                            |
+| Cross-platform desktop acquisition               | OS-aware hero and download chooser    | Source download and unsigned four-target installer CI; build-specific evidence in desktop build status; no signed public release |
+| Open source contribution                         | Navbar stars and footer               | Public repository and contribution guide                                                                                         |
 
 Sample counts, companies, documents and confirmations do not assert real sourcing or submission. Current alpha scope remains findable in the FAQ and download section.
 

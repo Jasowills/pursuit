@@ -6,6 +6,8 @@ See the [production-hardening follow-up](hardening-followup.md) for subsequent s
 
 The subsequent [bounded evidence-selection pass](structured-selection.md) adds a schema-constrained native Ollama path. Qwen passed three small fictional selection cases; Llama 1B failed a relevance case. This does not resolve the freeform-writing or overall production gate.
 
+The [worker recovery pass](worker-recovery.md) fixes source-claim transactions, interrupted-run history, late-worker draft ownership and stale execution-policy display. A real read-only CLI watcher poll also verified one source's persisted lifecycle. Integrated unattended applications remain unfinished.
+
 ## What changed
 
 - Removed Companion advertising from the landing section, navigation, footer, download area and walkthrough link. Dormant source remains for a future version.
