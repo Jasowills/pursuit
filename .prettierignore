@@ -7,3 +7,4 @@ coverage
 .validation
 pnpm-lock.yaml
 *.tsbuildinfo
+.impeccable/hook.cache.json
