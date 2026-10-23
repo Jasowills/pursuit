@@ -30,12 +30,12 @@ export const RESUME = {
   summary:
     'Product designer with six years of experience making complex software feel simple. I lead research, interaction design and design systems for B2B products, working closely with engineering from discovery to launch.',
   tailored:
-    'Product designer with six years of experience turning complex B2B workflows into clear, accessible experiences. Experienced in end-to-end discovery, cross-functional delivery and design systems—the work at the heart of Northstar’s product design role.',
+    'Product designer with six years of experience turning complex B2B workflows into clear, accessible experiences. Experienced in end-to-end discovery, cross-functional delivery and design systems, the work at the heart of Northstar’s product design role.',
   experience: [
     {
       company: 'Meridian Studio',
       role: 'Senior Product Designer',
-      date: '2022 — Present',
+      date: '2022 to Present',
       bullets: [
         'Led discovery and interaction design for a reporting workspace used by operations teams.',
         'Partnered with eight engineers and a product manager to take a new onboarding flow from interviews to release.',
@@ -45,7 +45,7 @@ export const RESUME = {
     {
       company: 'Fieldwork',
       role: 'Product Designer',
-      date: '2020 — 2022',
+      date: '2020 to 2022',
       bullets: [
         'Interviewed customers and mapped their workflows to inform the redesign of a project planning tool.',
         'Created prototypes, ran usability sessions and translated findings into implementation-ready designs.',
@@ -78,7 +78,7 @@ export function sampleBook(): CareerBook {
       {
         id: 'm2',
         role: 'assistant',
-        text: 'I’ve reviewed 128 roles against your preferences and shortlisted 4 for a closer look. Northstar stands out: the role combines B2B workflow design, research and design systems—all grounded in your Meridian experience.',
+        text: 'I’ve reviewed 128 roles against your preferences and shortlisted 4 for a closer look. Northstar stands out: the role combines B2B workflow design, research and design systems, all grounded in your Meridian experience.',
       },
       {
         id: 'm3',
@@ -147,7 +147,7 @@ export const VIDEO_SCRIPT = [
   [
     '0:15–0:50',
     'Tell one relevant story',
-    'At Meridian Studio, I led discovery and interaction design for a reporting workspace. I worked with customers, a product manager and eight engineers—from interviews and prototypes through to release.',
+    'At Meridian Studio, I led discovery and interaction design for a reporting workspace. I worked with customers, a product manager and eight engineers, from interviews and prototypes through to release.',
   ],
   [
     '0:50–1:15',

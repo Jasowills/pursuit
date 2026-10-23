@@ -24,6 +24,10 @@ The harness now connects a saved role to reviewed tailoring, its saved PDF, Ashb
 
 ## Resume tailoring and application work
 
+Choose a personal story, formal, or short conversational style in the tailoring studio. Generated letters and contact follow-ups exclude em dashes and stock claims such as “scalable”. Source resume facts remain unchanged. See the [writing rules and current limits](docs/WRITING_POLICY.md).
+
+Desktop installer builds target Apple Silicon Macs, Intel Macs, Windows x64 and Linux x64 separately. The [build guide](docs/DESKTOP_BUILD_STATUS.md#installer-qualification-refresh-2026-10-23) explains unsigned test artifacts, checksums and runtime prerequisites. Public signed downloads are not available.
+
 The native **Resumes & letters** studio imports text PDFs, DOCX and text; requires extraction review; selects source-backed experience; offers three introduction tones; and saves/exports actual PDFs. No model call is required. The retained API also stores original documents and PDF versions with owner checks. A live Qwen 2.5 7B selection test used 183 input and 24 output tokens.
 
 The first Ashby hosted-form executor and persistent worker are implemented behind operator configuration. The source-to-PDF-to-form fixture passes without contacting an employer; live Ashby qualification remains unfinished; native review controls now use the local coordinator. Company research returns published source evidence, and the harness keeps copyable follow-up drafts with a role.

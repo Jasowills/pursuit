@@ -796,6 +796,7 @@ export function CareerWorkspace({
                   key={`followup-${job.id}`}
                   job={job}
                   resume={book.tailoring?.resume}
+                  voice={book.tailoring?.voice}
                   onSave={(contacts) =>
                     persist({
                       ...book,

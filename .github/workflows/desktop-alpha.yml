@@ -55,10 +55,12 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev patchelf xdg-utils
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test:local-store
-      - run: cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --locked
       - name: Build workspace dependencies
         run: pnpm --filter '@pursuit/desktop^...' build
+      - name: Stage engine resources for native tests
+        run: node apps/desktop/scripts/bundle-engine.mjs
+      - run: pnpm test:local-store
+      - run: cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --locked
       - name: Build native installers (internal, unsigned)
         run: pnpm --filter @pursuit/desktop desktop build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
       - name: Verify architecture, installer files and packaged worker

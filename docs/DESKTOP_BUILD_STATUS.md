@@ -107,3 +107,24 @@ Verification: 11 local-store tests, 9 default native tests (4 opt-in tests ignor
 ## Neutral harness and annotated landing — 2026-10-22
 
 Removed olive/blue UI surface tints from the shared career workspace and desktop settings; key actions retain primary lime. The actual sample renderer was recaptured, without IPC interception. Desktop UI contract/settings regressions passed and the unsigned internal macOS Intel `.app` package rebuilt successfully (14.89 MiB). Landing now has aligned acquisition actions, an application timeline instead of mode tabs, richer companion screens with visible-only autoplay/pause/reduced-motion controls, neutral shadcn-table activity, three real-company watcher examples, first-party integration marks, Pexels illustrations and per-letter footer motion. These presentation changes do not implement the outstanding job-hunting executor or companion transport.
+
+## Installer qualification refresh, 2026-10-23
+
+The `Desktop installers` workflow replaces bare executable uploads with native installer builds:
+
+| Hardware          | Native runner  | Rust target              | Artifact      |
+| ----------------- | -------------- | ------------------------ | ------------- |
+| Apple Silicon Mac | macos-15       | aarch64-apple-darwin     | DMG           |
+| Intel Mac         | macos-15-intel | x86_64-apple-darwin      | DMG           |
+| Windows x64       | windows-latest | x86_64-pc-windows-msvc   | NSIS EXE      |
+| Linux x64         | ubuntu-22.04   | x86_64-unknown-linux-gnu | DEB, AppImage |
+
+Each job builds workspace dependencies and stages the engine before native tests. It checks the produced executable’s Mach-O/PE/ELF architecture, requires installer files, checks the worker staging resources, exercises the isolated worker, and uploads a target-specific artifact with `manifest.json` and `SHA256SUMS`. macOS also checks the worker inside the actual app bundle. Windows/Linux installer extraction and clean-machine UI installation remain additional qualification steps; a successful build is not proof of those checks.
+
+Run manually from [Desktop installers](https://github.com/Jasowills/pursuit/actions/workflows/desktop-alpha.yml). Select a successful run for the commit you intend to test, then download the artifact matching your hardware. GitHub requires sign-in for artifact downloads. Artifacts expire after 14 days. Verify each file against its accompanying SHA256SUMS before testing. No automated public release is created by this workflow.
+
+These are **unsigned internal alpha installers**. They are not signed/notarized public downloads. The local career engine currently requires Node 22.13+ on the user’s machine and a configured compatible Chromium executable for application execution. The installer includes the worker and Playwright code, not Node or a browser. Model access and any managed OpenCode runtime must also be configured separately. Do not present the source ZIP as an OS installer or infer Intel versus Apple Silicon from a browser user agent. Windows ARM and Linux ARM are not qualified.
+
+The workflow follows [Tauri’s platform build examples](https://github.com/tauri-apps/tauri-action) and the [Linux baseline guidance](https://v2.tauri.app/distribute/appimage/). Build-script permissions use the explicit `allowBuilds` map required by [pnpm 11](https://github.com/pnpm/pnpm.io/blob/main/blog/releases/11.0.md). The repository’s earlier `onlyBuiltDependencies` configuration was ignored by pnpm 11 and caused clean-run failures; its allowlist has been migrated without granting permission to all dependencies.
+
+The Companion promotion is deferred from the landing page. Its dormant implementation remains in the repository for a future version; no mobile availability is advertised.

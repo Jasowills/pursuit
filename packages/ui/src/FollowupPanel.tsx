@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { followup, type Resume } from '@pursuit/tailoring';
+import { followup, type Resume, type Voice } from '@pursuit/tailoring';
 import type { Opportunity } from './career-data';
 export function FollowupPanel({
   job,
   resume,
+  voice,
   onSave,
 }: {
   job: Opportunity;
   resume?: Resume;
+  voice?: Voice;
   onSave: (contacts: NonNullable<Opportunity['contacts']>) => Promise<boolean>;
 }) {
   const [name, setName] = useState(''),
@@ -16,6 +18,7 @@ export function FollowupPanel({
     [channel, setChannel] = useState(''),
     [message, setMessage] = useState(''),
     [notice, setNotice] = useState('');
+  const [tone, setTone] = useState<Voice['tone']>(voice?.tone ?? 'professional');
   async function draft() {
     setNotice('');
     try {
@@ -41,6 +44,8 @@ export function FollowupPanel({
       }
       const result = await followup({
         resume,
+        tone,
+        voice,
         person: { name, role, sourceUrl: source },
         job: { title: job.role, company: job.company },
         appliedReceipt: job.status === 'Applied' ? job.confirmation : undefined,
@@ -94,6 +99,14 @@ export function FollowupPanel({
       <label>
         LinkedIn or X profile (optional)
         <input type="url" value={channel} onChange={(e) => setChannel(e.target.value)} />
+      </label>
+      <label>
+        Message style
+        <select value={tone} onChange={(e) => setTone(e.target.value as Voice['tone'])}>
+          <option value="story">Personal context</option>
+          <option value="professional">Formal and clear</option>
+          <option value="direct">Short and conversational</option>
+        </select>
       </label>
       <button onClick={() => void draft()}>Prepare a follow-up</button>
       {notice && <p role="status">{notice}</p>}

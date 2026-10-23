@@ -1,4 +1,5 @@
 import { Resume, Role, Voice, Packet } from './contracts.js';
+import { checkDraft, draftPunctuation, writingIssues } from './writing.js';
 export async function digest(value: string | Uint8Array): Promise<string> {
   const input =
     typeof value === 'string' ? new TextEncoder().encode(value) : Uint8Array.from(value);
@@ -115,17 +116,22 @@ function supportedLetter(
   const name = resume.blocks.find((b) => b.kind === 'identity')?.text ?? '';
   const examples = ranked
     .filter((b) => b.kind === 'bullet')
-    .slice(0, 2)
-    .map((b) => b.text.replace(/^[•*\-]\s*/, ''));
+    .map((b) => draftPunctuation(b.text.replace(/^[•*\-]\s*/, '')))
+    .filter((text) => writingIssues(text, voice.avoid).length === 0)
+    .slice(0, 2);
   const opener =
     voice.tone === 'professional'
       ? `I am applying for the ${role.title} role at ${role.company}.`
       : voice.tone === 'direct'
         ? `I would like to be considered for ${role.title} at ${role.company}.`
         : `The ${role.title} opening at ${role.company} caught my attention.`;
-  const motivation = voice.motivation.trim();
+  const motivation = checkDraft(voice.motivation, voice.avoid);
   const evidence = examples.length
-    ? `Examples from my experience:\n${examples.map((s) => `- ${s}`).join('\n')}`
+    ? voice.tone === 'professional'
+      ? `Relevant work from my resume:\n${examples.map((s) => `- ${s}`).join('\n')}`
+      : voice.tone === 'story'
+        ? `One part of my work that relates to this role:\n${examples.join('\n')}`
+        : examples[0]!
     : 'My resume is attached for your review.';
   const greeting =
     voice.tone === 'professional'
@@ -133,18 +139,23 @@ function supportedLetter(
       : styleSignals(voice.writingSamples).usesContractions
         ? 'Hi,'
         : 'Hello,';
-  return [
-    greeting,
-    opener,
-    motivation,
-    evidence,
-    voice.tone === 'direct'
-      ? 'Would you be open to a conversation?'
-      : 'I would welcome the opportunity to discuss the role.',
-    name,
-  ]
-    .filter(Boolean)
-    .join('\n\n');
+  return checkDraft(
+    [
+      greeting,
+      opener,
+      motivation,
+      evidence,
+      voice.tone === 'direct'
+        ? 'Could we talk about what you need from this role?'
+        : voice.tone === 'story'
+          ? 'I would like to hear more about the work and discuss where I could help.'
+          : 'Thank you for reviewing my application. I am available to discuss the role.',
+      name,
+    ]
+      .filter(Boolean)
+      .join('\n\n'),
+    voice.avoid,
+  );
 }
 export async function tailor(
   input: unknown,
@@ -200,8 +211,10 @@ export async function tailor(
     voice,
     ranked.filter((b) => selectedIds.includes(b.id)),
   );
-  if (voice.avoid.some((phrase) => coverLetter.toLowerCase().includes(phrase.toLowerCase())))
-    gaps.push('The cover letter contains a phrase on your avoid list; revise before approval.');
+  if (ranked.some((b) => writingIssues(draftPunctuation(b.text), voice.avoid).length > 0))
+    gaps.push(
+      'Some resume wording was left out of the cover letter because it contains generic phrases or words on your avoid list. Your resume evidence is unchanged.',
+    );
   return Packet.parse({
     version: 1,
     sourceId: resume.sourceId,
@@ -245,6 +258,9 @@ export function parseSelection(output: string): string[] {
 }
 export async function validatePacket(packetInput: unknown, resumeInput: unknown): Promise<Packet> {
   const packet = Packet.parse(packetInput);
+  const issues = writingIssues(packet.coverLetter, packet.voice.avoid);
+  if (issues.length)
+    throw new Error(`Review the cover letter before approval: ${issues.join(', ')}.`);
   const resume = await validateResume(resumeInput);
   if (
     !resume.reviewedAt ||

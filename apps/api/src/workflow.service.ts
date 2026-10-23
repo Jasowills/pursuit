@@ -1,4 +1,4 @@
-import { structureResume, tailor } from '@pursuit/tailoring';
+import { structureResume, tailor, writingIssues } from '@pursuit/tailoring';
 import { DiscoveryService, type DiscoveryRequest } from './discovery.service';
 import {
   BadGatewayException,
@@ -229,6 +229,11 @@ export class WorkflowService {
     const row = await this.get(a, id);
     const content = EditableContent.parse(row.content);
     if (!content.recipient) throw new BadRequestException({ error: 'recipient_required' });
+    const writing = writingIssues(
+      [content.cover_letter, content.outreach.subject, content.outreach.body].join('\n'),
+    );
+    if (writing.length)
+      throw new BadRequestException({ error: 'writing_review_required', phrases: writing });
     const account = await this.gmail.account(a);
     if (!account || account.status !== 'ACTIVE' || account.disabled)
       throw new BadRequestException({ error: 'connect_gmail_first' });

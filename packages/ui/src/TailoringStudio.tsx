@@ -204,23 +204,23 @@ export function TailoringStudio({
         </select>
       </label>
       <fieldset>
-        <legend>How should your introduction sound?</legend>
+        <legend>Choose your cover-letter style</legend>
         {(
           [
             [
               'story',
-              'Story-led',
-              'The opening caught my attention. Here is the work behind my interest.',
+              'Personal story',
+              'Start with your reason for applying, then connect it to work you have done. No invented anecdotes.',
             ],
             [
               'professional',
-              'Professional',
-              'I am applying for the role. These examples show my relevant experience.',
+              'Formal and clear',
+              'Name the role and present a short list of relevant work. Use a courteous closing.',
             ],
             [
               'direct',
-              'Direct',
-              'I would like to be considered. Would you be open to a conversation?',
+              'Short and conversational',
+              'Use one relevant example and a direct question. Keep it brief.',
             ],
           ] as const
         ).map(([id, label, example]) => (
@@ -231,6 +231,10 @@ export function TailoringStudio({
           </label>
         ))}
       </fieldset>
+      <p>
+        Drafts use your reviewed experience and your own reasons. No em dashes or generic claims
+        such as “scalable”. You review the wording before using it.
+      </p>
       <label>
         Why this work matters to you, in your words{' '}
         <textarea
