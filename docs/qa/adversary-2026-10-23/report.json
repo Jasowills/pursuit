@@ -57,7 +57,7 @@
       "severity": "medium",
       "status": "FIXED",
       "expected": "Verifier can inspect the actual packaged worker and browser code.",
-      "observed": "Tauri cleaned the intermediate app after producing the DMG. Requesting app,dmg retains it. Apple Silicon replacement build passes resource checks. Intel also passed build, verification, worker and upload steps; final source rebuild remains required.",
+      "observed": "Tauri cleaned the intermediate app after creating the DMG. Retaining app,dmg fixes verification. All four targets at9d07e03 now pass native build, architecture, resource-staging, isolated-worker and upload checks; macOS also checks actual app-bundle resources.",
       "evidence": [
         "https://github.com/Jasowills/pursuit/actions/runs/39960253355",
         ".github/workflows/desktop-alpha.yml"
@@ -90,7 +90,6 @@
   "production_gates_outstanding": [
     "Resolve known dependency advisories with compatibility and reachability assessment",
     "Reliable local model latency and semantic quality evaluations; broader provider compatibility",
-    "Rebuild all four native installer targets after final source changes, and recheck main CI",
     "Signed/notarized releases and clean-machine installs on all four supported targets",
     "Real OS-webview setup, credential-store, crash/reopen and controlled application qualification",
     "Operator-approved live Ashby and Gmail/calendar checks; native integration boundaries remain",
@@ -103,7 +102,9 @@
     "out_of": 10,
     "meaning": "Subjective engineering estimate for a public production launch, requested by the user. Not a pass percentage, security certification, reliability probability or hiring-success estimate. Passing deterministic flows establish a useful developer alpha, while live execution, operations and distribution remain gates."
   },
-  "build_run": "https://github.com/Jasowills/pursuit/actions/runs/39960253355",
+  "build_run": "https://github.com/Jasowills/pursuit/actions/runs/39964551041",
   "external_actions": "No employer submissions, email sends, real user data modifications or paid model inference.",
-  "main_ci": "https://github.com/Jasowills/pursuit/actions/runs/39963035176 (passed for ffc3cac; final history fix requires fresh CI)"
+  "main_ci": "https://github.com/Jasowills/pursuit/actions/runs/39964539786",
+  "verified_code_commit": "9d07e0389663a58caf4e73895d8ae37bfff96b3e",
+  "native_targets_verified": ["macOS Apple Silicon", "macOS Intel", "Windows x64", "Linux x64"]
 }

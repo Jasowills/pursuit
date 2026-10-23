@@ -20,11 +20,11 @@
   &quot;verdict&quot;: &quot;NOT_READY&quot;,
   &quot;target&quot;: &quot;local-first desktop career harness and retained web workflow&quot;,
   &quot;automated_cases&quot;: {
-    &quot;passed&quot;: 203,
+    &quot;passed&quot;: 204,
     &quot;by_suite&quot;: {
       &quot;discovery&quot;: 68,
       &quot;application&quot;: 13,
-      &quot;coordinator&quot;: 10,
+      &quot;coordinator&quot;: 11,
       &quot;tailoring&quot;: 23,
       &quot;api&quot;: 59,
       &quot;native&quot;: 16,
@@ -76,7 +76,7 @@
       &quot;severity&quot;: &quot;medium&quot;,
       &quot;status&quot;: &quot;FIXED&quot;,
       &quot;expected&quot;: &quot;Verifier can inspect the actual packaged worker and browser code.&quot;,
-      &quot;observed&quot;: &quot;Tauri cleaned the intermediate app after producing the DMG. Requesting app,dmg retains it. Apple Silicon replacement build passes resource checks. Intel also passed build, verification, worker and upload steps; final source rebuild remains required.&quot;,
+      &quot;observed&quot;: &quot;Tauri cleaned the intermediate app after creating the DMG. Retaining app,dmg fixes verification. All four targets at9d07e03 now pass native build, architecture, resource-staging, isolated-worker and upload checks; macOS also checks actual app-bundle resources.&quot;,
       &quot;evidence&quot;: [
         &quot;https://github.com/Jasowills/pursuit/actions/runs/39960253355&quot;,
         &quot;.github/workflows/desktop-alpha.yml&quot;
@@ -92,12 +92,25 @@
       &quot;evidence&quot;: [
         &quot;dependency-audit-summary.json&quot;
       ]
+    },
+    {
+      &quot;id&quot;: &quot;ADV-0005&quot;,
+      &quot;title&quot;: &quot;Long application histories exceeded the native transport limit&quot;,
+      &quot;severity&quot;: &quot;high&quot;,
+      &quot;status&quot;: &quot;FIXED&quot;,
+      &quot;origin&quot;: &quot;controlled temporary-SQLite reproduction followed by regression&quot;,
+      &quot;expected&quot;: &quot;A hundred saved applications should remain inspectable without exceeding the 4 MB native response limit or repeating every answer in history.&quot;,
+      &quot;observed&quot;: &quot;The pre-fix test produced a 6,059,443-character snapshot from 100 records with six 10,000-character answers each. History now returns summaries; the same regression passes below 200,000 characters and verifies full answers remain in storage. Exact review responses are unchanged.&quot;,
+      &quot;evidence&quot;: [
+        &quot;packages/career-engine/test/engine.test.ts hundred verbose history test&quot;,
+        &quot;packages/career-engine/src/contracts.ts ExecutionSummary&quot;,
+        &quot;scripts/qa/native-engine-browser.py background history and full-review journey&quot;
+      ]
     }
   ],
   &quot;production_gates_outstanding&quot;: [
     &quot;Resolve known dependency advisories with compatibility and reachability assessment&quot;,
     &quot;Reliable local model latency and semantic quality evaluations; broader provider compatibility&quot;,
-    &quot;Rebuild all four native installer targets after final source changes, and recheck main CI&quot;,
     &quot;Signed/notarized releases and clean-machine installs on all four supported targets&quot;,
     &quot;Real OS-webview setup, credential-store, crash/reopen and controlled application qualification&quot;,
     &quot;Operator-approved live Ashby and Gmail/calendar checks; native integration boundaries remain&quot;,
@@ -110,6 +123,14 @@
     &quot;out_of&quot;: 10,
     &quot;meaning&quot;: &quot;Subjective engineering estimate for a public production launch, requested by the user. Not a pass percentage, security certification, reliability probability or hiring-success estimate. Passing deterministic flows establish a useful developer alpha, while live execution, operations and distribution remain gates.&quot;
   },
-  &quot;build_run&quot;: &quot;https://github.com/Jasowills/pursuit/actions/runs/39960253355&quot;,
-  &quot;external_actions&quot;: &quot;No employer submissions, email sends, real user data modifications or paid model inference.&quot;
+  &quot;build_run&quot;: &quot;https://github.com/Jasowills/pursuit/actions/runs/39964551041&quot;,
+  &quot;external_actions&quot;: &quot;No employer submissions, email sends, real user data modifications or paid model inference.&quot;,
+  &quot;main_ci&quot;: &quot;https://github.com/Jasowills/pursuit/actions/runs/39964539786&quot;,
+  &quot;verified_code_commit&quot;: &quot;9d07e0389663a58caf4e73895d8ae37bfff96b3e&quot;,
+  &quot;native_targets_verified&quot;: [
+    &quot;macOS Apple Silicon&quot;,
+    &quot;macOS Intel&quot;,
+    &quot;Windows x64&quot;,
+    &quot;Linux x64&quot;
+  ]
 }</pre>

@@ -1,0 +1,136 @@
+{
+  "commit": "9d07e0389663a58caf4e73895d8ae37bfff96b3e",
+  "native_ci": "https://github.com/Jasowills/pursuit/actions/runs/39964551041",
+  "main_ci": "https://github.com/Jasowills/pursuit/actions/runs/39964539786",
+  "native_ci_conclusion": "success",
+  "scope": "Four completed native build/verification/isolated-worker jobs. SHA256 values computed by each native runner over produced installer files. Not signing, clean-machine installation or proof of live integrations.",
+  "manifests": [
+    {
+      "version": "0.1.0",
+      "commit": "9d07e0389663a58caf4e73895d8ae37bfff96b3e",
+      "target": "x86_64-apple-darwin",
+      "platform": "darwin",
+      "architecture": "x64",
+      "distribution": "unsigned-internal-alpha",
+      "requirements": [
+        "Node >=22.13 for the career engine",
+        "Configured Chromium for application execution",
+        "Configured model access for AI drafts"
+      ],
+      "checks": [
+        "native-runner",
+        "binary-header-architecture",
+        "installer-present",
+        "engine-staging-resources",
+        "app-bundle-resources"
+      ],
+      "limitations": [
+        "Not signed or notarized",
+        "Clean-machine installation and native UI smoke test remain required"
+      ],
+      "artifacts": [
+        {
+          "filename": "Pursuit_0.1.0_x64.dmg",
+          "bytes": 10147807,
+          "sha256": "6059851ceb995bb125bc204c5eb324ebb879669675ea77494b39d12a5ed025f7"
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "commit": "9d07e0389663a58caf4e73895d8ae37bfff96b3e",
+      "target": "x86_64-pc-windows-msvc",
+      "platform": "win32",
+      "architecture": "x64",
+      "distribution": "unsigned-internal-alpha",
+      "requirements": [
+        "Node >=22.13 for the career engine",
+        "Configured Chromium for application execution",
+        "Configured model access for AI drafts"
+      ],
+      "checks": [
+        "native-runner",
+        "binary-header-architecture",
+        "installer-present",
+        "engine-staging-resources"
+      ],
+      "limitations": [
+        "Not signed or notarized",
+        "Clean-machine installation and native UI smoke test remain required"
+      ],
+      "artifacts": [
+        {
+          "filename": "Pursuit_0.1.0_x64-setup.exe",
+          "bytes": 7168513,
+          "sha256": "db30417ecd0510cd0fec0f32af645b7e2f1a34b39217003770c368d66f108e2b"
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "commit": "9d07e0389663a58caf4e73895d8ae37bfff96b3e",
+      "target": "x86_64-unknown-linux-gnu",
+      "platform": "linux",
+      "architecture": "x64",
+      "distribution": "unsigned-internal-alpha",
+      "requirements": [
+        "Node >=22.13 for the career engine",
+        "Configured Chromium for application execution",
+        "Configured model access for AI drafts"
+      ],
+      "checks": [
+        "native-runner",
+        "binary-header-architecture",
+        "installer-present",
+        "engine-staging-resources"
+      ],
+      "limitations": [
+        "Not signed or notarized",
+        "Clean-machine installation and native UI smoke test remain required"
+      ],
+      "artifacts": [
+        {
+          "filename": "Pursuit_0.1.0_amd64.deb",
+          "bytes": 10831202,
+          "sha256": "6b0634a9fc9b375588f8689e778fc8c839495d99d1baa95402815c12b13127a6"
+        },
+        {
+          "filename": "Pursuit_0.1.0_amd64.AppImage",
+          "bytes": 88619512,
+          "sha256": "2d1a9291ccf98c1e702b313418a640ef87753e70d285935a43035886b3cf8390"
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "commit": "9d07e0389663a58caf4e73895d8ae37bfff96b3e",
+      "target": "aarch64-apple-darwin",
+      "platform": "darwin",
+      "architecture": "arm64",
+      "distribution": "unsigned-internal-alpha",
+      "requirements": [
+        "Node >=22.13 for the career engine",
+        "Configured Chromium for application execution",
+        "Configured model access for AI drafts"
+      ],
+      "checks": [
+        "native-runner",
+        "binary-header-architecture",
+        "installer-present",
+        "engine-staging-resources",
+        "app-bundle-resources"
+      ],
+      "limitations": [
+        "Not signed or notarized",
+        "Clean-machine installation and native UI smoke test remain required"
+      ],
+      "artifacts": [
+        {
+          "filename": "Pursuit_0.1.0_aarch64.dmg",
+          "bytes": 9956392,
+          "sha256": "b90f1c530703b38dcf8db90f6cbb0f3db7cf0412f23cbb02ee064ea61bcbe04c"
+        }
+      ]
+    }
+  ]
+}

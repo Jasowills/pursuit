@@ -4,9 +4,9 @@
   "severity": "medium",
   "status": "FIXED",
   "expected": "Verifier can inspect the actual packaged worker and browser code.",
-  "observed": "Tauri cleaned the intermediate app after producing the DMG. Requesting app,dmg retains it. Apple Silicon replacement build passes resource checks. Intel also passed its build, verification, worker and upload steps. Final source rebuild remains required.",
+  "observed": "Tauri cleaned the intermediate app after creating the DMG. Retaining app,dmg fixes verification. All four targets at9d07e03 now pass native build, architecture, resource-staging, isolated-worker and upload checks; macOS also checks actual app-bundle resources.",
   "evidence": [
-    "https://github.com/Jasowills/pursuit/actions/runs/39960253355",
+    "https://github.com/Jasowills/pursuit/actions/runs/39964551041",
     ".github/workflows/desktop-alpha.yml"
   ]
 }
