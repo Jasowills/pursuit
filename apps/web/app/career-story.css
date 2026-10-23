@@ -88,8 +88,7 @@
 .document-section h2,
 .companion-copy h2,
 .background-copy h2,
-.outreach-section h2,
-.career-context-section h2 {
+.outreach-section h2 {
   font-size: clamp(34px, 4vw, 50px);
   line-height: 1.13;
   font-weight: 470;
@@ -98,8 +97,7 @@
 .journey-overview h2 > span,
 .new-harness-section h2 > span,
 .document-section h2 > span,
-.outreach-section h2 > span,
-.career-context-section h2 > span {
+.outreach-section h2 > span {
   color: #939393;
 }
 .journey-overview .section-heading-pair > p,
@@ -1601,24 +1599,6 @@
   flex: none;
   margin-top: 2px;
 }
-.career-context-section {
-  padding-block: 40px 70px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-  border-top: 1px solid #303030;
-}
-.career-context-section > div > svg {
-  color: #d5f578;
-  margin-bottom: 22px;
-}
-.career-context-section > div > p {
-  font-size: 14px;
-  color: #9e9e9e;
-  line-height: 1.95;
-  margin-bottom: 20px;
-}
 .closing-invitation {
   background: #d5f578;
   color: #1a1a1a;
@@ -2048,9 +2028,6 @@
     grid-template-columns: 1fr;
     gap: 25px;
   }
-  .career-context-section {
-    gap: 35px;
-  }
   .closing-invitation > .dark-frame {
     grid-template-columns: 1fr;
     gap: 25px;
@@ -2131,8 +2108,7 @@
   .journey-overview h2,
   .new-harness-section h2,
   .document-section h2,
-  .outreach-section h2,
-  .career-context-section h2 {
+  .outreach-section h2 {
     font-size: 34px;
   }
   .journey-track {
@@ -2523,14 +2499,6 @@
   }
   .gmail-consent {
     font-size: 8px;
-  }
-  .career-context-section {
-    grid-template-columns: 1fr;
-    gap: 25px;
-    padding-block: 40px;
-  }
-  .career-context-section > div > p {
-    font-size: 13px;
   }
   .closing-copy h2 {
     font-size: 40px;

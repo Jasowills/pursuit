@@ -518,9 +518,13 @@ fn external_url(raw: &str) -> Result<String, String> {
     {
         return Err("Only public HTTPS source links can be opened".into());
     }
-    let host = url.host_str().unwrap();
-    if host == "localhost"
-        || host.ends_with(".localhost")
+    // DNS permits an absolute hostname's trailing dot. Check the canonical
+    // name, otherwise localhost. bypasses the local-target restriction.
+    let host = url.host_str().unwrap().trim_end_matches('.');
+    if !host.contains('.')
+        || ["localhost", "local", "home.arpa"]
+            .iter()
+            .any(|local| host == *local || host.ends_with(&format!(".{local}")))
         || host.parse::<std::net::IpAddr>().is_ok()
         || host.starts_with('[')
     {
@@ -565,6 +569,19 @@ mod source_link_tests {
         assert!(external_url("javascript:alert(1)").is_err());
         assert!(external_url("https://user:secret@jobs.ashbyhq.com/x").is_err());
         assert!(external_url("https://127.0.0.1/").is_err());
+        for url in [
+            "https://localhost./",
+            "https://LOCALHOST./",
+            "https://printer.local/",
+            "https://device.home.arpa/",
+            "https://home.arpa/",
+            "https://host.localhost./",
+            "https://printer/",
+            "https://[::1]/",
+            "https://2130706433/",
+        ] {
+            assert!(external_url(url).is_err(), "Local target accepted: {url}");
+        }
         assert_eq!(
             external_url("https://jobs.ashbyhq.com/company/job").unwrap(),
             "https://jobs.ashbyhq.com/company/job"

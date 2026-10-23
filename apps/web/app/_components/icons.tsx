@@ -20,6 +20,7 @@ export type IconName =
   | 'close'
   | 'chevronDown'
   | 'arrowUpRight'
+  | 'download'
   | 'plus'
   | 'phone'
   | 'monitor'
@@ -29,6 +30,7 @@ export type IconName =
   | 'pause';
 
 const PATHS: Record<IconName, React.ReactNode> = {
+  download: <path d="M12 3v12m-4-4 4 4 4-4M4 15v5h16v-5" />,
   home: (
     <>
       <path d="M3.5 10.2 12 3.5l8.5 6.7" />

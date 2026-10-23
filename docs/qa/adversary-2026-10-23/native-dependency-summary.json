@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-23",
+  "verdict": "OPEN_FINDINGS",
+  "scanner": {
+    "name": "OSV-Scanner",
+    "version": "2.7.0",
+    "binary": "osv-scanner_darwin_amd64",
+    "sha256": "e82c5df7ab0a42dff29a1cd0660711447b56b4c0483ff66ad8634df10fd81a45",
+    "checksum_verified": true,
+    "exit_code": 1,
+    "call_analysis": false,
+    "lockfiles": {
+      "apps/desktop/src-tauri/Cargo.lock": 525,
+      "packages/local-store/Cargo.lock": 62
+    }
+  },
+  "unique_advisories": [
+    {
+      "id": "RUSTSEC-2024-0429",
+      "alias": "GHSA-wrw7-89jp-8q8g",
+      "package": "glib",
+      "version": "0.18.5",
+      "type": "unsound",
+      "scanner_max_severity": "6.9",
+      "chain": "tauri -> gtk/webkit2gtk -> glib",
+      "affected_functions": "VariantStrIter iterator methods",
+      "patched": ">=0.20.0",
+      "reachability": "Not established. No direct application calls found; transitive Linux runtime use not excluded."
+    },
+    {
+      "id": "RUSTSEC-2024-0370",
+      "package": "proc-macro-error",
+      "version": "1.0.4",
+      "type": "unmaintained",
+      "chain": "tauri -> gtk/glib macros -> proc-macro-error"
+    },
+    {
+      "id": "RUSTSEC-2026-0370",
+      "package": "zvariant",
+      "version": "4.2.0",
+      "type": "unmaintained",
+      "chain": "keyring -> secret-service -> zbus -> zvariant"
+    },
+    {
+      "id": "RUSTSEC-2026-0371",
+      "package": "zbus_names",
+      "version": "3.0.0",
+      "type": "unmaintained",
+      "chain": "keyring -> secret-service -> zbus -> zbus_names"
+    },
+    {
+      "id": "RUSTSEC-2026-0372",
+      "package": "zvariant_derive",
+      "version": "4.2.0",
+      "type": "unmaintained",
+      "chain": "keyring -> secret-service -> zbus -> zvariant -> zvariant_derive"
+    }
+  ],
+  "limitations": [
+    "Lockfile presence is not proof of exploitable call reachability.",
+    "Alias records for glib count as one advisory.",
+    "No local-store finding returned; this is not a full security certification.",
+    "No native dependency override or advisory suppression added."
+  ]
+}

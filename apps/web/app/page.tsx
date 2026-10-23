@@ -164,29 +164,6 @@ export default function HomePage() {
             </a>
           </div>
         </section>
-        <section className="career-context-section dark-frame">
-          <div>
-            <Icon name="user" size={32} />
-            <h2>
-              Give Pursuit
-              <br />
-              <span>the right context.</span>
-            </h2>
-          </div>
-          <div>
-            <p>
-              Save your experience, work authorization and preferences in Career Identity. Review
-              the source of a fact before adding it to your profile.
-            </p>
-            <p>
-              Choose which confirmed facts to include in a model request. Update your profile when
-              your experience or search requirements change.
-            </p>
-            <a className="text-link" href="/product-tour">
-              Explore Career Identity <Icon name="arrowUpRight" size={15} />
-            </a>
-          </div>
-        </section>
         <section className="dark-section dark-frame download-section" id="download">
           <div>
             <PursuitMark size={48} />

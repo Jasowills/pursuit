@@ -222,16 +222,27 @@ export function DownloadOptions() {
         {(['macOS', 'Windows', 'Linux'] as const).map((os) => (
           <button key={os} aria-pressed={platform === os} onClick={() => setChoice(os)}>
             <span className="download-os-mark">
-              <PlatformLogo platform={os} size={30} />
+              <PlatformLogo platform={os} size={20} />
             </span>
             <strong>{os}</strong>
-            <span>{os === detected ? 'Detected on this device' : 'Desktop alpha target'}</span>
           </button>
         ))}
       </div>
       <div className="release-download-detail">
-        <div>
-          <strong>{platform} developer alpha</strong>
+        <header className="download-platform-heading">
+          <PlatformLogo platform={platform} size={42} />
+          <div>
+            <h3>Pursuit for {platform}</h3>
+            <p>
+              {platform === 'macOS'
+                ? `${macChip === 'apple-silicon' ? 'Apple Silicon · arm64' : 'Intel · x64'} · DMG`
+                : platform === 'Windows'
+                  ? '64-bit Windows · EXE'
+                  : '64-bit Linux · DEB & AppImage'}
+            </p>
+          </div>
+        </header>
+        <div className="download-target-choice">
           {platform === 'macOS' && (
             <label>
               Mac processor
@@ -247,45 +258,54 @@ export function DownloadOptions() {
           )}
           <p>
             {platform === 'macOS'
-              ? `${macChip === 'apple-silicon' ? 'Apple Silicon (arm64)' : 'Intel (x64)'} DMG build target. Choose your processor explicitly; browsers cannot reliably detect Mac hardware.`
-              : platform === 'Windows'
-                ? 'Windows x64 installer build target. Windows ARM is not yet qualified.'
-                : 'Linux x64 DEB and AppImage build targets. Linux ARM is not yet qualified.'}
+              ? 'Choose the processor shown in About This Mac.'
+              : `${platform} ARM builds are not yet qualified.`}
           </p>
         </div>
+        <p className="download-availability">
+          Developer alpha. Source code and unsigned test builds.
+        </p>
         <div className="download-actions">
           <a
             className="dark-button primary"
             href="https://github.com/Jasowills/pursuit/archive/refs/heads/main.zip"
           >
-            <Icon name="folder" size={17} />
+            <Icon name="download" size={17} />
             Download source ZIP
           </a>
           <a
-            className="dark-button"
+            className="download-build-link"
             href="https://github.com/Jasowills/pursuit/actions/workflows/desktop-alpha.yml"
             target="_blank"
             rel="noreferrer"
           >
-            Installer build status
-            <Icon name="arrowUpRight" size={15} />
-          </a>
-          <a
-            className="dark-button"
-            href="https://github.com/Jasowills/pursuit/blob/main/docs/DESKTOP_BUILD_STATUS.md"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Build instructions
+            View unsigned builds
             <Icon name="arrowUpRight" size={15} />
           </a>
         </div>
-        <small>
-          The source ZIP is not an installer. Unsigned test installers appear as GitHub workflow
-          artifacts after a successful build; downloading artifacts requires GitHub sign-in. Public
-          signed releases are not available. The career engine currently needs Node 22.13+ and a
-          configured Chromium browser. Bring your own model.
-        </small>
+        <details className="download-setup-details">
+          <summary>
+            Setup & build details <Icon name="chevronDown" size={15} />
+          </summary>
+          <div>
+            <p>
+              The ZIP contains source code. Unsigned installers are available in successful GitHub
+              builds and require GitHub sign-in. Public signed releases are not available yet.
+            </p>
+            <p>
+              Install Node 22.13+ and connect your own model. Applications also need a configured
+              Chromium browser. On a Mac, choose Apple Silicon or Intel explicitly; a browser cannot
+              reliably identify your processor.
+            </p>
+            <a
+              href="https://github.com/Jasowills/pursuit/blob/main/docs/DESKTOP_BUILD_STATUS.md"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Read the build guide <Icon name="arrowUpRight" size={14} />
+            </a>
+          </div>
+        </details>
       </div>
     </div>
   );

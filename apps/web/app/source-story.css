@@ -29,13 +29,8 @@
   color: #eee;
 }
 .hero-download {
-  display: grid;
-  gap: 10px;
-  justify-items: center;
-}
-.hero-download-caption {
-  color: #aaa;
-  font-size: 10px;
+  display: flex;
+  justify-content: center;
 }
 .hero-download .dark-button {
   gap: 10px;
@@ -870,9 +865,6 @@
   .watcher-history > div {
     font-size: 10px;
     line-height: 1.7;
-  }
-  .hero-download-caption {
-    font-size: 9px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

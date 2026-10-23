@@ -1,0 +1,12 @@
+{
+  "scope": "Built landing page in Chromium. No downloads or external actions performed.",
+  "passed": 6,
+  "checks": [
+    "context section and hero caption removed; hero still leads to download options",
+    "all OS targets and both explicit Mac processor choices; truthful source and unsigned links",
+    "keyboard-accessible setup disclosure exposes prerequisites and build guide",
+    "320, 390, 768 and 1440px layouts have no horizontal overflow and 44px controls",
+    "footer wordmark is muted decorative text and respects reduced motion",
+    "no uncaught browser errors"
+  ]
+}

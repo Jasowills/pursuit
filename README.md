@@ -54,7 +54,7 @@ The queue enforces a ceiling of up to 100 attempts per UTC day; this does not gu
 
 ## Desktop quick start
 
-Requirements: Git, Node.js >=22.13 (24 LTS recommended), pnpm 11.12, Rust stable and your operating system's [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/). macOS is locally build-tested; Windows/Linux remain qualification targets. No signed public installers are published yet.
+Requirements: Git, Node.js >=22.13 (24 LTS recommended), pnpm 11.12, Rust stable and your operating system's [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/). Native CI has built Apple Silicon, Intel Mac, Windows x64 and Linux x64 installers. Clean-machine installation remains unqualified. No signed public installers are published yet.
 
 ```sh
 git clone https://github.com/Jasowills/pursuit.git

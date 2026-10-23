@@ -55,7 +55,6 @@ export function HeroDownload() {
         <span>{platform ? `Get Pursuit for ${platform}` : 'Get Pursuit for desktop'}</span>
         <Icon name="arrowUpRight" size={16} />
       </a>
-      <span className="hero-download-caption">Source alpha · public installers coming later</span>
     </div>
   );
 }
