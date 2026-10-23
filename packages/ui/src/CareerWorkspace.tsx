@@ -1,4 +1,7 @@
 'use client';
+import { SourcingPanel, EngineHistory } from './SourcingPanel';
+import { ApplicationReview } from './ApplicationReview';
+import type { EngineClient, EngineProgress } from '@pursuit/career-engine/contracts';
 import { FollowupPanel } from './FollowupPanel';
 import { TailoringStudio } from './TailoringStudio';
 import { StatusBadge } from './status';
@@ -127,6 +130,9 @@ type Props = {
   initialData?: CareerBook;
   sample?: boolean;
   connected?: boolean;
+  onEngine?: EngineClient;
+  engineProgress?: EngineProgress;
+  onEngineSetup?: () => void;
   onSave?: (book: CareerBook) => Promise<void>;
   onAsk?: (
     text: string,
@@ -196,6 +202,9 @@ export function CareerWorkspace({
   initialRequest = '',
   onSavePdf,
   onExportPdf,
+  onEngine,
+  engineProgress,
+  onEngineSetup,
 }: Props) {
   const [book, setBook] = useState<CareerBook>(initialData);
   const [screen, setScreen] = useState<CareerScreen>('assistant');
@@ -620,7 +629,50 @@ export function CareerWorkspace({
                   <DeskIcon name="plus" size={15} /> Add job posting
                 </button>
               </div>
-              {screen === 'opportunities' && (
+              {screen === 'opportunities' && !sample && onEngine && (
+                <SourcingPanel
+                  call={onEngine}
+                  progress={engineProgress}
+                  onSetup={() => onEngineSetup?.()}
+                  savedIds={book.opportunities.map((j) => j.id)}
+                  onSave={async (entry) => {
+                    const existing = book.opportunities.find((j) => j.id === entry.id);
+                    const changed =
+                      existing &&
+                      (existing.posting !== entry.posting ||
+                        existing.role !== entry.role ||
+                        existing.company !== entry.company);
+                    const refreshed = existing
+                      ? {
+                          ...existing,
+                          ...entry,
+                          status:
+                            existing.status === 'Applied'
+                              ? ('Applied' as const)
+                              : changed
+                                ? ('Review' as const)
+                                : existing.status,
+                          confirmation: existing.confirmation,
+                          contacts: existing.contacts,
+                        }
+                      : entry;
+                    const tailoring =
+                      changed && book.tailoring?.packet?.role.id === entry.id
+                        ? { resume: book.tailoring.resume, voice: book.tailoring.voice }
+                        : book.tailoring;
+                    const saved = await persist({
+                      ...book,
+                      tailoring,
+                      opportunities: existing
+                        ? book.opportunities.map((j) => (j.id === entry.id ? refreshed : j))
+                        : [entry, ...book.opportunities],
+                    });
+                    if (saved) setSelected(entry.id);
+                    return saved;
+                  }}
+                />
+              )}
+              {screen === 'opportunities' && (sample || !onEngine) && (
                 <div className="cw-sourcing-status" data-demo={sample}>
                   <span className="cw-search-indicator">
                     <DeskIcon name="search" size={17} />
@@ -717,14 +769,31 @@ export function CareerWorkspace({
                 ))}
                 {!book.opportunities.length && (
                   <p className="cw-empty">
-                    Add a job posting to start your shortlist. No roles are invented or fetched in
-                    the background by this screen.
+                    Save a sourced role or add a job posting to start your shortlist.
                   </p>
                 )}
               </div>
+              {!sample && job && onEngine && (
+                <ApplicationReview
+                  key={`application-${job.id}`}
+                  job={job}
+                  tailoring={book.tailoring}
+                  call={onEngine}
+                  onSetup={() => onEngineSetup?.()}
+                  onPrepare={() => navigate('resumes')}
+                  onConfirmed={(confirmation) =>
+                    persist({
+                      ...book,
+                      opportunities: book.opportunities.map((j) =>
+                        j.id === job.id ? { ...j, status: 'Applied', confirmation } : j,
+                      ),
+                    })
+                  }
+                />
+              )}
               {!sample && job && (
                 <FollowupPanel
-                  key={job.id}
+                  key={`followup-${job.id}`}
                   job={job}
                   resume={book.tailoring?.resume}
                   onSave={(contacts) =>
@@ -779,9 +848,21 @@ export function CareerWorkspace({
                 </>
               ) : (
                 <TailoringStudio
+                  key={selected}
+                  initialJobId={selected}
                   value={book.tailoring}
                   opportunities={book.opportunities}
-                  onSave={(tailoring) => persist({ ...book, tailoring })}
+                  onSave={(tailoring) =>
+                    persist({
+                      ...book,
+                      tailoring,
+                      opportunities: book.opportunities.map((j) =>
+                        j.id === tailoring.packet?.role.id && j.status !== 'Applied'
+                          ? { ...j, status: 'Prepared' }
+                          : j,
+                      ),
+                    })
+                  }
                   onModel={onAsk ? (prompt) => onAsk(prompt, false, () => {}) : undefined}
                   onSavePdf={onSavePdf}
                   onExportPdf={onExportPdf}
@@ -963,6 +1044,7 @@ export function CareerWorkspace({
                 </>
               ) : (
                 <div>
+                  {onEngine && <EngineHistory call={onEngine} progress={engineProgress} />}
                   {book.notes.length > 0 && (
                     <div className="cw-saved-work">
                       <h2>Saved career work</h2>
@@ -971,10 +1053,12 @@ export function CareerWorkspace({
                       ))}
                     </div>
                   )}
-                  <p className="cw-empty">
-                    Background runs will appear here when desktop source watchers and application
-                    execution are connected. The existing web scheduler has its own run history.
-                  </p>
+                  {!onEngine && (
+                    <p className="cw-empty">
+                      Background runs will appear here when desktop source watchers and application
+                      execution are connected. The existing web scheduler has its own run history.
+                    </p>
+                  )}
                 </div>
               )}
             </>
@@ -1013,10 +1097,27 @@ export function CareerWorkspace({
         </div>
         <div className="cw-inspector-body">
           {!sample && inspector !== 'role' ? (
-            <p className="cw-empty">
-              Prepare material with your model in the assistant. No generated document is attached
-              to this record yet.
-            </p>
+            book.tailoring?.packet &&
+            book.tailoring.packet.role.id === job?.id &&
+            (inspector === 'resume' || inspector === 'letter') ? (
+              <div className="cw-native-document">
+                <h2>{inspector === 'resume' ? 'Saved resume selection' : 'Cover letter draft'}</h2>
+                <pre>
+                  {inspector === 'resume'
+                    ? book.tailoring.packet.blocks.map((b) => b.text).join('\n')
+                    : book.tailoring.packet.coverLetter}
+                </pre>
+                <button onClick={() => navigate('resumes')}>Review and export documents</button>
+              </div>
+            ) : (
+              <div className="cw-empty">
+                <p>
+                  No saved {inspector === 'video' ? 'video script' : 'document'} is attached to this
+                  role. Prepare the application material in Resumes & letters.
+                </p>
+                <button onClick={() => navigate('resumes')}>Prepare documents</button>
+              </div>
+            )
           ) : inspector === 'resume' ? (
             <>
               <div className="cw-document-control">
@@ -1110,7 +1211,15 @@ export function CareerWorkspace({
                   </button>
                 )}
               </div>
-              <button className="cw-approve" disabled={busy} onClick={() => void approveExample()}>
+              <button
+                className="cw-approve"
+                disabled={busy}
+                onClick={() => {
+                  if (!sample && onEngine) {
+                    navigate('applications');
+                  } else void approveExample();
+                }}
+              >
                 {sample ? 'Approve sample application' : 'Review application execution'}
                 <DeskIcon name="arrow" size={15} />
               </button>

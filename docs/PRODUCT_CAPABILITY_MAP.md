@@ -4,7 +4,7 @@ Updated 2026-10-23. [Executed sourcing checks](qa/DISCOVERY_REPORT.md) and [engi
 
 | Capability                                       | Landing surface                       | Current implementation                                                                                           |
 | ------------------------------------------------ | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Broad job discovery and qualification            | Post-hero scroll walkthrough          | Headless multi-source engine + retained API importer; native wiring outstanding                                  |
+| Broad job discovery and qualification            | Post-hero scroll walkthrough          | Headless engine, retained importer and native bounded search with evidence-backed shortlist                      |
 | Company watchers and role alerts                 | Dedicated Company watchers section    | Retained web watcher CRUD; generic/native polling not implemented; landing alert is a simulation                 |
 | Career facts, preferences and context            | Career Identity section               | Native confirmed facts/provenance; richer search plan proposed                                                   |
 | Natural-language career assistant                | Actual harness capture and tour       | Native managed model conversations and model-free local counts                                                   |
@@ -12,7 +12,7 @@ Updated 2026-10-23. [Executed sourcing checks](qa/DISCOVERY_REPORT.md) and [engi
 | Grounded resume tailoring and version comparison | Full document workshop + scroll story | Reviewed source import, selection, PDF storage/export; current native packet only, full history outstanding      |
 | Cover letters                                    | Document workshop                     | Grounded letters in three tones with user motivation; deeper prose rewriting outstanding                         |
 | Video requirements and preparation               | Document workshop, background task    | Sample script/checklist; automatic requirement detection proposed                                                |
-| Bounded automatic applications                   | Scroll journey and background work    | Gated Ashby API/worker, browser-fixture qualified; live form/native controls outstanding                         |
+| Bounded automatic applications                   | Scroll journey and background work    | Gated Ashby API/worker and native review/submit controls; fixture-qualified, live forms outstanding              |
 | Background work and notifications                | Background and companion              | Retained research/drafts and exact-plan Ashby worker; native worker/push outstanding                             |
 | Cold outreach and contact evidence               | Outreach pipeline/draft               | Published company evidence, native manual contact drafts; approved web Gmail sending; native sending outstanding |
 | Direct Gmail and Composio                        | Gmail connection selector             | Retained web implementations; native migration outstanding                                                       |
@@ -38,3 +38,7 @@ The landing walkthrough now has six chapters, shared green/amber/red status labe
 ## Tailoring and application verification — 2026-10-23
 
 The source-backed tailoring workflow imports reviewed documents and saves real PDFs. A synthetic local Qwen selection and intercepted Ashby browser fixture pass. See [the executed report](qa/TAILORING_APPLICATION_REPORT.md) for scope. Live submissions, native execution controls, Drive OAuth and email attachment sending remain unqualified or incomplete. This does not change the product-level NOT_READY verdict.
+
+## Native workflow integration — 2026-10-23
+
+The desktop now connects public-source discovery, evidence review, selected-role tailoring, saved PDF, explicit answers, exact approval and recorded hosted outcomes through a local coordinator. It requires installed Node/browser runtimes and remains foreground-only. See [setup](NATIVE_JOB_WORKFLOW.md) and [scoped verification](qa/NATIVE_WORKFLOW_REPORT.md). No real employer submission is claimed.

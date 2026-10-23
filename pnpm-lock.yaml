@@ -99,6 +99,9 @@ importers:
 
   apps/desktop:
     dependencies:
+      '@pursuit/career-engine':
+        specifier: workspace:*
+        version: link:../../packages/career-engine
       '@pursuit/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -258,6 +261,37 @@ importers:
         specifier: ^3.2.0
         version: 3.2.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.51.2)(tsx@4.23.15)
 
+  packages/career-engine:
+    dependencies:
+      '@pursuit/application':
+        specifier: workspace:*
+        version: link:../application
+      '@pursuit/discovery':
+        specifier: workspace:*
+        version: link:../discovery
+      '@pursuit/tailoring':
+        specifier: workspace:*
+        version: link:../tailoring
+      playwright-core:
+        specifier: ^1.55.0
+        version: 1.64.1
+      zod:
+        specifier: ^4.0.14
+        version: 4.6.7
+    devDependencies:
+      '@types/node':
+        specifier: ^24.0.0
+        version: 24.19.2
+      esbuild:
+        specifier: ^0.28.2
+        version: 0.28.2
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.0
+        version: 3.2.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.51.2)(tsx@4.23.15)
+
   packages/database:
     dependencies:
       '@prisma/client':
@@ -375,6 +409,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@pursuit/career-engine':
+        specifier: workspace:*
+        version: link:../career-engine
       '@pursuit/shared':
         specifier: workspace:*
         version: link:../shared

@@ -23,7 +23,9 @@ export function TailoringStudio({
   onModel,
   onSavePdf,
   onExportPdf,
+  initialJobId,
 }: {
+  initialJobId?: string;
   value?: TailoringState;
   opportunities: Opportunity[];
   onSave: (state: TailoringState) => Promise<boolean>;
@@ -34,7 +36,9 @@ export function TailoringStudio({
   const [draft, setDraft] = useState(value.resume?.sourceText ?? '');
   const [name, setName] = useState(value.resume?.sourceName ?? 'resume.txt');
   const [reviewed, setReviewed] = useState(Boolean(value.resume?.reviewedAt));
-  const [jobId, setJobId] = useState(opportunities[0]?.id ?? '');
+  const [jobId, setJobId] = useState(
+    initialJobId ?? value.packet?.role.id ?? opportunities[0]?.id ?? '',
+  );
   const [tone, setTone] = useState<Voice['tone']>(value.voice?.tone ?? 'professional');
   const [motivation, setMotivation] = useState(value.voice?.motivation ?? '');
   const [sample, setSample] = useState(value.voice?.writingSamples?.[0] ?? '');

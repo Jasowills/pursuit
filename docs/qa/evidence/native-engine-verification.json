@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-23",
+  "verdict": "NOT_READY_FOR_FULL_PRODUCT_RELEASE",
+  "implemented_scope": "Native bounded source search and evidence review, saved role to grounded PDF, exact Ashby answer/approval/submit controls, persisted receipts and independent pause.",
+  "checks": {
+    "discovery_tests_passed": 68,
+    "tailoring_tests_passed": 15,
+    "application_tests_passed": 12,
+    "local_coordinator_tests_passed": 10,
+    "native_local_store_tests_passed": 12,
+    "desktop_rust_tests_passed": 13,
+    "desktop_existing_opt_in_tests_ignored": 6,
+    "intercepted_application_browser_tests_passed": 1,
+    "intercepted_coordinator_browser_tests_passed": 1,
+    "scoped_automated_test_cases_passed": 132,
+    "desktop_build": "passed",
+    "web_build": "passed",
+    "built_harness_flow": "passed",
+    "workspace_typecheck_run_successful_tasks": 20
+  },
+  "evidence": {
+    "harness": "native-engine-browser.json",
+    "isolated_packaging": "native-engine-packaging.json"
+  },
+  "verified_behaviors": [
+    "Source progress reflects fixture runs, unknown eligibility remains visible",
+    "Preferences and sourced records persist across restarts",
+    "Failed providers retain diagnostics without erasing other matches",
+    "Source-backed packet and stored PDF integrity enforced",
+    "Different bytes cannot silently replace an existing packet PDF",
+    "Required and supplied optional answers validated",
+    "Default-off execution and exact payload approval",
+    "A changed posting or different application role blocks execution",
+    "Pause from a second process fences preparation and preserves daily limit",
+    "Confirmation is durable and cannot resubmit",
+    "Owned Node workers are terminated on desktop shutdown",
+    "Only HTTPS source links without credentials or obvious local targets are opened"
+  ],
+  "test_boundaries": {
+    "harness": "Built frontend and real coordinator/SQLite. Tauri IPC, source requests and application adapter simulated.",
+    "rust": "Actual Rust-to-packaged-Node process transport and process shutdown; not macOS webview IPC.",
+    "browser": "Actual Chromium with every request intercepted. No employer contact or real submission.",
+    "source_freshness": "Deterministic provider fixtures in this pass; previous live discovery evidence remains separate.",
+    "model_calls": 0,
+    "emails_sent": 0,
+    "real_applications_submitted": 0,
+    "retained_api_e2e": "Not rerun in this pass; no API-source changes. Prior executed report remains separate."
+  },
+  "fixed_findings": [
+    "Duplicate React keys retained an obsolete application panel",
+    "Asynchronous toggle reverted before its save completed",
+    "Serialized IPC could delay pause until a running form finished",
+    "Worker could outlive desktop shutdown",
+    "Stored PDF could differ from a re-registered packet rendition",
+    "Optional invalid fields could reach browser validation and ambiguous timeouts",
+    "Native PDF retrieval now rejects stored-byte corruption",
+    "Direct lookup retains access beyond recent history, with a canonical Ashby posting identity across application paths",
+    "Refreshing changed saved postings clears the stale active packet while preserving the original resume"
+  ],
+  "remaining_gates": [
+    "Live Ashby form and receipt qualification",
+    "Actual native OS-webview and cross-platform installer qualification",
+    "Public source coverage beyond the native public-board/structured-page path",
+    "Native optional indexed-search configuration and company research synchronization",
+    "Unattended always-on worker and companion relay",
+    "Gmail attachments and dedicated Drive authorization",
+    "Production authentication where applicable, resource/load qualification, retention/deletion/encryption",
+    "Existing dependency advisories tracked in the prior QA record",
+    "Reduce cold process startup overhead and measure representative end-to-end latency"
+  ]
+}

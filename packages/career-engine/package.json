@@ -1,0 +1,35 @@
+{
+  "name": "@pursuit/career-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./contracts": {
+      "types": "./dist/contracts.d.ts",
+      "import": "./dist/contracts.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && esbuild src/worker.ts --bundle --platform=node --format=cjs --external:playwright-core --outfile=dist/worker.cjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:browser": "vitest run --config vitest.browser.config.ts"
+  },
+  "dependencies": {
+    "@pursuit/discovery": "workspace:*",
+    "@pursuit/application": "workspace:*",
+    "@pursuit/tailoring": "workspace:*",
+    "zod": "^4.0.14",
+    "playwright-core": "^1.55.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.0",
+    "esbuild": "^0.28.2"
+  }
+}

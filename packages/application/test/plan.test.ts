@@ -33,3 +33,38 @@ it('requires explicit answers to unknown required questions', () => {
     }),
   ).toHaveLength(1);
 });
+
+it('validates supplied optional answers while allowing unanswered optional fields', () => {
+  const form = {
+    url: 'https://jobs.ashbyhq.com/x/y',
+    fields: [
+      {
+        id: 'email',
+        label: 'Alternate email',
+        type: 'email' as const,
+        required: false,
+        options: [],
+      },
+      {
+        id: 'updates',
+        label: 'Product updates',
+        type: 'checkbox' as const,
+        required: false,
+        options: [],
+      },
+    ],
+  };
+  const payload = {
+    personId: 'user',
+    jobUrl: form.url,
+    packetHash: 'a'.repeat(64),
+    pdfHash: 'a'.repeat(64),
+    formHash: 'a'.repeat(64),
+    answers: { email: 'not an email', updates: 'yes' },
+  };
+  expect(missingAnswers(form, payload).map((f) => f.id)).toEqual(['email', 'updates']);
+  expect(missingAnswers(form, { ...payload, answers: {} })).toEqual([]);
+  expect(
+    missingAnswers(form, { ...payload, answers: { email: 'alex@example.com', updates: false } }),
+  ).toEqual([]);
+});

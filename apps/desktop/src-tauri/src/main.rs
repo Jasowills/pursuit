@@ -1,4 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+mod career_engine;
 
 mod connections;
 mod live;
@@ -133,6 +134,7 @@ fn export_resume_pdf(
 fn main() {
     tauri::Builder::default()
         .manage(managed::ManagedRuntime::default())
+        .manage(career_engine::CareerEngineState::default())
         .setup(|app| {
             let folder = app.path().app_data_dir()?;
             std::fs::create_dir_all(&folder)?;
@@ -141,6 +143,11 @@ fn main() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            career_engine::career_engine_settings,
+            career_engine::career_engine_pause,
+            career_engine::open_career_source,
+            career_engine::save_career_engine_settings,
+            career_engine::career_engine_call,
             workspace,
             career_book,
             save_resume_pdf,
@@ -172,6 +179,7 @@ fn main() {
         .expect("Pursuit could not start")
         .run(|app, event| {
             if matches!(event, tauri::RunEvent::Exit) {
+                app.state::<career_engine::CareerEngineState>().shutdown();
                 if let Ok(mut runtime) = app.state::<managed::ManagedRuntime>().0.lock() {
                     drop(runtime.take());
                 }

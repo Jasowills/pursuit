@@ -72,5 +72,8 @@ jobs:
       - name: Ashby hosted-form fixture
         run: pnpm --filter @pursuit/application test:browser
 
+      - name: Native coordinator browser fixture
+        run: pnpm --filter @pursuit/career-engine test:browser
+
       - name: Format check
         run: pnpm format:check

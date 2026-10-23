@@ -1,5 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
+import { EngineSetup } from './engine-setup';
+import { listen } from '@tauri-apps/api/event';
+import type { EngineClient, EngineProgress } from '@pursuit/career-engine/contracts';
 import { invoke, isTauri } from '@tauri-apps/api/core';
 import {
   CareerWorkspace,
@@ -16,8 +19,59 @@ import { AgentWorkspace } from './agent';
 function App() {
   const [book, setBook] = useState<CareerBook>(EMPTY_BOOK);
   const [tour, setTour] = useState(new URLSearchParams(location.search).get('tour') === '1');
-  const [settings, setSettings] = useState<'identity' | 'models' | 'agent' | null>(null);
+  const [settings, setSettings] = useState<'identity' | 'models' | 'agent' | 'engine' | null>(null);
   const [error, setError] = useState('');
+  const [engineWorking, setEngineWorking] = useState(false);
+  const [engineProgress, setEngineProgress] = useState<EngineProgress>();
+  const engineQueue = useRef<Promise<unknown>>(Promise.resolve());
+  const engineRequests = useRef(0);
+  const engineCall: EngineClient = useCallback((request, onProgress) => {
+    engineRequests.current++;
+    setEngineWorking(true);
+    const task = engineQueue.current
+      .catch(() => {})
+      .then(async () => {
+        if (!isTauri()) throw Error('Open the native desktop app to use the local engine.');
+        const requestId = crypto.randomUUID();
+        setEngineProgress(undefined);
+        const unlisten = await listen<{ requestId: string; event: EngineProgress }>(
+          'career-engine-progress',
+          (event) => {
+            if (event.payload.requestId === requestId) {
+              setEngineProgress(event.payload.event);
+              onProgress?.(event.payload.event);
+            }
+          },
+        );
+        try {
+          return await invoke('career_engine_call', { requestId, request });
+        } catch (error) {
+          throw new Error(String(error).replace(/_/g, ' '));
+        } finally {
+          await Promise.resolve(unlisten()).catch(() => {});
+        }
+      })
+      .finally(() => {
+        engineRequests.current--;
+        setEngineWorking(engineRequests.current > 0);
+      });
+    engineQueue.current = task;
+    return task;
+  }, []);
+  useEffect(() => {
+    if (!isTauri()) return;
+    const open = (event: MouseEvent) => {
+      const link = (event.target as HTMLElement).closest?.(
+        '.career-workspace a[target="_blank"]',
+      ) as HTMLAnchorElement | null;
+      if (link) {
+        event.preventDefault();
+        void invoke('open_career_source', { url: link.href }).catch((e) => setError(String(e)));
+      }
+    };
+    document.addEventListener('click', open, true);
+    return () => document.removeEventListener('click', open, true);
+  }, []);
   const [ready, setReady] = useState(false);
   const settingsDialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -101,7 +155,28 @@ function App() {
               ? 'Your workspace is saved on this device.'
               : 'Desktop interface preview'}
         </span>
-        {!tour && <button onClick={() => setTour(true)}>Explore sample workspace</button>}
+        {!tour && (
+          <>
+            <button disabled={engineWorking} onClick={() => setTour(true)}>
+              Explore sample workspace
+            </button>
+            {isTauri() && (
+              <button
+                onClick={() =>
+                  void invoke('career_engine_pause')
+                    .then(() =>
+                      setError(
+                        'Pending applications paused and approvals revoked. A submission already sent may still complete; check Background work.',
+                      ),
+                    )
+                    .catch((e) => setError(String(e)))
+                }
+              >
+                Pause pending applications
+              </button>
+            )}
+          </>
+        )}
         {error && <span role="alert">{error}</span>}
       </div>
       <CareerWorkspace
@@ -110,6 +185,9 @@ function App() {
         sample={tour}
         connected={isTauri()}
         onSave={save}
+        onEngine={isTauri() && !tour ? engineCall : undefined}
+        engineProgress={engineProgress}
+        onEngineSetup={() => setSettings('engine')}
         onSavePdf={
           isTauri()
             ? (hash, bytes) => invoke('save_resume_pdf', { hash, bytes: Array.from(bytes) })
@@ -142,7 +220,9 @@ function App() {
                 ? 'Career Identity'
                 : settings === 'models'
                   ? 'Models & connections'
-                  : 'Agent workspace'
+                  : settings === 'engine'
+                    ? 'Sourcing & execution setup'
+                    : 'Agent workspace'
             }
           >
             <header>
@@ -151,7 +231,9 @@ function App() {
                   ? 'Career Identity'
                   : settings === 'models'
                     ? 'Models & connections'
-                    : 'Agent workspace'}
+                    : settings === 'engine'
+                      ? 'Sourcing & execution setup'
+                      : 'Agent workspace'}
               </strong>
               <button aria-label="Close settings" onClick={() => settingsDialog.current?.close()}>
                 <DeskIcon name="close" />
@@ -175,7 +257,9 @@ function App() {
               </div>
             ) : (
               <div className="desktop-settings-content">
-                {settings === 'identity' ? (
+                {settings === 'engine' ? (
+                  <EngineSetup />
+                ) : settings === 'identity' ? (
                   <CareerIdentity />
                 ) : settings === 'models' ? (
                   <Models />

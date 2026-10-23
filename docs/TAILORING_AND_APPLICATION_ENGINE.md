@@ -92,7 +92,7 @@ Do not enable these on a public production service based only on the fixture run
 | `POST /application-execution/plans/:id/run`       | Execute an authorized plan when operator configuration permits            |
 | `GET /application-execution/plans`                | Owner's persisted states and errors                                       |
 
-These paths have `/api/v1` prefix. The execution controls are backend APIs; a complete native execution setup/review screen is not connected yet. No policy grant currently authorizes generation/submission of arbitrary newly discovered roles. Exact-payload review is required for this initial executor. Email applications remain a separate reviewed path; PDF attachment sending is not implemented in the current Gmail workflow. The resolver must not silently substitute a text-only email for an application requiring attachments.
+These paths have `/api/v1` prefix. The retained execution controls remain backend APIs. A separate [native local coordinator](NATIVE_JOB_WORKFLOW.md) now connects desktop setup, sourcing and exact application review without the retained API account. Both reuse the bounded queue/adapter modules; live form qualification is still outstanding. No policy grant currently authorizes generation/submission of arbitrary newly discovered roles. Exact-payload review is required for this initial executor. Email applications remain a separate reviewed path; PDF attachment sending is not implemented in the current Gmail workflow. The resolver must not silently substitute a text-only email for an application requiring attachments.
 
 ## Worker invariants
 
@@ -113,3 +113,5 @@ The harness's selected-role panel now keeps user-reviewed contact/source links a
 ## Verification
 
 See [executed tailoring/application QA](qa/TAILORING_APPLICATION_REPORT.md), the [fictional generated PDF](../output/pdf/tailored-resume-example.pdf), and the primary-source research linked above. The UI preview, PDF text round-trip, native SQLite tests, API authorization tests, local Ollama check and intercepted Ashby fixture cover different boundaries; none should be presented as a complete real-world application test.
+
+Native integration follow-up: [workflow and runtime setup](NATIVE_JOB_WORKFLOW.md), [executed verification](qa/NATIVE_WORKFLOW_REPORT.md).

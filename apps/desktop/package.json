@@ -5,17 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "pnpm engine:bundle && tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "desktop": "tauri",
-    "desktop:dev": "tauri dev",
-    "desktop:build": "tauri build"
+    "desktop:dev": "pnpm engine:bundle && tauri dev",
+    "desktop:build": "tauri build",
+    "engine:bundle": "pnpm --filter @pursuit/career-engine... build && node scripts/bundle-engine.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@pursuit/ui": "workspace:*"
+    "@pursuit/ui": "workspace:*",
+    "@pursuit/career-engine": "workspace:*"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.0.0",

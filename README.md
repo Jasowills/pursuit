@@ -14,31 +14,37 @@ The headless discovery engine fetches Greenhouse, Ashby, Lever, Workable and Him
 pnpm discovery hunt packages/discovery/examples/profile.json
 ```
 
-Replace the synthetic profile first. This CLI and the expanded retained API importer are working code; native harness integration, broad social-platform access and complete international eligibility remain unfinished. See [setup, source coverage and limits](docs/DISCOVERY_ENGINE.md) and the [executed QA report](docs/qa/DISCOVERY_REPORT.md).
+Replace the synthetic profile first. This CLI and the expanded retained API importer are working code; the native bounded-search path is connected, while broad social-platform access and complete international eligibility remain unfinished. See [setup, source coverage and limits](docs/DISCOVERY_ENGINE.md) and the [executed QA report](docs/qa/DISCOVERY_REPORT.md).
+
+## Native sourcing and application review
+
+Open **Opportunities → Engine setup** in the desktop app. With Node 22.13+ installed, set your search preferences, add public employer sources, run a bounded search and save roles with their match evidence. Search and matching do not call a model or require the web API.
+
+The harness now connects a saved role to reviewed tailoring, its saved PDF, Ashby form inspection, explicit answers, exact approval, a separate submit action and recorded outcome. Execution is off by default and requires an installed compatible browser. Live employer forms remain unqualified. See [setup and workflow](docs/NATIVE_JOB_WORKFLOW.md) and [executed verification](docs/qa/NATIVE_WORKFLOW_REPORT.md).
 
 ## Resume tailoring and application work
 
 The native **Resumes & letters** studio imports text PDFs, DOCX and text; requires extraction review; selects source-backed experience; offers three introduction tones; and saves/exports actual PDFs. No model call is required. The retained API also stores original documents and PDF versions with owner checks. A live Qwen 2.5 7B selection test used 183 input and 24 output tokens.
 
-The first Ashby hosted-form executor and persistent worker are implemented behind operator configuration. The source-to-PDF-to-form fixture passes without contacting an employer; live Ashby qualification and native execution controls remain unfinished. Company research returns published source evidence, and the harness keeps copyable follow-up drafts with a role.
+The first Ashby hosted-form executor and persistent worker are implemented behind operator configuration. The source-to-PDF-to-form fixture passes without contacting an employer; live Ashby qualification remains unfinished; native review controls now use the local coordinator. Company research returns published source evidence, and the harness keeps copyable follow-up drafts with a role.
 
 See [setup and exact boundaries](docs/TAILORING_AND_APPLICATION_ENGINE.md), [executed checks](docs/qa/TAILORING_APPLICATION_REPORT.md), and the [fictional PDF example](output/pdf/tailored-resume-example.pdf).
 
 ## What works today
 
-| Capability                                  | Desktop                                                          | Retained web/API                                              |
-| ------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------- |
-| Career facts, preferences and local records | SQLite career book and identity                                  | Tenant-scoped Postgres profile and records                    |
-| Assistant conversation                      | Managed, tool-denied OpenCode with BYOM; Ollama verified locally | Earlier agent adapter/prototype                               |
-| Job intake                                  | Paste and save a posting                                         | Manual intake; multi-ATS/Himalayas/page importer              |
-| Resume and cover-letter drafting            | Reviewed source selection and saved PDF export                   | Source-backed packets, original documents and saved PDFs      |
-| Watchers                                    | No watcher executor                                              | Configuration CRUD; no polling executor                       |
-| Scheduled work                              | No background sourcing/application worker                        | Research/preparation; optional exact-plan Ashby worker        |
-| Automatic applications                      | **Not implemented**                                              | Gated Ashby executor; fixture-qualified, not live-qualified   |
-| Gmail                                       | Not connected to native workspace                                | Direct Google OAuth or Composio; exact saved-message approval |
-| Mobile companion                            | No pairing/relay transport                                       | Expo prototype; no released phone companion                   |
+| Capability                                  | Desktop                                                               | Retained web/API                                              |
+| ------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Career facts, preferences and local records | SQLite career book and identity                                       | Tenant-scoped Postgres profile and records                    |
+| Assistant conversation                      | Managed, tool-denied OpenCode with BYOM; Ollama verified locally      | Earlier agent adapter/prototype                               |
+| Job intake                                  | Bounded public-source search; save sourced or pasted postings         | Manual intake; multi-ATS/Himalayas/page importer              |
+| Resume and cover-letter drafting            | Reviewed source selection and saved PDF export                        | Source-backed packets, original documents and saved PDFs      |
+| Watchers                                    | No watcher executor                                                   | Configuration CRUD; no polling executor                       |
+| Scheduled work                              | No background sourcing/application worker                             | Research/preparation; optional exact-plan Ashby worker        |
+| Automatic applications                      | Gated local Ashby executor; individually approved, not live-qualified | Gated Ashby executor; fixture-qualified, not live-qualified   |
+| Gmail                                       | Not connected to native workspace                                     | Direct Google OAuth or Composio; exact saved-message approval |
+| Mobile companion                            | No pairing/relay transport                                            | Expo prototype; no released phone companion                   |
 
-The intended 100-applications/day ceiling, broad global discovery and optional user-hosted always-on worker are design decisions, not current execution guarantees. Indeed/Glassdoor and arbitrary job-board scraping are not implemented. There is no universal applicant-tracking-system submission adapter.
+The queue enforces a ceiling of up to 100 attempts per UTC day; this does not guarantee 100 eligible or completed applications. Broad global discovery and the optional user-hosted always-on worker still require further integration and qualification. Indeed/Glassdoor and arbitrary job-board scraping are not implemented. There is no universal applicant-tracking-system submission adapter.
 
 ## Desktop quick start
 
@@ -135,6 +141,7 @@ packages/local-store Rust SQLite records and migrations
 packages/discovery   Headless sourcing, verification, company research and ranking
 packages/tailoring   Portable source-backed resume engine, imports and PDF rendering
 packages/application Bounded Ashby adapter and durable application queue
+packages/career-engine Local coordinator and packaged native worker
 packages/ui          Shared career workspace and visual components
 packages/shared      Zod contracts, matching and transition rules
 packages/agent-core  Runtime boundary and agent contracts

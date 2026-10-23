@@ -8,6 +8,7 @@ export type Opportunity = {
   status: 'Review' | 'Prepared' | 'Applied' | 'Video needed';
   reason: string;
   posting: string;
+  discovery?: import('@pursuit/career-engine/contracts').SourcedOpportunity['discovery'];
   confirmation?: string;
   contacts?: { name: string; role: string; sourceUrl: string; channel: string; message: string }[];
 };

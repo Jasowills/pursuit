@@ -53,6 +53,12 @@ export class ApplicationQueue {
         )
         .run();
   }
+  async find(personId: string, jobUrl: string) {
+    const identity = await digest(personId + '\0' + canonicalUrl(jobUrl));
+    const row = this.db.prepare('SELECT id FROM apply_jobs WHERE identity=?').get(identity) as
+      { id: string } | undefined;
+    return row ? this.get(row.id) : undefined;
+  }
   async add(input: unknown) {
     const payload = Payload.parse(input);
     const identity = await digest(payload.personId + '\0' + canonicalUrl(payload.jobUrl));

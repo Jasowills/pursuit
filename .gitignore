@@ -39,3 +39,6 @@ apps/desktop/src-tauri/gen/
 .impeccable/build/
 .impeccable/mocks/
 __pycache__/
+
+# Packaged local career-engine runtime
+apps/desktop/engine/

@@ -795,3 +795,35 @@ button.secondary:hover:enabled {
 .desktop-settings-dialog .desktop-settings {
   max-width: 95vw;
 }
+.desktop-engine-setup {
+  max-width: 680px;
+  padding: 24px;
+  color: #ddd;
+}
+.desktop-engine-setup p {
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.desktop-engine-setup label {
+  display: block;
+  font-size: 13px;
+  margin: 20px 0;
+}
+.desktop-engine-setup input:not([type='checkbox']) {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+  padding: 12px;
+  color: #eee;
+  background: #101010;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+.desktop-engine-setup button {
+  padding: 12px 18px;
+  background: #d7f780;
+  border: 0;
+  border-radius: 6px;
+}

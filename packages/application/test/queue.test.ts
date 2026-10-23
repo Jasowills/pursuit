@@ -168,3 +168,15 @@ it('does not submit when authorization expires while filling the form', async ()
     vi.useRealTimers();
   }
 });
+
+it('looks up an application independently of the recent-history window', async () => {
+  const { queue, row } = await setup();
+  try {
+    for (let i = 0; i < 101; i++)
+      await queue.add({ ...row.payload, jobUrl: `https://jobs.ashbyhq.com/example/older-${i}` });
+    expect((await queue.find('user', form.url))?.id).toBe(row.id);
+    expect(await queue.find('another-user', form.url)).toBeUndefined();
+  } finally {
+    queue.close();
+  }
+});

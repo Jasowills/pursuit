@@ -103,11 +103,16 @@ impl Store {
         if hash.len() != 64 || !hash.bytes().all(|c| c.is_ascii_hexdigit()) {
             return Err(rusqlite::Error::InvalidQuery);
         }
-        self.connection.query_row(
+        let bytes: Vec<u8> = self.connection.query_row(
             "SELECT body FROM career_artifacts WHERE id=?1",
             [hash],
             |r| r.get(0),
-        )
+        )?;
+        use sha2::{Digest, Sha256};
+        if format!("{:x}", Sha256::digest(&bytes)) != hash {
+            return Err(rusqlite::Error::InvalidQuery);
+        }
+        Ok(bytes)
     }
 }
 
@@ -130,5 +135,13 @@ mod artifact_tests {
         let store = Store::open(&path).unwrap();
         assert_eq!(store.resume_pdf(&hash).unwrap(), bytes);
         assert!(store.resume_pdf("../../escape").is_err());
+        store
+            .connection
+            .execute(
+                "UPDATE career_artifacts SET body=?1 WHERE id=?2",
+                params![b"%PDF-corrupted".as_slice(), hash],
+            )
+            .unwrap();
+        assert!(store.resume_pdf(&hash).is_err());
     }
 }

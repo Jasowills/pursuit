@@ -27,7 +27,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.0.2",
-    "@pursuit/tailoring": "workspace:*"
+    "@pursuit/tailoring": "workspace:*",
+    "@pursuit/career-engine": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18"

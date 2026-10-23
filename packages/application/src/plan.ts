@@ -21,10 +21,11 @@ export async function payloadHash(payload: unknown) {
 export function missingAnswers(form: Form, payload: Payload): Field[] {
   return form.fields.filter((field) => {
     if (field.type === 'file') return field.required && !/resume|cv/i.test(field.label);
-    if (!field.required) return false;
     const answer = payload.answers[field.id];
-    if (answer === undefined || answer === '' || (field.type === 'checkbox' && answer !== true))
-      return true;
+    if (answer === undefined || answer === '') return field.required;
+    if (field.type === 'checkbox')
+      return typeof answer !== 'boolean' || (field.required && !answer);
+    if (typeof answer !== 'string' || (field.required && !answer.trim())) return true;
     if (field.type === 'email' && !z.email().safeParse(answer).success) return true;
     if (field.type === 'url' && !z.url().safeParse(answer).success) return true;
     if (field.type === 'select' && !field.options.includes(String(answer))) return true;
