@@ -2,6 +2,8 @@
 
 **Verdict: NOT_READY for a public production release. Estimated readiness: 5/10.** This is an engineering judgment requested by the user, not a test pass rate, security certification, reliability probability or hiring-success score. The product has useful developer-alpha workflows; it still needs live and operational qualification.
 
+See the [production-hardening follow-up](hardening-followup.md) for subsequent scoped dependency fixes, their consumer checks, the remaining node-forge advisory and another failed real Qwen quality evaluation. Counts below describe the original review baseline.
+
 ## What changed
 
 - Removed Companion advertising from the landing section, navigation, footer, download area and walkthrough link. Dormant source remains for a future version.

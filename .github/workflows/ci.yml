@@ -55,6 +55,9 @@ jobs:
       - name: Apply database migrations
         run: pnpm db:migrate
 
+      - name: Security override consumer compatibility
+        run: node --test scripts/qa/dependency-compatibility.mjs
+
       - name: Build (packages, API, web)
         run: pnpm build
 

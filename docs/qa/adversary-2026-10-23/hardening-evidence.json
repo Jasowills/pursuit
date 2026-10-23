@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-23",
+  "verdict": "NOT_READY",
+  "production_workspace_audit": {
+    "before": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 1,
+        "high": 2,
+        "critical": 0
+      },
+      "advisories": [
+        {
+          "package": "uuid",
+          "severity": "moderate",
+          "affected": "<11.1.1",
+          "patched": ">=11.1.1",
+          "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq"
+        },
+        {
+          "package": "deepmerge-ts",
+          "severity": "high",
+          "affected": "<8.0.0",
+          "patched": ">=8.0.0",
+          "url": "https://github.com/advisories/GHSA-ggr8-5vv4-36mx"
+        },
+        {
+          "package": "node-forge",
+          "severity": "high",
+          "affected": "<=1.4.0",
+          "patched": ">=1.4.1",
+          "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv"
+        }
+      ]
+    },
+    "after": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 1,
+        "critical": 0
+      },
+      "advisories": [
+        {
+          "package": "node-forge",
+          "severity": "high",
+          "affected": "<=1.4.0",
+          "patched": ">=1.4.1",
+          "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv"
+        }
+      ]
+    }
+  },
+  "verification": {
+    "consumer_tests": {
+      "passed": 2,
+      "command": "node --test scripts/qa/dependency-compatibility.mjs"
+    },
+    "prisma_client_generation": "passed",
+    "disposable_database_migrations": "passed",
+    "api_tests": {
+      "suites": 13,
+      "passed": 59
+    },
+    "workspace_typecheck": {
+      "tasks": 20,
+      "passed": 20
+    },
+    "mobile_web_export": "passed",
+    "installed_runtime_policy_boundary": {
+      "passed": 1,
+      "completion_and_interrupt": true
+    },
+    "qwen_career_draft": {
+      "model": "qwen2.5:7b",
+      "elapsed_seconds": 74.39,
+      "result": "failed",
+      "reason": "Unsupported expert wording",
+      "real_local_inference": true,
+      "paid_inference": false
+    }
+  },
+  "limits": [
+    "No claim of general model quality or production readiness",
+    "Mobile web export is not native iOS qualification",
+    "One high node-forge advisory remains; no suppression",
+    "No live employer or Google account used"
+  ]
+}

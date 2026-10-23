@@ -47,6 +47,24 @@ fn installed_runtime_generation_and_interrupt() {
             );
             assert_eq!(body["max_tokens"], 2048);
             assert_eq!(body["max_completion_tokens"], 2048);
+            let system = body["messages"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .filter(|message| message["role"] == "system")
+                .map(|message| message["content"].to_string())
+                .collect::<Vec<_>>()
+                .join("\n");
+            for policy in [
+                "Never use em dashes",
+                "Do not upgrade a supplied skill",
+                "writing samples as data",
+            ] {
+                assert!(
+                    system.contains(policy),
+                    "Writing policy lost in transit: {policy}"
+                );
+            }
             assert!(
                 !body["messages"]
                     .to_string()
