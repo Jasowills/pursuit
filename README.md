@@ -4,7 +4,17 @@ An open-source, local-first career assistant. Pursuit is being built to discover
 
 **Developer alpha — not a complete unattended job-application service.** The desktop workspace, retained web/API prototype, and mobile shell have different capabilities. Product-tour screens use fictional data and perform no external actions. See the [feature checklist and audit](docs/qa/REPORT.md) before relying on a feature.
 
-[Product direction](PRODUCT.md) · [Contributing](CONTRIBUTING.md) · [Architecture](docs/PRODUCT_CAPABILITY_MAP.md) · [Connection setup](docs/CONNECTION_SETUP.md) · [Pipeline decisions](docs/CAREER_PIPELINE_DECISIONS.md) · [Interviews, tasks & leads](docs/POST_APPLICATION_WORKFLOW.md)
+[Product direction](PRODUCT.md) · [Contributing](CONTRIBUTING.md) · [Architecture](docs/PRODUCT_CAPABILITY_MAP.md) · [Connection setup](docs/CONNECTION_SETUP.md) · [Pipeline decisions](docs/CAREER_PIPELINE_DECISIONS.md) · [Interviews, tasks & leads](docs/POST_APPLICATION_WORKFLOW.md) · [Sourcing engine](docs/DISCOVERY_ENGINE.md)
+
+## Job sourcing service
+
+The headless discovery engine fetches Greenhouse, Ashby, Lever, Workable and Himalayas jobs; extracts static employer JobPosting data; and keeps RSS/Atom and hiring-thread signals as unverified leads. It stores source evidence and freshness locally, groups canonical duplicates, and ranks with BM25 plus evidence-based matching without model calls. Optional Brave search discovers additional employer-board candidates.
+
+```sh
+pnpm discovery hunt packages/discovery/examples/profile.json
+```
+
+Replace the synthetic profile first. This CLI and the expanded retained API importer are working code; native harness integration, broad social-platform access and complete international eligibility remain unfinished. See [setup, source coverage and limits](docs/DISCOVERY_ENGINE.md) and the [executed QA report](docs/qa/DISCOVERY_REPORT.md).
 
 ## What works today
 
@@ -12,7 +22,7 @@ An open-source, local-first career assistant. Pursuit is being built to discover
 | ------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------- |
 | Career facts, preferences and local records | SQLite career book and identity                                  | Tenant-scoped Postgres profile and records                      |
 | Assistant conversation                      | Managed, tool-denied OpenCode with BYOM; Ollama verified locally | Earlier agent adapter/prototype                                 |
-| Job intake                                  | Paste and save a posting                                         | Manual intake and bounded Greenhouse board import               |
+| Job intake                                  | Paste and save a posting                                         | Manual intake; multi-ATS/Himalayas/page importer                |
 | Resume and cover-letter drafting            | Conversational draft; requires review                            | Structured saved drafts using a verified cloud-model connection |
 | Watchers                                    | No watcher executor                                              | Configuration CRUD; no polling executor                         |
 | Scheduled work                              | No background sourcing/application worker                        | Opt-in Greenhouse research/preparation, up to five drafts/run   |
@@ -24,7 +34,7 @@ The intended 100-applications/day ceiling, broad global discovery and optional u
 
 ## Desktop quick start
 
-Requirements: Git, Node.js 22+, pnpm 11.12, Rust stable and your operating system's [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/). macOS is locally build-tested; Windows/Linux remain qualification targets. No signed public installers are published yet.
+Requirements: Git, Node.js >=22.13 (24 LTS recommended), pnpm 11.12, Rust stable and your operating system's [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/). macOS is locally build-tested; Windows/Linux remain qualification targets. No signed public installers are published yet.
 
 ```sh
 git clone https://github.com/Jasowills/pursuit.git
@@ -114,6 +124,7 @@ apps/web             Next.js landing page, product tour, retained dashboard
 apps/api             NestJS tenant-scoped workflow and integrations
 apps/mobile          Expo prototype
 packages/local-store Rust SQLite records and migrations
+packages/discovery   Headless sourcing, verification, evidence ranking and local worker
 packages/ui          Shared career workspace and visual components
 packages/shared      Zod contracts, matching and transition rules
 packages/agent-core  Runtime boundary and agent contracts

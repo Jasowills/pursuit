@@ -1,3 +1,4 @@
+import { DiscoveryService, type DiscoveryRequest } from './discovery.service';
 import {
   BadGatewayException,
   BadRequestException,
@@ -48,6 +49,7 @@ export class WorkflowService {
     private readonly connections: ConnectionsService,
     private readonly gmail: GmailService,
     private readonly careers: CareersService,
+    private readonly discovery: DiscoveryService,
   ) {}
 
   async list(a: SessionPrincipal): Promise<WorkflowDraft[]> {
@@ -66,46 +68,51 @@ export class WorkflowService {
   }
 
   async discover(a: SessionPrincipal, board: string) {
+    return this.discoverSource(a, { provider: 'greenhouse', board, region: 'us' });
+  }
+  async discoverSource(a: SessionPrincipal, input: DiscoveryRequest) {
     await this.careers.getProfile(a.userId, a.tenantId);
-    const res = await fetch(
-      `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(board)}/jobs?content=true`,
-      {
-        redirect: 'error',
-        signal: AbortSignal.timeout(20000),
-      },
-    ).catch(() => {
-      throw new BadGatewayException({ error: 'job_source_unreachable' });
-    });
-    if (!res.ok)
-      throw new BadGatewayException({ error: 'job_source_failed', provider_status: res.status });
-    const data = z
-      .object({
-        jobs: z
-          .array(
-            z.object({
-              id: z.number(),
-              title: z.string(),
-              absolute_url: z.string().url(),
-              location: z.object({ name: z.string() }),
-              content: z.string().optional(),
-            }),
-          )
-          .max(10000),
-      })
-      .parse(await res.json());
-    const selected = data.jobs.slice(0, 25);
+    const { source, poll } = await this.discovery.fetch(input);
     const items = [];
-    for (const job of selected) {
-      const result = await this.careers.intakeJob(a.tenantId, {
-        company_name: board,
-        title: job.title,
-        source_url: job.absolute_url,
-        location: job.location.name,
-        description: (job.content ?? '').replace(/<[^>]*>/g, ' ').slice(0, 40000),
-      });
-      items.push(result);
+    for (const job of poll.jobs) {
+      const result = await this.careers.intakeJob(
+        a.tenantId,
+        {
+          company_name: job.company,
+          title: job.title,
+          source_url: job.sourceUrl,
+          location: job.location,
+          description: job.description,
+          posting_id: job.externalId,
+          remote_restrictions: job.countryEvidence
+            ? job.applicantCountries.join(', ') || job.countryEvidence
+            : null,
+          compensation: job.compensation ? JSON.stringify(job.compensation) : null,
+        },
+        {
+          userId: a.userId,
+          source: {
+            kind: source.provider,
+            baseUrl: source.url ?? job.evidence.url,
+            externalId: job.externalId,
+            observedAt: job.evidence.observedAt,
+            raw: job.raw,
+            evidence: job.evidence,
+            attribution: job.attribution,
+            validThrough: job.validThrough,
+          },
+        },
+      );
+      if (result.job.status !== 'CLOSED') items.push(result);
     }
-    return { items, total_available: data.jobs.length, imported: items.length, limit: 25 };
+    return {
+      items,
+      total_available: poll.complete ? poll.jobs.length : null,
+      imported: items.length,
+      limit: 5000,
+      complete: poll.complete,
+      diagnostics: poll.diagnostics,
+    };
   }
 
   async prepare(

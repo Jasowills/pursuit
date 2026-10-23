@@ -1,0 +1,58 @@
+{
+  "performed_on": "2026-10-23",
+  "scope": "Source inspection plus deterministic probes on freshly compiled shared source. Synthetic profiles, no external requests or database mutations.",
+  "baseline": "26 existing shared tests passed; some assert unsafe placeholder behavior.",
+  "probes": [
+    {
+      "name": "US-only role with Nigerian authorization",
+      "expected": "Must not confirm eligibility",
+      "actual": {
+        "eligibility": "VERIFIED_ELIGIBLE",
+        "hard_failures": [],
+        "eligibility_evidence": [
+          "work_authorization_verified",
+          "role_family_match:software engineer"
+        ]
+      }
+    },
+    {
+      "name": "US citizen and no sponsorship required/provided",
+      "expected": "No sponsorship language alone must not exclude an authorized citizen",
+      "actual": {
+        "eligibility": "INELIGIBLE",
+        "hard_failures": ["mentions_unavailable_sponsorship_with_verified_restriction"],
+        "eligibility_evidence": ["work_authorization_verified"]
+      }
+    },
+    {
+      "name": "Hard exclusion plus restrictive sponsorship without verified authorization",
+      "expected": "Hard exclusion must remain ineligible",
+      "actual": {
+        "eligibility": "UNKNOWN",
+        "hard_failures": ["matches_hard_exclusion:defense"],
+        "eligibility_evidence": ["restrictive_visa_language_without_verified_profile"]
+      }
+    },
+    {
+      "name": "Seniority-distinct fingerprint",
+      "expected": "Must not use this fingerprint as unique job identity",
+      "actual": {
+        "senior": "acme:software engineer",
+        "junior": "acme:software engineer"
+      }
+    },
+    {
+      "name": "C++ and C# fingerprint",
+      "expected": "Distinct specialties must not collapse as identity",
+      "actual": {
+        "cpp": "acme:c engineer",
+        "csharp": "acme:c engineer"
+      }
+    },
+    {
+      "name": "Non-Latin title",
+      "expected": "Preserve multilingual role identity",
+      "actual": "acme:"
+    }
+  ]
+}

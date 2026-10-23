@@ -2,6 +2,8 @@
 
 Discussion draft, 2026-10-22. This records product decisions and an implementation proposal, not capabilities already delivered. Source findings and references: [job-hunting research](research/job-hunting-pipeline.md). Current native behavior: [career workspace](CAREER_WORKSPACE.md).
 
+Implementation update, 2026-10-23: global discovery is the chosen direction. The first [headless sourcing engine and retained API importer](DISCOVERY_ENGINE.md) now exist, including source snapshots, bounded polling and evidence ranking. Desktop integration and production coverage remain unfinished. The model-spend ceiling is still undecided.
+
 ## Decisions confirmed in this discussion
 
 - Prioritize broad coverage while enforcing eligibility and daily limits.

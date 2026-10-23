@@ -39,11 +39,11 @@ describe('evaluateEligibility', () => {
     expect(res.eligibility).toBe('UNKNOWN');
   });
 
-  it('returns INELIGIBLE when verified authorization conflicts with sponsorship restriction', () => {
+  it('does not reject an authorized citizen merely because sponsorship is unavailable', () => {
     const res = evaluateEligibility({
       job: {
         title: 'Software Engineer',
-        location: null,
+        location: 'United States',
         remote_restrictions: null,
         description: 'No sponsorship provided.',
         compensation: null,
@@ -53,7 +53,7 @@ describe('evaluateEligibility', () => {
         work_authorization: [{ jurisdiction: 'US', status: 'CITIZEN', verified: true }],
       },
     });
-    expect(res.eligibility).toBe('INELIGIBLE');
+    expect(res.eligibility).toBe('VERIFIED_ELIGIBLE');
   });
 
   it('UNKNOWN when role family does not match', () => {
@@ -74,7 +74,7 @@ describe('evaluateEligibility', () => {
     const res = evaluateEligibility({
       job: {
         title: 'Software Engineer',
-        location: null,
+        location: 'United States',
         remote_restrictions: null,
         description: 'build software',
         compensation: null,
@@ -87,7 +87,7 @@ describe('evaluateEligibility', () => {
     expect(res.eligibility).toBe('VERIFIED_ELIGIBLE');
   });
 
-  it('POSSIBLY_ELIGIBLE without verified evidence but matching family', () => {
+  it('UNKNOWN when only role relevance is established', () => {
     const res = evaluateEligibility({
       job: {
         title: 'Software Engineer',
@@ -98,7 +98,7 @@ describe('evaluateEligibility', () => {
       },
       profile: baseProfile,
     });
-    expect(res.eligibility).toBe('POSSIBLY_ELIGIBLE');
+    expect(res.eligibility).toBe('UNKNOWN');
   });
 });
 
@@ -127,5 +127,69 @@ describe('baselineFitScore', () => {
     );
     expect(res.score).toBe(0);
     expect(res.rationale).toContain('no direct skill evidence');
+  });
+});
+
+describe('geographic safety regressions', () => {
+  it('does not qualify a US-only remote role with unrelated Nigerian authorization', () => {
+    const result = evaluateEligibility({
+      job: {
+        title: 'Software Engineer',
+        location: 'United States',
+        remote_restrictions: 'US residents only',
+        description: 'Build systems',
+        compensation: null,
+      },
+      profile: {
+        ...baseProfile,
+        work_authorization: [{ jurisdiction: 'NG', status: 'CITIZEN', verified: true }],
+      },
+    });
+    expect(result.eligibility).toBe('UNKNOWN');
+  });
+  it('preserves hard exclusion failures even when visa language is ambiguous', () => {
+    const result = evaluateEligibility({
+      job: {
+        title: 'Software Engineer',
+        location: null,
+        remote_restrictions: null,
+        description: 'Defense. No sponsorship provided.',
+        compensation: null,
+      },
+      profile: { ...baseProfile, hard_exclusions: ['Defense'] },
+    });
+    expect(result.eligibility).toBe('INELIGIBLE');
+  });
+  it('does not interpret positive sponsorship language as a restriction', () => {
+    const result = evaluateEligibility({
+      job: {
+        title: 'Software Engineer',
+        location: 'United States',
+        remote_restrictions: null,
+        description: 'Visa sponsorship provided.',
+        compensation: null,
+      },
+      profile: {
+        ...baseProfile,
+        work_authorization: [{ jurisdiction: 'US', status: 'CITIZEN', verified: true }],
+      },
+    });
+    expect(result.hard_failures).toEqual([]);
+  });
+  it('blocks a verified sponsorship requirement when the employer cannot sponsor', () => {
+    const result = evaluateEligibility({
+      job: {
+        title: 'Software Engineer',
+        location: 'United States',
+        remote_restrictions: null,
+        description: 'No sponsorship provided.',
+        compensation: null,
+      },
+      profile: {
+        ...baseProfile,
+        work_authorization: [{ jurisdiction: 'US', status: 'NEEDS_SPONSORSHIP', verified: true }],
+      },
+    });
+    expect(result.eligibility).toBe('INELIGIBLE');
   });
 });

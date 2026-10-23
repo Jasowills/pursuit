@@ -1,0 +1,15 @@
+{
+  "roles": ["software engineer", "qa engineer"],
+  "skills": [
+    {
+      "name": "TypeScript",
+      "evidence": "Replace with your own verified resume/project reference."
+    },
+    { "name": "PostgreSQL", "evidence": "Replace with your own verified resume/project reference." }
+  ],
+  "residenceCountry": "NG",
+  "residenceVerified": false,
+  "workAuthorization": [],
+  "remoteOnly": true,
+  "exclusions": []
+}

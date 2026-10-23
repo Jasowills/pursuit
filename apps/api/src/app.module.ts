@@ -1,3 +1,4 @@
+import { DiscoveryService } from './discovery.service';
 import { AutopilotService } from './autopilot.service';
 import { AutopilotController } from './autopilot.controller';
 import { Module } from '@nestjs/common';
@@ -28,6 +29,7 @@ import { DirectGmailService } from './direct-gmail.service';
     WorkflowController,
   ],
   providers: [
+    DiscoveryService,
     AutopilotService,
     DbService,
     AuthService,

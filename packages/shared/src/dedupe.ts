@@ -40,7 +40,7 @@ export function canonicalizeUrl(rawUrl: string): string {
   }
   // sort remaining params for stable comparison
   const search = [...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b));
-  const qs = search.map(([k, v]) => `${k}=${v}`).join('&');
+  const qs = new URLSearchParams(search).toString();
   url.search = '';
   url.hash = '';
   url.pathname = url.pathname.replace(/\/+$/, '') || '/';
@@ -51,7 +51,8 @@ export function canonicalizeUrl(rawUrl: string): string {
 function normalizeToken(s: string): string {
   return s
     .toLowerCase()
-    .replace(/[^a-z0-9 ]+/g, ' ')
+    .normalize('NFKC')
+    .replace(/[^\p{L}\p{N}+# ]+/gu, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -111,7 +112,7 @@ export function normalizeRoleTitle(title: string): string {
 }
 
 /**
- * Stable job identity used for cross-source dedupe.
+ * Similarity hint for retrieval/clustering, NEVER a unique job identity.
  * Format: `company:role` of the NORMALIZED parts.
  */
 export function jobFingerprint(companyName: string, roleTitle: string): string {

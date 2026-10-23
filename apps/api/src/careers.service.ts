@@ -64,6 +64,19 @@ export class CareersService {
   async intakeJob(
     tenantId: string,
     input: JobCreateInput,
+    observation?: {
+      userId?: string;
+      source?: {
+        kind: string;
+        baseUrl: string;
+        externalId: string;
+        observedAt: string;
+        raw: Record<string, unknown>;
+        evidence: unknown;
+        attribution: string | null;
+        validThrough?: string | null;
+      };
+    },
   ): Promise<{
     job: ReturnType<typeof mapJob>;
     match: ReturnType<typeof mapJobMatch> | null;
@@ -75,55 +88,146 @@ export class CareersService {
     );
     const canonicalUrl = canonicalizeUrl(input.source_url);
 
-    // dedupe (PRD): never create duplicate jobs for the same company+role/url
-    let existing = await this.db.db.job.findUnique({ where: { canonicalUrl } });
-    if (!existing) {
-      const company = await this.db.db.company.findFirst({ where: { name: input.company_name } });
-      if (company) {
-        existing = await this.db.db.job.findFirst({
-          where: { companyId: company.id, title: { equals: input.title, mode: 'insensitive' } },
-        });
-      }
-    }
-    let company = await this.db.db.company.findFirst({ where: { name: input.company_name } });
-    company ??= await this.db.db.company.create({ data: { name: input.company_name } });
-
-    const job =
-      existing ??
-      (await this.db.db.job.create({
-        data: {
-          companyId: company.id,
+    // A company/title is a similarity hint, never a unique requisition identity.
+    const source = observation?.source
+      ? await this.db.db.jobSource.upsert({
+          where: {
+            kind_baseUrl: { kind: observation.source.kind, baseUrl: observation.source.baseUrl },
+          },
+          create: {
+            kind: observation.source.kind,
+            baseUrl: observation.source.baseUrl,
+            termsStatus: 'DOCUMENTED_OR_USER_SUPPLIED',
+          },
+          update: {},
+        })
+      : null;
+    const existing = await this.db.db.job.findFirst({
+      where: {
+        OR: [
+          { canonicalUrl },
+          ...(source && observation?.source
+            ? [{ sourceId: source.id, externalId: observation.source.externalId }]
+            : []),
+        ],
+      },
+    });
+    const company =
+      existing && !observation?.source
+        ? await this.db.db.company.findUniqueOrThrow({ where: { id: existing.companyId } })
+        : await this.db.db.company.upsert({
+            where: { name: input.company_name },
+            create: { name: input.company_name },
+            update: {},
+          });
+    const canRefresh = Boolean(
+      observation?.source && (!existing?.sourceId || existing.sourceId === source?.id),
+    );
+    const descriptionHash = createHash('sha256')
+      .update(
+        JSON.stringify({
+          description: input.description ?? null,
           title: input.title,
           location: input.location ?? null,
-          remoteRestrictions: input.remote_restrictions ?? null,
+          restrictions: input.remote_restrictions ?? null,
           compensation: input.compensation ?? null,
-          canonicalUrl,
-          descriptionHash: input.description
-            ? createHash('sha256').update(input.description).digest('hex')
+          source: observation?.source
+            ? {
+                kind: observation.source.kind,
+                baseUrl: observation.source.baseUrl,
+                externalId: observation.source.externalId,
+                raw: observation.source.raw,
+              }
             : null,
-        },
-      }));
-    if (!existing && (input.description ?? input.posting_id)) {
+        }),
+      )
+      .digest('hex');
+    const data = {
+      companyId: company.id,
+      title: input.title,
+      location: input.location ?? null,
+      remoteRestrictions: input.remote_restrictions ?? null,
+      compensation: input.compensation ?? null,
+      descriptionHash,
+      lastSeenAt: new Date(),
+      status:
+        observation?.source?.validThrough &&
+        Date.parse(observation.source.validThrough) <= Date.now()
+          ? 'CLOSED'
+          : existing?.status === 'CLOSED'
+            ? 'REOPENED'
+            : 'OPEN',
+    };
+    const job = existing
+      ? canRefresh
+        ? await this.db.db.job
+            .updateMany({
+              // Compare-and-set the primary source so concurrent first observations
+              // cannot both claim an unowned canonical role.
+              where: { id: existing.id, sourceId: existing.sourceId },
+              data: {
+                ...data,
+                sourceId: existing.sourceId ?? source?.id,
+                externalId: existing.externalId ?? observation?.source?.externalId,
+              },
+            })
+            .then(() => this.db.db.job.findUniqueOrThrow({ where: { id: existing.id } }))
+        : existing
+      : await this.db.db.job.upsert({
+          where: { canonicalUrl },
+          create: {
+            ...data,
+            companyId: company.id,
+            canonicalUrl,
+            sourceId: source?.id,
+            externalId: observation?.source?.externalId ?? null,
+          },
+          update: {},
+        });
+    if (
+      (!existing || (canRefresh && existing.descriptionHash !== descriptionHash)) &&
+      job.descriptionHash === descriptionHash &&
+      (!observation?.source || job.sourceId === source?.id)
+    ) {
       await this.db.db.jobSnapshot.create({
         data: {
           jobId: job.id,
           description: input.description ?? null,
-          metadata: { posting_id: input.posting_id ?? null, fingerprint },
+          metadata: JSON.parse(
+            JSON.stringify({
+              posting_id: input.posting_id ?? null,
+              fingerprint,
+              provenance: observation?.source ?? null,
+            }),
+          ),
         },
       });
     }
 
+    const storedDescription =
+      (
+        await this.db.db.jobSnapshot.findFirst({
+          where: { jobId: job.id },
+          orderBy: { observedAt: 'desc' },
+        })
+      )?.description ?? null;
+    const storedCompany =
+      job.companyId === company.id
+        ? company
+        : await this.db.db.company.findUniqueOrThrow({ where: { id: job.companyId } });
     // eligibility hook — unknown never silently passes (PRD)
-    const profileRow = await this.db.db.careerProfile.findFirst({ where: { tenantId } });
+    const profileRow = await this.db.db.careerProfile.findFirst({
+      where: { tenantId, ...(observation?.userId ? { userId: observation.userId } : {}) },
+    });
     let match: ReturnType<typeof mapJobMatch> | null = null;
     if (profileRow) {
       const el = evaluateEligibility({
         job: {
-          title: input.title,
-          location: input.location ?? null,
-          remote_restrictions: input.remote_restrictions ?? null,
-          description: input.description ?? null,
-          compensation: input.compensation ?? null,
+          title: job.title,
+          location: job.location,
+          remote_restrictions: job.remoteRestrictions,
+          description: storedDescription,
+          compensation: job.compensation,
         },
         profile: {
           work_authorization: (profileRow.workAuthorization as never) ?? [],
@@ -134,7 +238,7 @@ export class CareersService {
         },
       });
       const fit = baselineFitScore(
-        { title: input.title, description: input.description ?? null },
+        { title: job.title, description: storedDescription },
         { skills: [], role_families: (profileRow.roleFamilies as never) ?? [] },
       );
       const matchData = {
@@ -149,7 +253,7 @@ export class CareersService {
       const matchRow = await this.db.db.jobMatch.upsert({
         where: { tenantId_jobId: { tenantId, jobId: job.id } },
         create: matchData,
-        update: {},
+        update: matchData,
       });
       match = mapJobMatch(matchRow);
     }
@@ -158,7 +262,7 @@ export class CareersService {
       job_id: job.id,
       deduped: Boolean(existing),
     });
-    return { job: mapJob(job, company, fingerprint), match, deduped: Boolean(existing) };
+    return { job: mapJob(job, storedCompany, fingerprint), match, deduped: Boolean(existing) };
   }
 
   async listJobs(tenantId: string) {

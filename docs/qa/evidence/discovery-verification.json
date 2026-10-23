@@ -1,0 +1,94 @@
+{
+  "performed_on": "2026-10-23",
+  "scope": "Discovery library/CLI, source trust, retained API sourcing, deterministic eligibility. Native harness and live social-platform credentials not covered.",
+  "sandbox": {
+    "api": "disposable PostgreSQL 16 container, loopback 54339, existing migrations",
+    "sqlite": "in-memory unit tests and temporary file for live persistence",
+    "external_mutations": false
+  },
+  "results": {
+    "discovery_tests": {
+      "passed": 66,
+      "failed": 0
+    },
+    "shared_tests": {
+      "passed": 32,
+      "failed": 0
+    },
+    "api_tests": {
+      "passed": 44,
+      "failed": 0
+    },
+    "workspace_typecheck_tasks": {
+      "successful": 14,
+      "total": 14
+    },
+    "discovery_build": "pass",
+    "formatting": {
+      "changed_files": "pass",
+      "repository": "existing_differences_in_14_unchanged_files"
+    }
+  },
+  "findings": [
+    {
+      "id": "DISC-001",
+      "status": "fixed_with_regression"
+    },
+    {
+      "id": "DISC-002",
+      "status": "fixed_with_regression"
+    },
+    {
+      "id": "DISC-003",
+      "status": "fixed_with_regression"
+    },
+    {
+      "id": "DISC-004",
+      "status": "fixed_with_regression"
+    },
+    {
+      "id": "DISC-005",
+      "status": "fixed_with_regression"
+    },
+    {
+      "id": "DISC-006",
+      "status": "fixed_with_regression"
+    },
+    {
+      "id": "DISC-007",
+      "status": "fixed_with_regression"
+    },
+    {
+      "id": "DISC-008",
+      "status": "fixed_with_regression"
+    },
+    {
+      "id": "DISC-009",
+      "status": "fixed_with_regression"
+    }
+  ],
+  "dependency_audit": {
+    "high": 3,
+    "moderate": 1,
+    "new_discovery_package_in_reported_paths": false,
+    "status": "workspace_transitive_findings_remain"
+  },
+  "evidence": [
+    "discovery-audit.json",
+    "discovery-after-fixes.json",
+    "discovery-live-contract.json",
+    "discovery-live-persistence.json",
+    "discovery-benchmark.json"
+  ],
+  "unverified": [
+    "native desktop integration",
+    "production source permissions and quotas",
+    "worldwide recall",
+    "live Workable, Hacker News and Brave contract",
+    "semantic/transferable skill ranking",
+    "complete international work eligibility",
+    "production concurrency and resource retention"
+  ],
+  "verdict": "NOT_READY",
+  "verdict_scope": "Full unattended product release; implemented sourcing slice passed the listed checks, while native integration, source coverage and existing dependency findings remain."
+}

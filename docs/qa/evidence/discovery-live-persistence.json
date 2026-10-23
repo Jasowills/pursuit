@@ -1,0 +1,71 @@
+{
+  "observedAt": "2026-10-23T00:55:28.543Z",
+  "scope": "Read-only public source poll, persisted SQLite reopen, deterministic matching and one listing verification. Synthetic candidate, no application or messaging.",
+  "runs": [
+    {
+      "sourceId": "live-cloudflare",
+      "status": "complete",
+      "count": 446,
+      "diagnostics": []
+    },
+    {
+      "sourceId": "live-himalayas",
+      "status": "partial",
+      "count": 20,
+      "diagnostics": ["page_budget_reached"]
+    },
+    {
+      "sourceId": "live-wwr",
+      "status": "partial",
+      "count": 93,
+      "diagnostics": ["feed_window_not_authoritative_closure"]
+    }
+  ],
+  "storedBeforeRestart": 559,
+  "storedAfterRestart": 559,
+  "verification": {
+    "status": "observed_open",
+    "url": "https://boards-api.greenhouse.io/v1/boards/cloudflare/jobs/8256449",
+    "reason": "Posting is currently returned by the documented source. This does not prove the employer is interviewing.",
+    "observedAt": "2026-10-23T00:55:26.104Z"
+  },
+  "matchCount": 300,
+  "sampleAssessments": [
+    {
+      "title": "Senior Forward Deployed Engineer",
+      "company": "Cloudflare",
+      "kind": "vacancy",
+      "eligibility": "unknown",
+      "unknowns": [
+        "Remote work arrangement is not confirmed.",
+        "Applicant-country eligibility is not explicit in the source.",
+        "Employer work-authorization, payroll and sponsorship requirements need verification.",
+        "Working-hour/timezone requirements are not confirmed."
+      ]
+    },
+    {
+      "title": "Senior Forward Deployed Engineer",
+      "company": "Cloudflare",
+      "kind": "vacancy",
+      "eligibility": "unknown",
+      "unknowns": [
+        "Remote work arrangement is not confirmed.",
+        "Applicant-country eligibility is not explicit in the source.",
+        "Employer work-authorization, payroll and sponsorship requirements need verification.",
+        "Working-hour/timezone requirements are not confirmed."
+      ]
+    },
+    {
+      "title": "Senior Systems Engineer, AI Gateway",
+      "company": "Cloudflare",
+      "kind": "vacancy",
+      "eligibility": "unknown",
+      "unknowns": [
+        "Remote work arrangement is not confirmed.",
+        "Applicant-country eligibility is not explicit in the source.",
+        "Employer work-authorization, payroll and sponsorship requirements need verification.",
+        "Working-hour/timezone requirements are not confirmed."
+      ]
+    }
+  ]
+}

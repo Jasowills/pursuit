@@ -113,8 +113,8 @@ export default function WorkflowPage() {
             <section id="discover">
               <h2 className="panel-heading">Discover</h2>
               <p className="mt-3 text-sm leading-relaxed">
-                Import up to 25 current roles from a public Greenhouse board. Eligibility uses your
-                career profile; uncertain details stay unknown.
+                Import roles from a public Greenhouse board. Eligibility uses your career profile;
+                uncertain details stay unknown.
               </p>
               <form
                 className="mt-4 flex flex-wrap items-end gap-3"

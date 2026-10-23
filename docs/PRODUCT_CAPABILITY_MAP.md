@@ -1,10 +1,10 @@
 # Product story and implementation checklist
 
-2026-10-22. Landing visibility is separate from shipping a capability. See [pipeline decisions](CAREER_PIPELINE_DECISIONS.md) and [workspace boundaries](CAREER_WORKSPACE.md).
+Updated 2026-10-23. [Executed sourcing checks](qa/DISCOVERY_REPORT.md) and [engine boundaries](DISCOVERY_ENGINE.md). Landing visibility is separate from shipping a capability. See [pipeline decisions](CAREER_PIPELINE_DECISIONS.md) and [workspace boundaries](CAREER_WORKSPACE.md).
 
 | Capability                                       | Landing surface                       | Current implementation                                                                                |
 | ------------------------------------------------ | ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Broad job discovery and qualification            | Post-hero scroll walkthrough          | Retained web Greenhouse import/rules; broad native discovery proposed                                 |
+| Broad job discovery and qualification            | Post-hero scroll walkthrough          | Headless multi-source engine + retained API importer; native wiring outstanding                       |
 | Company watchers and role alerts                 | Dedicated Company watchers section    | Retained web watcher CRUD; generic/native polling not implemented; landing alert is a simulation      |
 | Career facts, preferences and context            | Career Identity section               | Native confirmed facts/provenance; richer search plan proposed                                        |
 | Natural-language career assistant                | Actual harness capture and tour       | Native managed model conversations and model-free local counts                                        |

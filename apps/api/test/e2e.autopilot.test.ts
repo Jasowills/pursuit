@@ -111,12 +111,14 @@ describe('persistent opt-in autopilot (real Postgres, external providers mocked)
           title: 'Software Engineer',
           source_url: `https://autopilot.example/${stamp}/${board}`,
           description: 'Build TypeScript services.',
-          location: 'Remote',
+          location: 'United States',
         }),
       ],
       imported: 1,
       total_available: 1,
-      limit: 25,
+      limit: 5000,
+      complete: true,
+      diagnostics: [],
     }));
   });
   afterAll(async () => {
@@ -240,7 +242,7 @@ describe('persistent opt-in autopilot (real Postgres, external providers mocked)
             title: 'Software Engineer',
             source_url: `https://autopilot.example/${stamp}/budget-${i}`,
             description: 'Build services',
-            location: 'Remote',
+            location: 'United States',
           }),
         );
       return { items, imported: 3, total_available: 3, limit: 25 };

@@ -1,3 +1,4 @@
+import { DiscoveryRequest } from './discovery.service';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import type { Request } from 'express';
 import { z } from 'zod';
@@ -59,6 +60,13 @@ export class WorkflowController {
     @Body(new ZodValidationPipe(discovery)) body: z.infer<typeof discovery>,
   ) {
     return this.workflows.discover(authOf(r), body.board);
+  }
+  @Post('workflow/discover-source') discoverSource(
+    @Req() r: Request,
+    @Body(new ZodValidationPipe(DiscoveryRequest))
+    body: import('./discovery.service').DiscoveryRequest,
+  ) {
+    return this.workflows.discoverSource(authOf(r), body);
   }
   @Get('workflow') async list(@Req() r: Request): Promise<{ items: WorkflowDraft[] }> {
     return { items: await this.workflows.list(authOf(r)) };

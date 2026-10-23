@@ -7,3 +7,9 @@ Planning date: **2026-10-22**. Research uses public first-party documentation an
 - [Desktop, Core and Connect](desktop-core-connect.md): Tauri/Electron tradeoffs, SQLite migration, secrets, browser packaging, native Gmail OAuth, optional Composio, encrypted accountless relay and mobile distribution.
 
 The approved decisions, source-code disposition, phases and acceptance criteria are in [the change assessment](../DESKTOP_CHANGE_IMPACT.md), [master implementation plan](../DESKTOP_IMPLEMENTATION_PLAN.md), and [first-slice tickets](../DESKTOP_FIRST_SLICE_BACKLOG.md). The existing [PRD](../specifications/PRD.md) now contains an amendment rather than a replacement.
+
+## Discovery implementation research — 2026-10-23
+
+- [Platform access and job-board inventory](discovery-platform-access.md): practical routes for social platforms, boards, feeds and regional sources.
+- [Primary source contracts](discovery-source-foundation.md): ATS APIs, indexed search, freshness and evidence rules.
+- [Implemented engine](../DISCOVERY_ENGINE.md): executable commands, verified coverage, matching baseline and remaining integration work.

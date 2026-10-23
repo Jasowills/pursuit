@@ -1,0 +1,7 @@
+{
+  "id": "greenhouse:cloudflare",
+  "provider": "greenhouse",
+  "board": "cloudflare",
+  "company": "Cloudflare",
+  "intervalMinutes": 360
+}

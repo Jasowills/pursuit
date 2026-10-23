@@ -51,3 +51,13 @@ describe('fingerprinting', () => {
     expect(jobFingerprint('acme', 'designer')).not.toBe(jobFingerprint('acme', 'engineer'));
   });
 });
+
+it('preserves encoded query values through repeated canonicalization', () => {
+  const url = canonicalizeUrl('https://example.com/job?value=a%26b&utm_source=x');
+  expect(new URL(url).searchParams.get('value')).toBe('a&b');
+  expect(canonicalizeUrl(url)).toBe(url);
+});
+it('preserves non-Latin titles and distinct C++/C# specialties', () => {
+  expect(normalizeRoleTitle('软件工程师')).toBe('软件工程师');
+  expect(jobFingerprint('Acme', 'C++ Engineer')).not.toBe(jobFingerprint('Acme', 'C# Engineer'));
+});

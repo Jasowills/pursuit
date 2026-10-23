@@ -53,29 +53,69 @@ export function evaluateEligibility(input: EligibilityInput): EligibilityResult 
     }
   }
 
-  // work authorization: verified facts are authoritative
-  const hasVerifiedAuth = input.profile.work_authorization.some((a) => a.verified);
-  const mentionsRestrictiveVisa =
-    /sponsor(?:ship|s)?\s+(?:not\s+)?(?:provided|available)|no\s+sponsorship|requires?\s+sponsorship|cannot\s+provide\s+(?:visa\s+)?sponsorship/.test(
+  if (hard_failures.length)
+    return { eligibility: 'INELIGIBLE', hard_failures, eligibility_evidence };
+
+  // Only match authorization to explicit employer jurisdiction; unrelated verified
+  // citizenship is not evidence for every country. Free-text ambiguity stays unknown.
+  const geography = `${input.job.location ?? ''} ${input.job.remote_restrictions ?? ''}`;
+  const regions: Record<string, string[]> = {
+    US: ['United States', 'USA'],
+    GB: ['United Kingdom', 'UK', 'Great Britain'],
+    CA: ['Canada'],
+    NG: ['Nigeria'],
+    DE: ['Germany'],
+    FR: ['France'],
+    AU: ['Australia'],
+    IE: ['Ireland'],
+    NL: ['Netherlands'],
+    IN: ['India'],
+    NZ: ['New Zealand'],
+    SG: ['Singapore'],
+  };
+  const jurisdictions = Object.entries(regions)
+    .filter(
+      ([code, names]) =>
+        new RegExp(`\\b${code}\\b`).test(geography) ||
+        names.some((name) => new RegExp(`\\b${name}\\b`, 'i').test(geography)),
+    )
+    .map(([code]) => code);
+  const status = (s: string) => s.trim().toUpperCase().replace(/[ -]/g, '_');
+  const authorized = new Set([
+    'AUTHORIZED',
+    'CITIZEN',
+    'CITIZENSHIP',
+    'PERMANENT_RESIDENT',
+    'WORK_PERMIT',
+    'WORK_AUTHORIZED',
+  ]);
+  const auth = input.profile.work_authorization.filter(
+    (a) => a.verified && jurisdictions.includes(a.jurisdiction.toUpperCase()),
+  );
+  const hasVerifiedAuth = auth.some((a) => authorized.has(status(a.status)));
+  const needsSponsorship = auth.some((a) =>
+    ['NEEDS_SPONSORSHIP', 'REQUIRES_SPONSORSHIP'].includes(status(a.status)),
+  );
+  const noSponsorship =
+    /no\s+(?:visa\s+)?sponsorship|(?:cannot|can not|do not|does not|unable to)\s+(?:provide|offer|support)\s+(?:visa\s+)?sponsor|sponsorship\s+(?:is\s+)?not\s+(?:provided|available|offered)/i.test(
       haystack,
     );
-  if (hasVerifiedAuth) {
-    eligibility_evidence.push('work_authorization_verified');
-    if (mentionsRestrictiveVisa) {
-      hard_failures.push('mentions_unavailable_sponsorship_with_verified_restriction');
-    }
-  } else if (mentionsRestrictiveVisa) {
-    // cannot decide — never silently pass
+  if (needsSponsorship && !hasVerifiedAuth && noSponsorship) {
+    hard_failures.push('required_sponsorship_unavailable');
     return {
-      eligibility: 'UNKNOWN',
+      eligibility: 'INELIGIBLE',
       hard_failures,
-      eligibility_evidence: ['restrictive_visa_language_without_verified_profile'],
+      eligibility_evidence: ['verified_sponsorship_requirement_conflicts_with_posting'],
     };
   }
-
-  if (hard_failures.length > 0) {
-    return { eligibility: 'INELIGIBLE', hard_failures, eligibility_evidence };
-  }
+  if (hasVerifiedAuth)
+    eligibility_evidence.push(`work_authorization_verified_for:${jurisdictions.join(',')}`);
+  else
+    eligibility_evidence.push(
+      jurisdictions.length
+        ? 'work_authorization_for_employer_jurisdiction_unknown'
+        : 'employer_jurisdiction_unknown',
+    );
 
   // role family relevance
   const roleHint = normalizeRoleTitle(input.job.title);
@@ -94,32 +134,27 @@ export function evaluateEligibility(input: EligibilityInput): EligibilityResult 
     eligibility_evidence.push(`role_family_match:${roleHint}`);
   }
 
-  // compensation is advisory, not a hard gate, unless profile has verified floor
-  if (input.profile.desired_compensation && input.job.compensation) {
-    const m = input.job.compensation.match(/[^0-9]*([0-9][0-9,\.]+)\s*k?/i);
-    if (m?.[1]) {
-      const offered = Number(m[1].replace(/[,\.]/g, ''));
-      const floor = input.profile.desired_compensation.min_amount;
-      eligibility_evidence.push(
-        offered >= floor
-          ? 'compensation_offered_at_or_above_floor'
-          : 'compensation_below_stated_floor',
-      );
-    } else {
-      eligibility_evidence.push('compensation_present_unparsed');
-    }
-  }
+  // The legacy text field has no reliable currency/pay-period contract. Never compare
+  // "$120k" as 120 or an hourly rate against an annual floor.
+  if (input.profile.desired_compensation && input.job.compensation)
+    eligibility_evidence.push('compensation_currency_and_period_need_verification');
 
   if (eligibility_evidence.length === 0) {
     return { eligibility: 'UNKNOWN', hard_failures, eligibility_evidence: ['no_evidence'] };
   }
 
-  // verified facts only produce VERIFIED_ELIGIBLE
-  const verified = eligibility_evidence.includes('work_authorization_verified');
+  // Remote residency, timezone and payroll restrictions need additional facts the
+  // legacy contract cannot represent; never treat verified citizenship as those facts.
+  const additionalRestrictions = Boolean(input.job.remote_restrictions?.trim());
   return {
-    eligibility: verified ? 'VERIFIED_ELIGIBLE' : 'POSSIBLY_ELIGIBLE',
+    eligibility:
+      hasVerifiedAuth && jurisdictions.length === 1 && !additionalRestrictions
+        ? 'VERIFIED_ELIGIBLE'
+        : 'UNKNOWN',
     hard_failures,
-    eligibility_evidence,
+    eligibility_evidence: additionalRestrictions
+      ? [...eligibility_evidence, 'remote_residency_or_other_restrictions_need_verification']
+      : eligibility_evidence,
   };
 }
 

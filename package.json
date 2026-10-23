@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@11.12.0",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13.0"
   },
   "scripts": {
     "dev": "turbo run dev --parallel",
@@ -23,7 +23,8 @@
     "agent:smoke": "pnpm --filter @pursuit/agent-core smoke",
     "dev:desktop": "pnpm --filter @pursuit/desktop desktop:dev",
     "build:desktop": "pnpm --filter @pursuit/desktop desktop:build",
-    "test:local-store": "cargo test --manifest-path packages/local-store/Cargo.toml"
+    "test:local-store": "cargo test --manifest-path packages/local-store/Cargo.toml",
+    "discovery": "pnpm --filter @pursuit/discovery cli"
   },
   "devDependencies": {
     "prettier": "^3.6.0",

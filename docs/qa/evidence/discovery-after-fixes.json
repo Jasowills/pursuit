@@ -1,0 +1,44 @@
+{
+  "performed_on": "2026-10-23T00:54:57.593Z",
+  "scope": "Executed against freshly built shared package. Synthetic data, no external effects. Fingerprints are retrieval hints, not unique job identity.",
+  "probes": [
+    {
+      "name": "US-only role with Nigerian authorization",
+      "actual": {
+        "eligibility": "UNKNOWN",
+        "hard_failures": [],
+        "eligibility_evidence": [
+          "work_authorization_for_employer_jurisdiction_unknown",
+          "role_family_match:software engineer"
+        ]
+      }
+    },
+    {
+      "name": "Authorized US citizen and no sponsorship",
+      "actual": {
+        "eligibility": "VERIFIED_ELIGIBLE",
+        "hard_failures": [],
+        "eligibility_evidence": [
+          "work_authorization_verified_for:US",
+          "role_family_match:software engineer"
+        ]
+      }
+    },
+    {
+      "name": "Hard exclusion before sponsorship uncertainty",
+      "actual": {
+        "eligibility": "INELIGIBLE",
+        "hard_failures": ["matches_hard_exclusion:defense"],
+        "eligibility_evidence": []
+      }
+    },
+    {
+      "name": "Specialty and non-Latin identity",
+      "actual": {
+        "cpp": "acme:c++ engineer",
+        "csharp": "acme:c# engineer",
+        "chinese": "acme:软件工程师"
+      }
+    }
+  ]
+}
