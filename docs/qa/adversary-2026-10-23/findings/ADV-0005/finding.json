@@ -1,0 +1,14 @@
+{
+  "id": "ADV-0005",
+  "title": "Long application histories exceeded the native transport limit",
+  "severity": "high",
+  "status": "FIXED",
+  "origin": "controlled temporary-SQLite reproduction followed by regression",
+  "expected": "A hundred saved applications should remain inspectable without exceeding the 4 MB native response limit or repeating every answer in history.",
+  "observed": "The pre-fix test produced a 6,059,443-character snapshot from 100 records with six 10,000-character answers each. History now returns summaries; the same regression passes below 200,000 characters and verifies full answers remain in storage. Exact review responses are unchanged.",
+  "evidence": [
+    "packages/career-engine/test/engine.test.ts hundred verbose history test",
+    "packages/career-engine/src/contracts.ts ExecutionSummary",
+    "scripts/qa/native-engine-browser.py background history and full-review journey"
+  ]
+}

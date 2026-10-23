@@ -430,3 +430,38 @@ it('uses the canonical posting for lookup when the hosted form adds an applicati
     close();
   }
 });
+it('keeps a hundred verbose application records out of the history transport payload', async () => {
+  const { engine, root, close } = setup();
+  const { ApplicationQueue } = await import('@pursuit/application');
+  const queue = new ApplicationQueue(join(root, 'applications.sqlite'));
+  const answer = 'A'.repeat(10000);
+  let first = '';
+  try {
+    for (let i = 0; i < 100; i++) {
+      const row = await queue.add({
+        personId: 'local-user',
+        jobUrl: `https://jobs.ashbyhq.com/fixture/role-${i}`,
+        packetHash: 'a'.repeat(64),
+        pdfHash: 'b'.repeat(64),
+        formHash: 'c'.repeat(64),
+        answers: {
+          one: answer,
+          two: answer,
+          three: answer,
+          four: answer,
+          five: answer,
+          six: answer,
+        },
+      });
+      if (!first) first = row.id;
+    }
+    const snapshot = engine.snapshot();
+    expect(snapshot.plans).toHaveLength(100);
+    expect(JSON.stringify(snapshot).length).toBeLessThan(200000);
+    expect(JSON.stringify(snapshot)).not.toContain('A'.repeat(100));
+    expect(queue.get(first).payload.answers.one).toBe(answer);
+  } finally {
+    queue.close();
+    close();
+  }
+});

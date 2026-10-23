@@ -16,17 +16,17 @@
 | --------------------------------------------------------------- | ------------: |
 | Discovery                                                       |            68 |
 | Application queue/planning/recovery                             |            13 |
-| Native coordinator                                              |            10 |
+| Native coordinator                                              |            11 |
 | Tailoring/imports/PDF/writing                                   |            23 |
 | Retained API, isolated PostgreSQL and mocked external providers |            59 |
 | Native Rust, diagnostics and process boundaries                 |            16 |
 | Native local-store integrity                                    |            12 |
 | Intercepted Chromium application/coordinator adapters           |             2 |
-| **Automated cases**                                             |       **203** |
+| **Automated cases**                                             |       **204** |
 
 Separately, **12 built landing/recovery browser scenarios passed**, plus the built harness source-to-confirmation journey. The latter uses a real local coordinator and SQLite, simulated Tauri IPC, source fixtures and an application adapter fixture. Actual Rust process transport and Chromium form execution are tested separately. This is not a real employer submission or native OS-webview qualification. Six native cases are opt-in in the default suite; ignored cases are not counted as passing.
 
-Both frontend builds and all 20 workspace typecheck/build tasks passed. Main CI passed its builds, typechecks and tests but failed at formatting in15 files. The listed files received formatter-only corrections, followed by a full formatting check; the final CI run remains the authority for the pushed snapshot. Large lazy-loaded PDF chunks remain build warnings. One controlled approval mutation in an external temporary copy was caught by the fabricated-hash regression. That experiment did not alter the working source.
+Both frontend builds and all 20 workspace typecheck/build tasks passed. Main CI initially passed its builds, typechecks and tests but failed at formatting in 15 files. The listed files received formatter-only corrections, followed by a full formatting check; the ffc3cac main CI run then passed. The final history fix requires fresh CI. Large lazy-loaded PDF chunks remain build warnings. One controlled approval mutation in an external temporary copy was caught by the fabricated-hash regression. That experiment did not alter the working source.
 
 The [synthetic benchmark](discovery-benchmark.json) imports 5,000 observations and returns 300 ranked results. On this host, import took 1,224 ms, ranking 1,505 ms and process RSS was 395 MiB. These are a single-process, in-memory, model-free smoke measurement, not a production concurrency, latency SLO or match-quality evaluation.
 
@@ -41,6 +41,8 @@ The [synthetic benchmark](discovery-benchmark.json) imports 5,000 observations a
 **Packaging:** Windows x64 and Linux x64 installers passed real native-runner builds, architecture/resource-staging checks and isolated worker execution. The replacement Apple Silicon DMG/app also passes verification. The Intel Mac installer also passed its build, verification and upload steps; only job cache cleanup remained when checked. The original Mac failure was a verifier expecting an intermediate app that Tauri had removed after producing a DMG; retaining both resolves that on Apple Silicon. [Native build run](https://github.com/Jasowills/pursuit/actions/runs/39960253355). These artifacts are unsigned test installers, not signed/notarized public releases or proof of clean-machine installation. Node and browser prerequisites are still separately configured.
 
 **Security scope:** executed checks cover private/mixed DNS, redirect/metadata blocking, credential forwarding, bounded and stalled source responses, exact payload approval, stale/tampered PDFs/forms, duplicate/concurrent execution, crash recovery, tenant isolation, literal string rendering and instructed-fact boundaries. These are targeted regression and adversarial checks. They do not establish resistance to every prompt injection or constitute an independent penetration test. Third-party sites were not attacked.
+
+**Large-history transport:** an adversarial volume case produced a 6,059,443-character snapshot, exceeding the 4 MB native channel. History now carries summaries; the same 100-record regression stays below 200,000 characters while preserving the complete saved answers. Full answer review remains explicit. See ADV-0005.
 
 ## Release gates, in priority order
 

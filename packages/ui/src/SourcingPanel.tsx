@@ -472,7 +472,7 @@ export function EngineHistory({
       {snapshot?.plans.map((p) => (
         <article className="cw-engine-history" key={p.id}>
           <strong>{p.state}</strong>
-          <span>{p.payload.jobUrl}</span>
+          <span>{p.jobUrl}</span>
           {p.last_error && <p>{p.last_error}</p>}
           {p.receipt && (
             <p>

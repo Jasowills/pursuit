@@ -98,6 +98,7 @@ with tempfile.TemporaryDirectory(prefix='pursuit-ui-engine-') as root:
             assert call({'action':'snapshot'})['value']['policy']['enabled']==False
             page.get_by_role('button',name='Background work',exact=True).click()
             expect(page.get_by_text('CONFIRMED',exact=True)).to_be_visible()
+            expect(page.locator('.cw-engine-history').filter(has_text='CONFIRMED')).to_contain_text('https://jobs.ashbyhq.com/fixture/qa')
             assert not errors,errors
             report={'scope':'Built native frontend and actual local coordinator/SQLite. Tauri IPC, source reads and application adapter simulated; real browser adapter and Rust process transport tested separately. No external submissions.','search':'pass','eligibility_unknown_visible':'pass','save_role':'pass','changed_posting_retailoring':'pass','prepare_and_export_pdf':'pass','exact_answer_review':'pass','explicit_approval_and_submit':'pass','reload_confirmation_no_resubmit':'pass','background_history':'pass','synthetic_submissions':counts['submitted'],'browser_errors':errors}
             (ROOT/'docs/qa/evidence/native-engine-browser.json').write_text(json.dumps(report,indent=2)+'\n')

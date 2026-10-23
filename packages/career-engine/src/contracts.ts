@@ -37,6 +37,7 @@ export type ExecutionPlan = {
   receipt: Receipt | null;
   approval_until: string | null;
 };
+export type ExecutionSummary = Omit<ExecutionPlan, 'payload'> & { jobUrl: string };
 export type EngineSnapshot = {
   profile: SearchProfile;
   sources: {
@@ -56,7 +57,7 @@ export type EngineSnapshot = {
     diagnostics: string[];
   }[];
   policy: { enabled: boolean; dailyLimit: number };
-  plans: ExecutionPlan[];
+  plans: ExecutionSummary[];
 };
 export type EngineProgress = { phase: string; message: string; completed?: number; total?: number };
 export type EngineRequest = { action: string; [key: string]: unknown };

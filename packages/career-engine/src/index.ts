@@ -155,7 +155,10 @@ export class CareerEngine {
         .slice(0, 20)
         .map((r: any) => ({ ...r, diagnostics: JSON.parse(r.diagnostics) })),
       policy: this.setting('policy', { enabled: false, dailyLimit: 100 }),
-      plans: this.queue.list().map((r) => this.plan(String(r.id))),
+      plans: this.queue.list().map((r) => {
+        const { payload, ...summary } = this.plan(String(r.id));
+        return { ...summary, jobUrl: payload.jobUrl };
+      }),
     };
   }
   private plan(id: string): ExecutionPlan {
