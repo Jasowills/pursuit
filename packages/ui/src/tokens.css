@@ -69,15 +69,9 @@
 
   /* Depth */
   --shadow-xs: 0 1px 2px rgba(16, 16, 18, 0.05);
-  --shadow-sm:
-    0 1px 2px rgba(16, 16, 18, 0.05),
-    0 6px 18px rgba(16, 16, 18, 0.04);
-  --shadow-panel:
-    0 2px 8px rgba(16, 16, 18, 0.04),
-    0 24px 64px rgba(16, 16, 18, 0.08);
-  --shadow-float:
-    0 8px 24px rgba(16, 16, 18, 0.08),
-    0 36px 100px rgba(16, 16, 18, 0.16);
+  --shadow-sm: 0 1px 2px rgba(16, 16, 18, 0.05), 0 6px 18px rgba(16, 16, 18, 0.04);
+  --shadow-panel: 0 2px 8px rgba(16, 16, 18, 0.04), 0 24px 64px rgba(16, 16, 18, 0.08);
+  --shadow-float: 0 8px 24px rgba(16, 16, 18, 0.08), 0 36px 100px rgba(16, 16, 18, 0.16);
 
   /* Type */
   --font-sans: var(--font-geist), 'Geist', Inter, system-ui, sans-serif;

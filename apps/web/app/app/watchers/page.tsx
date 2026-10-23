@@ -83,8 +83,9 @@ export default function WatchersPage() {
       <div className="notice notice-warning">
         <span className="notice-label">Honest status</span>
         <p className="text-[13px] leading-relaxed text-[color:var(--ink-soft)]">
-          <strong className="font-semibold">Watchers are stored and can be toggled, but checking is
-          not scheduled yet.</strong>{' '}
+          <strong className="font-semibold">
+            Watchers are stored and can be toggled, but checking is not scheduled yet.
+          </strong>{' '}
           No robotic execution runs in this milestone, so nothing has been fetched from these URLs
           automatically. Manual job intake covers discovery for now.
         </p>

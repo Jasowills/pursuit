@@ -1,0 +1,44 @@
+{
+  "vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 1,
+    "high": 3,
+    "critical": 0
+  },
+  "scope": "pnpm production workspace audit; not an exploitability assessment or a native-only dependency audit",
+  "advisories": [
+    {
+      "package": "uuid",
+      "severity": "moderate",
+      "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "patched_versions": ">=11.1.1",
+      "source": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "example_dependency_path": "apps__mobile>@expo/metro-runtime>@expo/log-box>@expo/dom-webview>expo>@expo/cli>@expo/config>@expo/config-plugins>xcode>uuid"
+    },
+    {
+      "package": "deepmerge-ts",
+      "severity": "high",
+      "title": "DeepmergeTS has stack exhaustion when merging recursive object graphs",
+      "patched_versions": ">=8.0.0",
+      "source": "https://github.com/advisories/GHSA-ggr8-5vv4-36mx",
+      "example_dependency_path": "packages__database>@prisma/client>prisma>@prisma/config>deepmerge-ts"
+    },
+    {
+      "package": "node-forge",
+      "severity": "high",
+      "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+      "patched_versions": ">=1.4.1",
+      "source": "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+      "example_dependency_path": "apps__mobile>@expo/metro-runtime>@expo/log-box>@expo/dom-webview>expo>@expo/cli>@expo/code-signing-certificates>node-forge"
+    },
+    {
+      "package": "braces",
+      "severity": "high",
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "patched_versions": ">=3.0.4",
+      "source": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "example_dependency_path": "apps__mobile>@expo/metro-runtime>@expo/log-box>@expo/dom-webview>expo>@expo/cli>@expo/metro>metro>metro-file-map>micromatch>braces"
+    }
+  ]
+}

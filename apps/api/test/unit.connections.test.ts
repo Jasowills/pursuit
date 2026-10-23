@@ -28,16 +28,14 @@ describe('user-owned credential encryption', () => {
 
 describe('model transport', () => {
   it('uses fixed authenticated endpoints and removes unsupported model families', async () => {
-    const transport = jest
-      .fn()
-      .mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            data: [{ id: 'gpt-text' }, { id: 'gpt-audio' }, { id: 'image-model' }],
-          }),
-          { status: 200 },
-        ),
-      );
+    const transport = jest.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [{ id: 'gpt-text' }, { id: 'gpt-audio' }, { id: 'image-model' }],
+        }),
+        { status: 200 },
+      ),
+    );
     const gateway = new ModelGateway(transport);
     expect(await gateway.models('openai', 'private-key')).toEqual(['gpt-text']);
     expect(transport).toHaveBeenCalledWith(

@@ -1,0 +1,18 @@
+{
+  "scope": "Built Chromium UI, simulated Tauri IPC. Native diagnostics storage tested separately. No external sends.",
+  "checks": [
+    "companion promotion and dead anchors absent",
+    "download targets and explicit Mac chip choice",
+    "CTA keyboard selection and useful destination",
+    "CTA narrow layout and reduced motion",
+    "landing has no uncaught browser errors",
+    "failed startup blocks editing and does not overwrite saved data",
+    "diagnostics default to no events and never receive exception payload",
+    "issue form opens fixed URL without uploading report",
+    "explicit diagnostic event deletion",
+    "unhandled rejection captures only category",
+    "untrusted company markup renders as text and starts no engine action",
+    "render crash boundary preserves data and exposes feedback"
+  ],
+  "passed": 12
+}

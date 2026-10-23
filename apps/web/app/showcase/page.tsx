@@ -8,7 +8,15 @@ import { LandingHeader } from '../_components/header';
  */
 export const metadata: Metadata = { title: 'Showcase' };
 
-function Row({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
+function Row({
+  title,
+  note,
+  children,
+}: {
+  title: string;
+  note?: string;
+  children: React.ReactNode;
+}) {
   return (
     <section className="mt-12">
       <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[var(--ink)] pb-2">
@@ -114,7 +122,10 @@ export default function ShowcasePage() {
           </div>
         </Row>
 
-        <Row title="03 / Buttons" note="Minimum 48px primary height; 44px for small. Offset hover, no pill radii.">
+        <Row
+          title="03 / Buttons"
+          note="Minimum 48px primary height; 44px for small. Offset hover, no pill radii."
+        >
           <div className="flex flex-wrap items-center gap-3">
             <button className="btn btn-primary btn-arrow">Primary action</button>
             <button className="btn btn-outline">Secondary</button>
@@ -127,7 +138,10 @@ export default function ShowcasePage() {
           </div>
         </Row>
 
-        <Row title="04 / Stamps" note="Status is text first. Color reinforces; it never carries the meaning alone.">
+        <Row
+          title="04 / Stamps"
+          note="Status is text first. Color reinforces; it never carries the meaning alone."
+        >
           <div className="flex flex-wrap gap-2">
             <span className="stamp stamp-muted">Discovered</span>
             <span className="stamp stamp-signal">Verified</span>
@@ -161,7 +175,10 @@ export default function ShowcasePage() {
           </div>
         </Row>
 
-        <Row title="06 / Panels & notices" note="One hairline border. No floating cards, no stacked shadows.">
+        <Row
+          title="06 / Panels & notices"
+          note="One hairline border. No floating cards, no stacked shadows."
+        >
           <div className="grid gap-4 md:grid-cols-2">
             <div className="panel">
               <p className="panel-title">Standard panel</p>
@@ -180,7 +197,9 @@ export default function ShowcasePage() {
             <div className="notice notice-danger">
               <span className="notice-label">Request failed</span>
               <p className="text-sm font-semibold">The record could not be loaded</p>
-              <p className="mt-1 text-[13px] text-[color:var(--ink-soft)]">Error detail appears here.</p>
+              <p className="mt-1 text-[13px] text-[color:var(--ink-soft)]">
+                Error detail appears here.
+              </p>
             </div>
             <div className="notice notice-success">
               <span className="notice-label">Record added</span>
@@ -191,7 +210,10 @@ export default function ShowcasePage() {
           </div>
         </Row>
 
-        <Row title="07 / Records" note="Rows, not cards. Rules carry the structure; the content carries the weight.">
+        <Row
+          title="07 / Records"
+          note="Rows, not cards. Rules carry the structure; the content carries the weight."
+        >
           <div className="stat-strip max-w-[760px]">
             {[
               ['Applications', '05'],

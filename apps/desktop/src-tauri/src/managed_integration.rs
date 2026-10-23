@@ -276,6 +276,8 @@ fn installed_ollama_career_draft() {
                 "\u{2014}",
                 "scalable",
                 "proven track record",
+                "expert",
+                "mastery",
                 "stanford",
                 "doctor",
             ] {
@@ -290,8 +292,16 @@ fn installed_ollama_career_draft() {
             );
             break;
         }
-        assert!(!["failed", "interrupted"].contains(&view.state.as_str()),
-            "Local model session failed: {}", instance.call(&format!("/api/session/{id}/message?limit=10&order=desc"), None).unwrap());
+        assert!(
+            !["failed", "interrupted"].contains(&view.state.as_str()),
+            "Local model session failed: {}",
+            instance
+                .call(
+                    &format!("/api/session/{id}/message?limit=10&order=desc"),
+                    None
+                )
+                .unwrap()
+        );
         assert!(
             began.elapsed() < Duration::from_secs(180),
             "Local draft timed out"

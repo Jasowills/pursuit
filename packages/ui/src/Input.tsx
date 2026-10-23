@@ -2,7 +2,9 @@ import { forwardRef, type InputHTMLAttributes, type TextareaHTMLAttributes } fro
 import { cn } from './utils';
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
-  ({ className, ...props }, ref) => <input ref={ref} className={cn('input', className)} {...props} />,
+  ({ className, ...props }, ref) => (
+    <input ref={ref} className={cn('input', className)} {...props} />
+  ),
 );
 Input.displayName = 'Input';
 
@@ -20,9 +22,7 @@ export const Label = ({ children, htmlFor }: { children: string; htmlFor?: strin
   </label>
 );
 
-export const FieldHint = ({ children }: { children: string }) => (
-  <p className="hint">{children}</p>
-);
+export const FieldHint = ({ children }: { children: string }) => <p className="hint">{children}</p>;
 
 export const FieldError = ({ children }: { children: string }) => (
   <p role="alert" className="mt-1 text-xs font-medium text-[color:var(--danger)]">

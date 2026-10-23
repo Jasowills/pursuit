@@ -1,0 +1,14 @@
+{
+  "id": "ADV-0001",
+  "title": "Initial workspace read failure could expose an empty editable career book",
+  "severity": "high",
+  "status": "FIXED",
+  "origin": "code review plus fault-injected recovery regression",
+  "expected": "Preserve existing data and block editing after failed startup read.",
+  "observed": "The new failed-load view blocks editing; no save command is sent in the built UI fault injection.",
+  "evidence": [
+    "browser.json",
+    "apps/desktop/src/main.tsx loadFailed guard",
+    "git diff 1f11e43^..1f11e43 -- apps/desktop/src/main.tsx"
+  ]
+}

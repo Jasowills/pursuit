@@ -19,7 +19,13 @@ const clean = {
     body: 'I tested REST APIs with SQL. Could we discuss the QA role?',
   },
 };
-const principal: SessionPrincipal = { userId: 'user', tenantId: 'tenant', sessionId: 'session', email: 'user@example.com', displayName: 'Alex Morgan' };
+const principal: SessionPrincipal = {
+  userId: 'user',
+  tenantId: 'tenant',
+  sessionId: 'session',
+  email: 'user@example.com',
+  displayName: 'Alex Morgan',
+};
 function saved(content: typeof clean): WorkflowDraft {
   return {
     id: 'draft',

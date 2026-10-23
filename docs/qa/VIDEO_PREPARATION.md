@@ -3,6 +3,7 @@
 The rejected stock portrait and camera-frame treatment were replaced with an authored employer/request/project brief, a selectable four-part outline, sample script, clipboard action and recording checklist. The unused portrait asset was removed. This is an interactive product scenario, not a video recorder, model-generated script or employer integration.
 
 Validation:
+
 - Next production build and TypeScript passed.
 - Playwright checked four script selections, clipboard success and rejected-copy recovery, local checklist state, phone focus/selected-only passage behavior, and no horizontal overflow at 1263, 390 and 320px. No uncaught page errors.
 - Desktop and both mobile renders were inspected in one batched pass and one confirmation after readability/mobile-interaction corrections.

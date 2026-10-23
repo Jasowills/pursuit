@@ -180,3 +180,19 @@ it('looks up an application independently of the recent-history window', async (
     queue.close();
   }
 });
+it('rejects a fabricated review hash without granting an approval', async () => {
+  const { queue, row } = await setup();
+  try {
+    expect(() => queue.authorize(row.id, 'b'.repeat(64))).toThrow('application_changed_or_locked');
+    expect(queue.get(row.id).state).toBe('DRAFT');
+    expect(queue.get(row.id).approval).toBeNull();
+    const submit = vi.fn();
+    const result = await queue.run(row.id, pdf, adapter({ submit }));
+    expect(result.state).toBe('DRAFT');
+    expect(submit).not.toHaveBeenCalled();
+    queue.authorize(row.id, row.payload_hash);
+    expect(queue.get(row.id).state).toBe('AUTHORIZED');
+  } finally {
+    queue.close();
+  }
+});

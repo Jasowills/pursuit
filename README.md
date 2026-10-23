@@ -6,6 +6,8 @@ An open-source, local-first career assistant. Pursuit is being built to discover
 
 [Product direction](PRODUCT.md) · [Contributing](CONTRIBUTING.md) · [Architecture](docs/PRODUCT_CAPABILITY_MAP.md) · [Connection setup](docs/CONNECTION_SETUP.md) · [Pipeline decisions](docs/CAREER_PIPELINE_DECISIONS.md) · [Interviews, tasks & leads](docs/POST_APPLICATION_WORKFLOW.md) · [Sourcing engine](docs/DISCOVERY_ENGINE.md)
 
+The latest [release review](docs/qa/adversary-2026-10-23/report.md) records executed tests, failures and remaining production gates. Use **Help & report an issue** in the native app to preview and copy optional local diagnostics. No diagnostic report uploads automatically; see [privacy and crash-recovery limits](docs/DIAGNOSTICS.md).
+
 ## Job sourcing service
 
 The headless discovery engine fetches Greenhouse, Ashby, Lever, Workable and Himalayas jobs; extracts static employer JobPosting data; and keeps RSS/Atom and hiring-thread signals as unverified leads. It stores source evidence and freshness locally, groups canonical duplicates, and ranks with BM25 plus evidence-based matching without model calls. Optional Brave search discovers additional employer-board candidates.

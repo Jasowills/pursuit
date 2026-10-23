@@ -1,0 +1,115 @@
+<!doctype html><meta charset="utf-8" /><title>Pursuit release review</title
+><style>
+  body {
+    font: 16px/1.6 system-ui;
+    max-width: 950px;
+    margin: 48px auto;
+    padding: 24px;
+  }
+  pre {
+    white-space: pre-wrap;
+    background: #f3f3f1;
+    padding: 24px;
+  }
+</style>
+<h1>Pursuit release review: NOT_READY</h1>
+<p>Public-production readiness estimate:5/10. Engineering judgment, not a measured pass rate.</p>
+<pre>
+{
+  &quot;run_id&quot;: &quot;pursuit-adversary-2026-10-23&quot;,
+  &quot;verdict&quot;: &quot;NOT_READY&quot;,
+  &quot;target&quot;: &quot;local-first desktop career harness and retained web workflow&quot;,
+  &quot;automated_cases&quot;: {
+    &quot;passed&quot;: 203,
+    &quot;by_suite&quot;: {
+      &quot;discovery&quot;: 68,
+      &quot;application&quot;: 13,
+      &quot;coordinator&quot;: 10,
+      &quot;tailoring&quot;: 23,
+      &quot;api&quot;: 59,
+      &quot;native&quot;: 16,
+      &quot;local_store&quot;: 12,
+      &quot;intercepted_browser_adapters&quot;: 2
+    },
+    &quot;default_native_ignored&quot;: 6,
+    &quot;notes&quot;: &quot;One of the six opt-in native cases was separately attempted with real Qwen. Its latest stricter quality run failed and is not counted among default-suite passes.&quot;
+  },
+  &quot;built_ui&quot;: {
+    &quot;recovery_landing_scenarios_passed&quot;: 12,
+    &quot;harness_journey&quot;: &quot;source, save, reviewed import, PDF, inspected form, exact answer review, approval, submit, changed-posting recovery and reload without duplicate; Tauri IPC and network/application dependencies simulated&quot;,
+    &quot;os_webview_verified&quot;: false
+  },
+  &quot;mutations&quot;: {
+    &quot;attempted&quot;: 1,
+    &quot;caught&quot;: 1,
+    &quot;survived&quot;: 0
+  },
+  &quot;findings&quot;: [
+    {
+      &quot;id&quot;: &quot;ADV-0001&quot;,
+      &quot;title&quot;: &quot;Initial workspace read failure could expose an empty editable career book&quot;,
+      &quot;severity&quot;: &quot;high&quot;,
+      &quot;status&quot;: &quot;FIXED&quot;,
+      &quot;origin&quot;: &quot;code review plus fault-injected recovery regression&quot;,
+      &quot;expected&quot;: &quot;Preserve existing data and block editing after failed startup read.&quot;,
+      &quot;observed&quot;: &quot;The new failed-load view blocks editing; no save command is sent in the built UI fault injection.&quot;,
+      &quot;evidence&quot;: [
+        &quot;browser.json&quot;,
+        &quot;apps/desktop/src/main.tsx loadFailed guard&quot;,
+        &quot;git diff 1f11e43^..1f11e43 -- apps/desktop/src/main.tsx&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;ADV-0002&quot;,
+      &quot;title&quot;: &quot;Local Qwen cold-start timeout and uneven generated wording&quot;,
+      &quot;severity&quot;: &quot;high&quot;,
+      &quot;status&quot;: &quot;REPRODUCED&quot;,
+      &quot;expected&quot;: &quot;A bounded medium-model draft should complete reliably and stay within supplied facts.&quot;,
+      &quot;observed&quot;: &quot;Two runs hit the 30-second provider header limit. With a 120-second header allowance, one run completed in 112.63s and resisted injected Stanford/doctor claims, but overstated the supplied skill as expert. The stricter no-expertise-inflation follow-up timed out at 180s. Prompt and bounded timing were improved; reliable live-model quality is not established.&quot;,
+      &quot;evidence&quot;: [
+        &quot;model-evaluation.json&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;ADV-0003&quot;,
+      &quot;title&quot;: &quot;Mac DMG-only build removed the app bundle before resource verification&quot;,
+      &quot;severity&quot;: &quot;medium&quot;,
+      &quot;status&quot;: &quot;FIXED&quot;,
+      &quot;expected&quot;: &quot;Verifier can inspect the actual packaged worker and browser code.&quot;,
+      &quot;observed&quot;: &quot;Tauri cleaned the intermediate app after producing the DMG. Requesting app,dmg retains it. Apple Silicon replacement build passes resource checks. Intel also passed build, verification, worker and upload steps; final source rebuild remains required.&quot;,
+      &quot;evidence&quot;: [
+        &quot;https://github.com/Jasowills/pursuit/actions/runs/39960253355&quot;,
+        &quot;.github/workflows/desktop-alpha.yml&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;ADV-0004&quot;,
+      &quot;title&quot;: &quot;Known advisories in retained Prisma/mobile dependency tree&quot;,
+      &quot;severity&quot;: &quot;high&quot;,
+      &quot;status&quot;: &quot;REPRODUCED&quot;,
+      &quot;expected&quot;: &quot;Release tree has reviewed and resolved high-severity dependency advisories.&quot;,
+      &quot;observed&quot;: &quot;Production workspace audit reports three high and one moderate advisory. No exploitability claim is made; native desktop dependency reachability differs from the retained Prisma/mobile tree. Major dependency overrides were not forced without compatibility qualification.&quot;,
+      &quot;evidence&quot;: [
+        &quot;dependency-audit-summary.json&quot;
+      ]
+    }
+  ],
+  &quot;production_gates_outstanding&quot;: [
+    &quot;Resolve known dependency advisories with compatibility and reachability assessment&quot;,
+    &quot;Reliable local model latency and semantic quality evaluations; broader provider compatibility&quot;,
+    &quot;Rebuild all four native installer targets after final source changes, and recheck main CI&quot;,
+    &quot;Signed/notarized releases and clean-machine installs on all four supported targets&quot;,
+    &quot;Real OS-webview setup, credential-store, crash/reopen and controlled application qualification&quot;,
+    &quot;Operator-approved live Ashby and Gmail/calendar checks; native integration boundaries remain&quot;,
+    &quot;Unattended worker/autopilot supervision, bounded budgets, recovery and long-duration stress qualification&quot;,
+    &quot;Source coverage/recall, eligibility accuracy and matching calibration across countries/role families&quot;,
+    &quot;Backup/recovery, retention/deletion and sustained performance verification&quot;
+  ],
+  &quot;readiness_estimate&quot;: {
+    &quot;score&quot;: 5,
+    &quot;out_of&quot;: 10,
+    &quot;meaning&quot;: &quot;Subjective engineering estimate for a public production launch, requested by the user. Not a pass percentage, security certification, reliability probability or hiring-success estimate. Passing deterministic flows establish a useful developer alpha, while live execution, operations and distribution remain gates.&quot;
+  },
+  &quot;build_run&quot;: &quot;https://github.com/Jasowills/pursuit/actions/runs/39960253355&quot;,
+  &quot;external_actions&quot;: &quot;No employer submissions, email sends, real user data modifications or paid model inference.&quot;
+}</pre>

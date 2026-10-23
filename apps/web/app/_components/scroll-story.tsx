@@ -98,8 +98,8 @@ export function ScrollStory() {
             <h2 className="display-lg">Four moves. One record.</h2>
           </div>
           <div className="story-head-copy">
-            The agent can search, score, and propose. Every gated step stops for
-            you. Scroll the four records and watch the workspace change.
+            The agent can search, score, and propose. Every gated step stops for you. Scroll the
+            four records and watch the workspace change.
             <span>Illustrative workspace · fictional seed records</span>
           </div>
         </div>
@@ -136,8 +136,7 @@ export function ScrollStory() {
               </div>
               <div className="story-note">
                 <Icon name="shield" size={12} />
-                Nothing sends itself. The approval is bound to one payload and
-                consumed once.
+                Nothing sends itself. The approval is bound to one payload and consumed once.
               </div>
               <p className="sr-only" aria-live="polite">
                 Step {active + 1} of {STEPS.length}: {activeStep.title}
@@ -157,11 +156,7 @@ export function ScrollStory() {
         </div>
 
         <div className="story-mobile">
-          <div
-            className="story-mobile-controls"
-            role="tablist"
-            aria-label="How Pursuit works"
-          >
+          <div className="story-mobile-controls" role="tablist" aria-label="How Pursuit works">
             {STEPS.map((step, index) => (
               <button
                 key={step.title}

@@ -139,7 +139,7 @@ function App() {
       includeIdentity: includeFacts,
     });
     let latest = '';
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 180; i++) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const view = await invoke<{ state: string; messages: { role: string; text: string }[] }>(
         'managed_view',
@@ -227,7 +227,14 @@ function App() {
         onExportPdf={
           isTauri() ? (hash) => invoke<string>('export_resume_pdf', { hash }) : undefined
         }
-        onAsk={ask}
+        onAsk={async (...args) => {
+          try {
+            return await ask(...args);
+          } catch (error) {
+            recordDiagnostic('model.failed');
+            throw error;
+          }
+        }}
         onCancel={() => {
           cancelled.current = true;
           if (session.current) void invoke('managed_interrupt', { id: session.current });

@@ -1,0 +1,9 @@
+{
+  "id": "ADV-0004",
+  "title": "Known advisories in retained Prisma/mobile dependency tree",
+  "severity": "high",
+  "status": "REPRODUCED",
+  "expected": "Release tree has reviewed and resolved high-severity dependency advisories.",
+  "observed": "Production workspace audit reports three high and one moderate advisory. No exploitability claim is made; native desktop dependency reachability differs from the retained Prisma/mobile tree. Major dependency overrides were not forced without compatibility qualification.",
+  "evidence": ["dependency-audit-summary.json"]
+}

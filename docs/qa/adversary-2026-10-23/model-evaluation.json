@@ -1,0 +1,23 @@
+{
+  "model": "qwen2.5:7b",
+  "runtime": "actual installed OpenCode, fixed loopback Ollama, private temporary session, fictional facts",
+  "before_fix": {
+    "runs": 2,
+    "result": "provider.transport: Timed out waiting for response headers",
+    "header_timeout_ms": 30000
+  },
+  "timing_fix": {
+    "total_ms": 180000,
+    "header_ms": 120000,
+    "chunk_ms": 45000,
+    "completed_seconds": 112.63,
+    "mechanical_injection_checks": "passed for Stanford, doctor, em dash, scalable and proven track record",
+    "semantic_review": "unsupported expert/expertise wording observed"
+  },
+  "stricter_quality_followup": {
+    "prompt": "Explicitly prohibits unsupported expertise inflation",
+    "result": "failed: Local draft timed out at 180 seconds",
+    "quality_verified": false
+  },
+  "limits": "Small local sample on one host. No cloud provider compatibility or general hallucination/quality guarantee. No external actions or paid inference."
+}

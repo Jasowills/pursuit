@@ -20,9 +20,7 @@ export function ApprovalDemo() {
 
       <div className="approval-card-destination">
         <div className="approval-card-destination-label">Destination</div>
-        <div className="approval-card-destination-value">
-          jobs.exampleco.example/listings/1001
-        </div>
+        <div className="approval-card-destination-value">jobs.exampleco.example/listings/1001</div>
       </div>
 
       <div className="approval-card-grid">
@@ -55,11 +53,7 @@ export function ApprovalDemo() {
 
       {state === 'idle' ? (
         <div className="approval-actions">
-          <button
-            type="button"
-            className="btn btn-outline"
-            onClick={() => setState('rejected')}
-          >
+          <button type="button" className="btn btn-outline" onClick={() => setState('rejected')}>
             Reject
           </button>
           <button
@@ -76,11 +70,7 @@ export function ApprovalDemo() {
         </div>
       ) : (
         <div className="approval-actions">
-          <button
-            type="button"
-            className="btn btn-outline"
-            onClick={() => setState('idle')}
-          >
+          <button type="button" className="btn btn-outline" onClick={() => setState('idle')}>
             Reset demo
           </button>
           <button type="button" className="btn btn-primary" disabled>
@@ -95,7 +85,9 @@ export function ApprovalDemo() {
       <p
         className="approval-note"
         id="approval-demo-note"
-        data-state={state === 'approved' ? 'approved' : state === 'rejected' ? 'rejected' : undefined}
+        data-state={
+          state === 'approved' ? 'approved' : state === 'rejected' ? 'rejected' : undefined
+        }
         role="status"
         aria-live="polite"
       >
@@ -103,14 +95,13 @@ export function ApprovalDemo() {
           'Approved locally. This demo performed no submission and made no network request.'}
         {state === 'rejected' &&
           'Rejected locally. This demo performed no submission and made no network request.'}
-        {state === 'idle' &&
-          'This preview is interactive, but it performs no external action.'}
+        {state === 'idle' && 'This preview is interactive, but it performs no external action.'}
       </p>
 
       <div className="approval-policy">
         <Icon name="shield" size={12} />
-        Policy gateway: <strong>submit_application</strong> is gated. In the product,
-        approval locks the hash; it does not bypass the gateway.
+        Policy gateway: <strong>submit_application</strong> is gated. In the product, approval locks
+        the hash; it does not bypass the gateway.
       </div>
     </div>
   );

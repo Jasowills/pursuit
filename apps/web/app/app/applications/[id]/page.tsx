@@ -6,7 +6,15 @@ import { useState } from 'react';
 import { apiFetch, useResource, ApiError } from '@/lib/api-client';
 import { ALLOWED_APPLICATION_TRANSITIONS } from '@pursuit/shared';
 import type { ApplicationStatus, Application, ApplicationEventItem } from '@pursuit/shared';
-import { PageHeader, Loading, ErrorBox, StatusPill, Card, Field, inputClass } from '../../_components/ui';
+import {
+  PageHeader,
+  Loading,
+  ErrorBox,
+  StatusPill,
+  Card,
+  Field,
+  inputClass,
+} from '../../_components/ui';
 
 interface DetailResponse {
   application: Application;
@@ -88,7 +96,9 @@ export default function ApplicationDetailPage() {
               <p className="eyebrow">Submitted</p>
               <p className="mt-1 text-[12px] text-[color:var(--muted-foreground)]">
                 {new Date(app.submitted_at).toLocaleString()} · confirmation{' '}
-                <code className="font-mono text-[11px] text-[color:var(--ink)]">{app.confirmation_ref}</code>
+                <code className="font-mono text-[11px] text-[color:var(--ink)]">
+                  {app.confirmation_ref}
+                </code>
               </p>
             </div>
           )}
@@ -160,7 +170,9 @@ export default function ApplicationDetailPage() {
           </div>
           <ol className="mt-4">
             {detail.data.events.length === 0 ? (
-              <li className="text-[13px] text-[color:var(--muted-foreground)]">No recorded events.</li>
+              <li className="text-[13px] text-[color:var(--muted-foreground)]">
+                No recorded events.
+              </li>
             ) : (
               detail.data.events.map((ev) => (
                 <li

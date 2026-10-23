@@ -146,9 +146,7 @@ function OverviewScene() {
               <span className="mini-next-pill">1 approval</span>
             </div>
             <h4>Review the exact payload before anything leaves the building.</h4>
-            <p className="mini-next-meta">
-              Senior Software Engineer, Growth · ExampleCorp
-            </p>
+            <p className="mini-next-meta">Senior Software Engineer, Growth · ExampleCorp</p>
             <div className="mini-next-foot">
               <span>HASH-BOUND · SINGLE USE</span>
               <span className="mini-next-button">
@@ -166,12 +164,8 @@ function OverviewScene() {
               <div className="mini-row">
                 <Avatar initials="EC" />
                 <div className="mini-row-copy">
-                  <div className="mini-row-title">
-                    Senior Software Engineer, Growth
-                  </div>
-                  <div className="mini-row-meta">
-                    ExampleCorp · Remote, US
-                  </div>
+                  <div className="mini-row-title">Senior Software Engineer, Growth</div>
+                  <div className="mini-row-meta">ExampleCorp · Remote, US</div>
                 </div>
                 <MiniStatus tone="warning">Ready for review</MiniStatus>
               </div>
@@ -186,9 +180,7 @@ function OverviewScene() {
               <div className="mini-row">
                 <Avatar initials="TV" tone="teal" />
                 <div className="mini-row-copy">
-                  <div className="mini-row-title">
-                    Full-stack Engineer, Product
-                  </div>
+                  <div className="mini-row-title">Full-stack Engineer, Product</div>
                   <div className="mini-row-meta">TerraVine · Remote</div>
                 </div>
                 <MiniStatus tone="muted">Discovered</MiniStatus>
@@ -241,9 +233,7 @@ function OverviewScene() {
                   <span className="mini-watcher-name">exampleco.example/careers</span>
                   <MiniStatus tone="muted">Stored</MiniStatus>
                 </div>
-                <div className="mini-watcher-meta">
-                  Every 120 min · scheduler not connected
-                </div>
+                <div className="mini-watcher-meta">Every 120 min · scheduler not connected</div>
               </div>
             </div>
           </div>
@@ -265,16 +255,12 @@ function OverviewScene() {
           </div>
           <div className="mini-activity-row">
             <span className="mini-activity-time">09:38</span>
-            <span className="mini-activity-copy">
-              Source snapshot re-read · hash unchanged
-            </span>
+            <span className="mini-activity-copy">Source snapshot re-read · hash unchanged</span>
             <MiniStatus tone="muted">Recorded</MiniStatus>
           </div>
           <div className="mini-activity-row">
             <span className="mini-activity-time">09:36</span>
-            <span className="mini-activity-copy">
-              Agent run stopped at submit_application
-            </span>
+            <span className="mini-activity-copy">Agent run stopped at submit_application</span>
             <MiniStatus tone="muted">Dev runtime</MiniStatus>
           </div>
         </div>
@@ -322,15 +308,10 @@ function DiscoverScene() {
             <div className="mini-job">
               <Avatar initials="EC" />
               <div className="mini-job-copy">
-                <div className="mini-job-title">
-                  Senior Software Engineer, Growth
-                </div>
-                <div className="mini-job-meta">
-                  ExampleCorp · Remote, US · $165,000/yr
-                </div>
+                <div className="mini-job-title">Senior Software Engineer, Growth</div>
+                <div className="mini-job-meta">ExampleCorp · Remote, US · $165,000/yr</div>
                 <div className="mini-job-why">
-                  <Icon name="sparkles" size={8} />
-                  3 checks passed · 8 of 9 requirements
+                  <Icon name="sparkles" size={8} />3 checks passed · 8 of 9 requirements
                 </div>
               </div>
               <div className="mini-job-side">
@@ -343,9 +324,7 @@ function DiscoverScene() {
               <Avatar initials="GW" tone="lime" />
               <div className="mini-job-copy">
                 <div className="mini-job-title">Platform Engineer II</div>
-                <div className="mini-job-meta">
-                  GraphiteWorks · Austin, TX · $150,000/yr
-                </div>
+                <div className="mini-job-meta">GraphiteWorks · Austin, TX · $150,000/yr</div>
                 <div className="mini-job-why">
                   <Icon name="sparkles" size={8} />
                   Comp matches · location needs review
@@ -361,9 +340,7 @@ function DiscoverScene() {
               <Avatar initials="TV" tone="teal" />
               <div className="mini-job-copy">
                 <div className="mini-job-title">Full-stack Engineer, Product</div>
-                <div className="mini-job-meta">
-                  TerraVine · Remote · compensation not listed
-                </div>
+                <div className="mini-job-meta">TerraVine · Remote · compensation not listed</div>
                 <div className="mini-job-why">
                   <Icon name="sparkles" size={8} />
                   Unknown comp stays unknown
@@ -379,9 +356,7 @@ function DiscoverScene() {
               <Avatar initials="DR" tone="warm" />
               <div className="mini-job-copy">
                 <div className="mini-job-title">Staff Platform Engineer</div>
-                <div className="mini-job-meta">
-                  DefenseRay · Denver, CO · on-site
-                </div>
+                <div className="mini-job-meta">DefenseRay · Denver, CO · on-site</div>
                 <div className="mini-job-why">
                   <Icon name="shield" size={8} />
                   Excluded by defense-contract hard filter
@@ -441,9 +416,7 @@ function DiscoverScene() {
             <div className="mini-panel-body">
               <div className="mini-watcher" style={{ marginTop: 0, borderTop: 0, paddingTop: 0 }}>
                 <div className="mini-watcher-name">exampleco.example/careers</div>
-                <div className="mini-watcher-meta">
-                  Every 120 min · no scheduler connected
-                </div>
+                <div className="mini-watcher-meta">Every 120 min · no scheduler connected</div>
               </div>
             </div>
           </div>
@@ -478,9 +451,7 @@ function QualifyScene() {
       <div className="preview-head">
         <div>
           <div className="preview-head-title">Senior Software Engineer, Growth</div>
-          <div className="preview-head-sub">
-            ExampleCorp · Remote, US · captured 18 Oct 2026
-          </div>
+          <div className="preview-head-sub">ExampleCorp · Remote, US · captured 18 Oct 2026</div>
         </div>
         <div className="preview-head-actions">
           <MiniStatus tone="success">Verified eligible</MiniStatus>
@@ -550,15 +521,11 @@ function QualifyScene() {
             <div className="mini-panel-body">
               <div className="mini-evidence">
                 <div className="mini-evidence-name">exampleco.example/careers</div>
-                <div className="mini-evidence-meta">
-                  captured 18 Oct 2026 · hash 8b1f…9d2a
-                </div>
+                <div className="mini-evidence-meta">captured 18 Oct 2026 · hash 8b1f…9d2a</div>
               </div>
               <div className="mini-evidence">
                 <div className="mini-evidence-name">Description hash</div>
-                <div className="mini-evidence-meta">
-                  e3a9…41c0 · changes trigger review
-                </div>
+                <div className="mini-evidence-meta">e3a9…41c0 · changes trigger review</div>
               </div>
             </div>
           </div>
@@ -570,8 +537,8 @@ function QualifyScene() {
             </div>
             <div className="mini-panel-body">
               <div className="mini-gate" style={{ marginTop: 0 }}>
-                <Icon name="lock" size={9} /> submit_application is gated.
-                Approval comes before action.
+                <Icon name="lock" size={9} /> submit_application is gated. Approval comes before
+                action.
               </div>
             </div>
           </div>
@@ -604,9 +571,7 @@ function ApproveScene() {
             <MiniStatus tone="warning">Submit application</MiniStatus>
           </div>
           <h4>Senior Software Engineer, Growth</h4>
-          <div className="mini-approval-destination">
-            jobs.exampleco.example/listings/1001
-          </div>
+          <div className="mini-approval-destination">jobs.exampleco.example/listings/1001</div>
 
           <div className="mini-approval-grid">
             <div className="mini-field">
@@ -639,9 +604,7 @@ function ApproveScene() {
             <span className="mini-hash">sha256 9f3a…c21e</span>
             <div className="mini-approval-actions">
               <span className="mini-btn">Reject</span>
-              <span className="mini-btn mini-btn-dark">
-                Approve exact payload
-              </span>
+              <span className="mini-btn mini-btn-dark">Approve exact payload</span>
             </div>
           </div>
         </div>
@@ -717,9 +680,7 @@ function TrackScene() {
       <div className="preview-head">
         <div>
           <div className="preview-head-title">Application record</div>
-          <div className="preview-head-sub">
-            Senior Software Engineer, Growth · ExampleCorp
-          </div>
+          <div className="preview-head-sub">Senior Software Engineer, Growth · ExampleCorp</div>
         </div>
         <div className="preview-head-actions">
           <MiniStatus tone="warning">Ready for review</MiniStatus>
@@ -773,9 +734,7 @@ function TrackScene() {
               <div className="mini-timeline-item" data-state="pending">
                 <span className="mini-timeline-dot" />
                 <div className="mini-timeline-label">Ready for review</div>
-                <div className="mini-timeline-meta">
-                  21 Oct 2026 · 10:05 · 1 approval pending
-                </div>
+                <div className="mini-timeline-meta">21 Oct 2026 · 10:05 · 1 approval pending</div>
               </div>
               <div className="mini-timeline-item" data-state="pending">
                 <span className="mini-timeline-dot" />
@@ -787,9 +746,7 @@ function TrackScene() {
               <div className="mini-timeline-item" data-state="empty">
                 <span className="mini-timeline-dot" />
                 <div className="mini-timeline-label">No submission recorded</div>
-                <div className="mini-timeline-meta">
-                  confirmation_ref is required for SUBMITTED
-                </div>
+                <div className="mini-timeline-meta">confirmation_ref is required for SUBMITTED</div>
               </div>
             </div>
           </div>
@@ -1032,8 +989,7 @@ function PhoneContent({ scene }: { scene: Scene }) {
           <Icon name="clock" size={9} /> Re-read source snapshot
         </div>
         <div className="mini-gate" style={{ marginTop: 10 }}>
-          <Icon name="lock" size={9} /> Start application requires a profile
-          record.
+          <Icon name="lock" size={9} /> Start application requires a profile record.
         </div>
         <span className="mini-btn mini-btn-dark" style={{ width: '100%', marginTop: 9 }}>
           Start application <Icon name="arrowUpRight" size={9} />
@@ -1058,9 +1014,7 @@ function PhoneContent({ scene }: { scene: Scene }) {
               <MiniStatus tone="warning">Awaiting you</MiniStatus>
             </div>
             <h4>Submit application</h4>
-            <div className="mini-approval-destination">
-              jobs.exampleco.example/listings/1001
-            </div>
+            <div className="mini-approval-destination">jobs.exampleco.example/listings/1001</div>
             <div className="mini-approval-grid">
               <div className="mini-field">
                 <div className="mini-field-label">Attachment</div>
@@ -1160,9 +1114,7 @@ export function MobileProductWindow({ scene }: { scene: Scene }) {
     <div className="preview-mobile">
       <div className="mobile-preview-inner">
         <PhoneMock scene={scene} />
-        <div className="mobile-preview-caption">
-          Interactive preview · sample workspace
-        </div>
+        <div className="mobile-preview-caption">Interactive preview · sample workspace</div>
       </div>
     </div>
   );

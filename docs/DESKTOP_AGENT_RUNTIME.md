@@ -28,3 +28,9 @@ Renderer interaction checks cover desktop and minimum-width session states using
 References: [OpenCode API](https://opencode.ai/v2/docs/api), [agents](https://dev.opencode.ai/v2/docs/agents/), [permissions](https://dev.opencode.ai/v2/docs/permissions/), [instructions and project isolation](https://dev.opencode.ai/v2/docs/instructions/).
 
 The conversational career shell now routes explicit requests into these same native sessions. See [career workspace behavior and tour boundaries](CAREER_WORKSPACE.md).
+
+## Local inference budgets, 2026-10-23
+
+Ollama uses bounded 180-second total, 120-second first-header and 45-second inter-chunk budgets. Cloud provider budgets remain 90/30/15 seconds. The assistant UI waits up to 180 polling iterations before directing users to inspect the unresolved session rather than retrying. These larger local bounds accommodate CPU model loading; they do not guarantee a response.
+
+A real Qwen 2.5:7b/OpenCode check reproduced the prior 30-second header timeout. One run completed in 112.63 seconds after the adjustment but overstated a supplied skill as expertise. A tightened prompt prohibits unsupported expertise-level claims; the stricter follow-up timed out at 180 seconds. Reliable model latency and semantic quality remain release gates. No paid inference or external action occurred. See the [evaluation evidence](qa/adversary-2026-10-23/model-evaluation.json).

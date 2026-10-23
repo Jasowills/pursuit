@@ -163,7 +163,11 @@ export function Skeleton({ className }: { className?: string }) {
 
 export function LoadingState({ label }: { label: string }) {
   return (
-    <div role="status" aria-live="polite" className="flex items-center gap-3 py-8 text-sm text-[color:var(--muted)]">
+    <div
+      role="status"
+      aria-live="polite"
+      className="flex items-center gap-3 py-8 text-sm text-[color:var(--muted)]"
+    >
       <span
         aria-hidden
         className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[var(--muted)] border-t-transparent"
@@ -186,7 +190,9 @@ export function ErrorState({
     <div role="alert" className="notice notice-danger">
       <span className="notice-label">Request failed</span>
       <p className="font-medium">{title}</p>
-      {detail ? <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">{detail}</p> : null}
+      {detail ? (
+        <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">{detail}</p>
+      ) : null}
       {retry ? (
         <button onClick={retry} className="link-underline mt-3 text-sm" type="button">
           Try again

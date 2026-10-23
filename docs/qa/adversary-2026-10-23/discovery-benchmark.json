@@ -1,0 +1,11 @@
+{
+  "observedAt": "2026-10-23T13:22:39.701Z",
+  "node": "v24.16.0",
+  "scenario": "5,000 synthetic source observations, roughly 2.7KB descriptions, two evidence-backed candidate skills; in-memory SQLite; single process; no network or model.",
+  "inputCount": 5000,
+  "outputCount": 300,
+  "importMs": 1224,
+  "rankingMs": 1505,
+  "rssMiB": 395,
+  "limitation": "A local smoke benchmark, not a production concurrency, recall or quality evaluation."
+}

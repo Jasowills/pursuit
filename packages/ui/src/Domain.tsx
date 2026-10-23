@@ -32,7 +32,9 @@ export function JobCard({
     <Card className="flex flex-col gap-3">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <p className="text-xs uppercase tracking-wide text-[color:var(--muted)]">{job.company_name}</p>
+          <p className="text-xs uppercase tracking-wide text-[color:var(--muted)]">
+            {job.company_name}
+          </p>
           <h4 className="mt-0.5 text-base font-semibold">{job.title}</h4>
         </div>
         <StatusIndicator
@@ -244,7 +246,9 @@ export function ResumeVersionCard({
         <Badge tone={version.status === 'APPROVED' ? 'success' : 'neutral'}>
           {version.status.toLowerCase().replace(/_/g, ' ')}
         </Badge>
-        <span className="font-mono text-xs text-[color:var(--muted)]">{version.template_version}</span>
+        <span className="font-mono text-xs text-[color:var(--muted)]">
+          {version.template_version}
+        </span>
       </div>
       <p className="text-sm font-medium">{version.label}</p>
       <p className="text-xs text-[color:var(--muted)]">
@@ -323,7 +327,9 @@ export function NotificationItem({
     >
       <span className="text-sm font-medium">{notification.title}</span>
       <span className="text-sm text-[color:var(--muted)]">{notification.body}</span>
-      <span className="font-mono text-[11px] text-[color:var(--muted)]">{notification.created_at}</span>
+      <span className="font-mono text-[11px] text-[color:var(--muted)]">
+        {notification.created_at}
+      </span>
     </button>
   );
 }

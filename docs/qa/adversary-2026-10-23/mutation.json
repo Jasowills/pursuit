@@ -1,0 +1,9 @@
+{
+  "scope": "temporary copy outside repository; actual application source was not mutated",
+  "mutation": "Authorize with stored payload hash instead of the reviewed caller-provided hash",
+  "attempted": 1,
+  "caught": 1,
+  "survived": 0,
+  "result": "fabricated-review-hash regression failed as intended; other8 queue cases passed",
+  "reproduction": "Copy packages/application src and test into a temporary package, link its dependencies, replace authorize().run(...expectedHash) with .run(...this.get(id).payload_hash), then execute test/queue.test.ts."
+}

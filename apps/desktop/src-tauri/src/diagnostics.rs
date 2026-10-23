@@ -52,9 +52,12 @@ fn private_write(path: &std::path::Path, data: &[u8]) -> std::io::Result<()> {
         use std::os::unix::fs::OpenOptionsExt;
         options.mode(0o600);
     }
-    let mut file = options.open(path)?;
+    let temporary = path.with_extension("pending");
+    let mut file = options.open(&temporary)?;
     file.write_all(data)?;
-    file.sync_all()
+    file.sync_all()?;
+    drop(file);
+    std::fs::rename(temporary, path)
 }
 impl Diagnostics {
     pub fn open(folder: PathBuf) -> std::io::Result<Self> {
