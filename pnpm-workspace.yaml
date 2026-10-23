@@ -1,15 +1,15 @@
 packages:
   - 'apps/*'
   - 'packages/*'
-onlyBuiltDependencies:
-  - prisma
-  - '@prisma/client'
-  - '@prisma/engines'
-  - esbuild
-  - '@tailwindcss/oxide'
-  - sharp
-  - workerd
-  - '@swc/core'
+allowBuilds:
+  prisma: true
+  '@prisma/client': true
+  '@prisma/engines': true
+  esbuild: true
+  '@tailwindcss/oxide': true
+  sharp: true
+  workerd: true
+  '@swc/core': true
 
 overrides:
   postcss: ^8.5.23

@@ -1,5 +1,12 @@
 // Run on the target runner after Tauri bundling. Does not publish a release.
-import { readFileSync, readdirSync, statSync, mkdirSync, copyFileSync, writeFileSync } from 'node:fs';
+import {
+  readFileSync,
+  readdirSync,
+  statSync,
+  mkdirSync,
+  copyFileSync,
+  writeFileSync,
+} from 'node:fs';
 import { join, basename, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
@@ -45,26 +52,53 @@ for (const extension of formats.split(',')) {
   assert(statSync(path).size > 1000000, 'Installer unexpectedly small');
   const filename = basename(path);
   copyFileSync(path, join(out, filename));
-  artifacts.push({ filename, bytes: statSync(path).size, sha256: createHash('sha256').update(readFileSync(path)).digest('hex') });
+  artifacts.push({
+    filename,
+    bytes: statSync(path).size,
+    sha256: createHash('sha256').update(readFileSync(path)).digest('hex'),
+  });
 }
 // Verify the resources Tauri consumed, including runtime-resolved browser code.
 assert(statSync('apps/desktop/engine/worker.cjs').size > 1000);
 assert(statSync('apps/desktop/engine/node_modules/playwright-core/package.json').size > 0);
 if (process.platform === 'darwin') {
   const resources = join(root, 'bundle/macos/Pursuit.app/Contents/Resources/engine');
-  assert.equal(readFileSync(join(resources, 'worker.cjs')).compare(readFileSync('apps/desktop/engine/worker.cjs')), 0);
+  assert.equal(
+    readFileSync(join(resources, 'worker.cjs')).compare(
+      readFileSync('apps/desktop/engine/worker.cjs'),
+    ),
+    0,
+  );
   assert(statSync(join(resources, 'node_modules/playwright-core/package.json')).size > 0);
 }
 const manifest = {
   version: JSON.parse(readFileSync('apps/desktop/src-tauri/tauri.conf.json', 'utf8')).version,
   commit: process.env.GITHUB_SHA ?? null,
-  target, platform: process.platform, architecture: process.arch,
+  target,
+  platform: process.platform,
+  architecture: process.arch,
   distribution: 'unsigned-internal-alpha',
-  requirements: ['Node >=22.13 for the career engine', 'Configured Chromium for application execution', 'Configured model access for AI drafts'],
-  checks: ['native-runner', 'binary-header-architecture', 'installer-present', 'engine-staging-resources', ...(process.platform === 'darwin' ? ['app-bundle-resources'] : [])],
-  limitations: ['Not signed or notarized', 'Clean-machine installation and native UI smoke test remain required'],
+  requirements: [
+    'Node >=22.13 for the career engine',
+    'Configured Chromium for application execution',
+    'Configured model access for AI drafts',
+  ],
+  checks: [
+    'native-runner',
+    'binary-header-architecture',
+    'installer-present',
+    'engine-staging-resources',
+    ...(process.platform === 'darwin' ? ['app-bundle-resources'] : []),
+  ],
+  limitations: [
+    'Not signed or notarized',
+    'Clean-machine installation and native UI smoke test remain required',
+  ],
   artifacts,
 };
 writeFileSync(join(out, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
-writeFileSync(join(out, 'SHA256SUMS'), artifacts.map((a) => `${a.sha256}  ${a.filename}`).join('\n') + '\n');
+writeFileSync(
+  join(out, 'SHA256SUMS'),
+  artifacts.map((a) => `${a.sha256}  ${a.filename}`).join('\n') + '\n',
+);
 console.log(JSON.stringify(manifest, null, 2));

@@ -16,7 +16,7 @@
     "./status": "./src/status.tsx"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp src/tokens.css dist/tokens.css",
+    "build": "tsc -p tsconfig.json && node -e \"require('node:fs').copyFileSync('src/tokens.css', 'dist/tokens.css')\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "echo 'no unit tests (visual components)' && exit 0"
   },
