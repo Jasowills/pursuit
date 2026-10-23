@@ -71,7 +71,7 @@ export function ModelConnections() {
                 () =>
                   apiFetch('/connections/models', {
                     method: 'POST',
-                    json: { provider, api_key: submitted },
+                    json: { provider, api_key: provider === 'ollama' ? '' : submitted },
                   }),
                 'Connected. Select and test a model below.',
               );
@@ -97,8 +97,9 @@ export function ModelConnections() {
             >
               <input
                 type="password"
-                required
-                minLength={10}
+                required={provider !== 'ollama'}
+                disabled={provider === 'ollama'}
+                minLength={provider === 'ollama' ? 0 : 10}
                 maxLength={4096}
                 autoComplete="off"
                 spellCheck={false}

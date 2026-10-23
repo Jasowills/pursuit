@@ -132,7 +132,10 @@ describe('BYOM career workflow (real Postgres, mocked external services)', () =>
       .expect(201);
     draftId = draft.body.id;
     content = draft.body.content;
-    expect(content.resume).toBe(generated.resume);
+    expect(content.resume).toBe(
+      'Fictional Tester has built TypeScript services and PostgreSQL workflows.',
+    );
+    expect(content.resume).not.toBe(generated.resume);
     expect(draft.body.status).toBe('DRAFT');
     await api(other).get(`/api/v1/workflow/${draftId}`).expect(404);
     expect((await api(other).get('/api/v1/workflow').expect(200)).body.items).toEqual([]);

@@ -6,7 +6,7 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "dev": "pnpm build && node dist/main.js",
-    "test": "jest --config jest.config.cjs --silent",
+    "test": "jest --config jest.config.cjs --silent --runInBand",
     "test:e2e": "jest --config jest.config.cjs --runInBand --silent --testPathPattern e2e"
   },
   "dependencies": {
@@ -20,7 +20,9 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "zod": "^4.0.14",
-    "@pursuit/discovery": "workspace:*"
+    "@pursuit/discovery": "workspace:*",
+    "@pursuit/tailoring": "workspace:*",
+    "@pursuit/application": "workspace:*"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",

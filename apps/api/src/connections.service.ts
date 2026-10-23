@@ -78,7 +78,12 @@ export class ConnectionsService {
     return { model, verified: true };
   }
 
-  async generate(a: SessionPrincipal, id: string, prompt: string) {
+  async generate(
+    a: SessionPrincipal,
+    id: string,
+    prompt: string,
+    options?: { maxOutputTokens?: number; schema?: Record<string, unknown> },
+  ) {
     const row = await this.get(a, id);
     if (!row.model || !row.testedAt)
       throw new BadRequestException({ error: 'test_model_connection_first' });
@@ -87,6 +92,7 @@ export class ConnectionsService {
       this.vault.open(row.ciphertext, this.owner(a, row.provider)),
       row.model,
       prompt,
+      options,
     );
     // A revocation or replacement during inference invalidates the result.
     const current = await this.get(a, id);

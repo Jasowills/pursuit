@@ -12,11 +12,15 @@ const connect = z
     api_key: z
       .string()
       .trim()
-      .min(10)
+      .min(0)
       .max(4096)
-      .regex(/^[^\s]+$/),
+      .regex(/^[^\s]*$/),
   })
-  .strict();
+  .strict()
+  .superRefine((v, c) => {
+    if (v.provider !== 'ollama' && v.api_key.length < 10)
+      c.addIssue({ code: 'custom', message: 'API key is required' });
+  });
 const test = z.object({ model: z.string().min(1).max(200) }).strict();
 
 @Controller('connections/models')
@@ -29,7 +33,11 @@ export class ConnectionsController {
     @Req() req: Request,
     @Body(new ZodValidationPipe(connect)) body: z.infer<typeof connect>,
   ) {
-    return this.connections.connect(authOf(req), body.provider, body.api_key);
+    return this.connections.connect(
+      authOf(req),
+      body.provider,
+      body.provider === 'ollama' ? 'local-no-key' : body.api_key,
+    );
   }
   @Post(':id/test') test(
     @Req() req: Request,

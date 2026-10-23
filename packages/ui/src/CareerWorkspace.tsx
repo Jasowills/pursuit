@@ -1,4 +1,6 @@
 'use client';
+import { FollowupPanel } from './FollowupPanel';
+import { TailoringStudio } from './TailoringStudio';
 import { StatusBadge } from './status';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -135,6 +137,8 @@ type Props = {
   onSettings?: (screen: 'identity' | 'models' | 'agent') => void;
   onExitSample?: () => void;
   initialRequest?: string;
+  onSavePdf?: (hash: string, bytes: Uint8Array) => Promise<void>;
+  onExportPdf?: (hash: string) => Promise<string>;
 };
 export function ResumeDocument({ tailored = true }: { tailored?: boolean }) {
   return (
@@ -190,6 +194,8 @@ export function CareerWorkspace({
   onSettings,
   onExitSample,
   initialRequest = '',
+  onSavePdf,
+  onExportPdf,
 }: Props) {
   const [book, setBook] = useState<CareerBook>(initialData);
   const [screen, setScreen] = useState<CareerScreen>('assistant');
@@ -716,6 +722,21 @@ export function CareerWorkspace({
                   </p>
                 )}
               </div>
+              {!sample && job && (
+                <FollowupPanel
+                  key={job.id}
+                  job={job}
+                  resume={book.tailoring?.resume}
+                  onSave={(contacts) =>
+                    persist({
+                      ...book,
+                      opportunities: book.opportunities.map((item) =>
+                        item.id === job.id ? { ...item, contacts } : item,
+                      ),
+                    })
+                  }
+                />
+              )}
             </>
           ) : screen === 'resumes' ? (
             <>
@@ -757,11 +778,14 @@ export function CareerWorkspace({
                   <ResumeDocument tailored={tailored} />
                 </>
               ) : (
-                <p className="cw-empty">
-                  Confirm your career information in Career Identity, then use your connected model
-                  to draft material in the assistant. Document export and application packet
-                  preparation are not connected in this alpha.
-                </p>
+                <TailoringStudio
+                  value={book.tailoring}
+                  opportunities={book.opportunities}
+                  onSave={(tailoring) => persist({ ...book, tailoring })}
+                  onModel={onAsk ? (prompt) => onAsk(prompt, false, () => {}) : undefined}
+                  onSavePdf={onSavePdf}
+                  onExportPdf={onExportPdf}
+                />
               )}
             </>
           ) : screen === 'outreach' ? (

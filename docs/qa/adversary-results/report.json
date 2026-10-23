@@ -1,0 +1,89 @@
+{
+  "run_id": "adv-tailoring-2026-10-23",
+  "target": "Pursuit tailoring and Ashby queue slice",
+  "verdict": "NOT_READY",
+  "verdict_reason": "The reproduced expiry finding is fixed; real form qualification and full-product security/operations gates remain incomplete.",
+  "application_map": [
+    "Authenticated tenant API \u2192 owned resume/file storage",
+    "Reviewed source \u2192 packet \u2192 hashed PDF",
+    "Exact approval \u2192 SQLite queue \u2192 bounded browser adapter",
+    "Native studio \u2192 simulated IPC browser QA + separately tested Rust store"
+  ],
+  "requirement_model": {
+    "known": [
+      "No invented experience",
+      "Explicit application approval",
+      "Bounded daily attempts",
+      "Safe recovery without duplicate submission"
+    ],
+    "inferred": ["Approval must remain valid at the moment of submission"],
+    "unknown": [
+      "Real employer Ashby forms, third-party widgets and receipts",
+      "Horizontal deployment behavior"
+    ]
+  },
+  "risk_plan": [
+    {
+      "area": "Document integrity",
+      "risk": "HIGH",
+      "mode": "Source-tampering/import tests"
+    },
+    {
+      "area": "Authorization and state changes",
+      "risk": "HIGH",
+      "mode": "Expiry fault injection, worker revocation, restart recovery"
+    },
+    {
+      "area": "Provider behavior",
+      "risk": "HIGH",
+      "mode": "Intercepted browser fixture; live behavior unknown"
+    }
+  ],
+  "sandbox": "Disposable task PostgreSQL, temporary private storage, synthetic local SQLite, fake clock and fully intercepted browser traffic.",
+  "baseline": {
+    "workspace_tests_passed": 189,
+    "application_tests_passed": 9
+  },
+  "new_scenarios": 1,
+  "findings": {
+    "fixed_high": 1,
+    "items": [
+      {
+        "id": "ADV-0001",
+        "title": "Approval expiration during form fill did not prevent submission",
+        "severity": "HIGH",
+        "status": "FIXED",
+        "mode": "chaos",
+        "scenario": "Authorize at 10:00, begin at 10:29, complete fill at 10:31 after the 30-minute approval expires.",
+        "expected": "No submit call; application needs renewed review.",
+        "observed_before": "submit called once; regression expected zero and failed.",
+        "observed_after": "No submit call, NEEDS_USER. All 10 application unit cases pass.",
+        "reproduction": [
+          "Run packages/application/test/queue.test.ts authorization-expiry test.",
+          "Fake time advances during adapter.fill; no network or account involved.",
+          "Before fix the test fails submitted count 1 vs 0.",
+          "With approval_until checked in the SUBMITTING transition the test passes."
+        ],
+        "evidence": {
+          "test": "packages/application/test/queue.test.ts",
+          "before": {
+            "passed": 9,
+            "failed": 1,
+            "submit_calls": 1
+          },
+          "after": {
+            "passed": 10,
+            "failed": 0,
+            "submit_calls": 0,
+            "state": "NEEDS_USER"
+          }
+        }
+      }
+    ]
+  },
+  "limitations": [
+    "Not an independent external security audit",
+    "No production load or hostile native-process sandbox qualification",
+    "Existing dependency advisories remain in the main QA record"
+  ]
+}

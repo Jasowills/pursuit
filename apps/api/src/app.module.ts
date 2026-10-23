@@ -1,3 +1,7 @@
+import { ApplicationExecutionController } from './application-execution.controller';
+import { ApplicationExecutionService } from './application-execution.service';
+import { TailoringController } from './tailoring.controller';
+import { TailoringService } from './tailoring.service';
 import { DiscoveryService } from './discovery.service';
 import { AutopilotService } from './autopilot.service';
 import { AutopilotController } from './autopilot.controller';
@@ -21,6 +25,8 @@ import { DirectGmailService } from './direct-gmail.service';
 
 @Module({
   controllers: [
+    ApplicationExecutionController,
+    TailoringController,
     AutopilotController,
     CoreController,
     CareersController,
@@ -29,6 +35,8 @@ import { DirectGmailService } from './direct-gmail.service';
     WorkflowController,
   ],
   providers: [
+    ApplicationExecutionService,
+    TailoringService,
     DiscoveryService,
     AutopilotService,
     DbService,

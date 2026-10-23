@@ -1,0 +1,12 @@
+{
+  "scope": "Real browser and bundled parser/PDF code; native IPC simulated. Rust persistence separately tested. No live applications or messages.",
+  "import_txt": "pass",
+  "import_pdf": "pass",
+  "import_docx": "pass",
+  "source_review": "pass",
+  "prepare_without_model": "pass",
+  "pdf_export": "pass",
+  "reload_saved_packet": "pass",
+  "pdf_bytes": 8589,
+  "browser_errors": []
+}

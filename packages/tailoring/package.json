@@ -1,0 +1,63 @@
+{
+  "name": "@pursuit/tailoring",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./pdf": {
+      "types": "./dist/pdf.d.ts",
+      "import": "./dist/pdf.js",
+      "require": "./dist/pdf.cjs"
+    },
+    "./imports": {
+      "types": "./dist/imports.d.ts",
+      "default": "./dist/imports.js"
+    },
+    "./font": "./assets/NotoSans-Regular.ttf",
+    "./worker": "./dist/document-worker.cjs",
+    "./font-url": {
+      "types": "./dist/font-url.d.ts",
+      "default": "./dist/font-url.js"
+    }
+  },
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && esbuild src/index.ts --bundle --platform=node --format=cjs --outfile=dist/index.cjs && esbuild src/document-worker.ts --bundle --platform=node --format=cjs --external:unpdf --outfile=dist/document-worker.cjs && esbuild src/pdf.ts --bundle --platform=node --format=cjs --outfile=dist/pdf.cjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.0.14",
+    "pdf-lib": "^1.17.1",
+    "unpdf": "^1.4.0",
+    "fflate": "^0.8.2",
+    "fast-xml-parser": "^5.3.0",
+    "@pdf-lib/fontkit": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.19.2"
+  },
+  "typesVersions": {
+    "*": {
+      "pdf": [
+        "dist/pdf.d.ts"
+      ],
+      "imports": [
+        "dist/imports.d.ts"
+      ],
+      "font-url": [
+        "dist/font-url.d.ts"
+      ]
+    }
+  }
+}

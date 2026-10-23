@@ -1,0 +1,31 @@
+{
+  "id": "ADV-0001",
+  "title": "Approval expiration during form fill did not prevent submission",
+  "severity": "HIGH",
+  "status": "FIXED",
+  "mode": "chaos",
+  "scenario": "Authorize at 10:00, begin at 10:29, complete fill at 10:31 after the 30-minute approval expires.",
+  "expected": "No submit call; application needs renewed review.",
+  "observed_before": "submit called once; regression expected zero and failed.",
+  "observed_after": "No submit call, NEEDS_USER. All 10 application unit cases pass.",
+  "reproduction": [
+    "Run packages/application/test/queue.test.ts authorization-expiry test.",
+    "Fake time advances during adapter.fill; no network or account involved.",
+    "Before fix the test fails submitted count 1 vs 0.",
+    "With approval_until checked in the SUBMITTING transition the test passes."
+  ],
+  "evidence": {
+    "test": "packages/application/test/queue.test.ts",
+    "before": {
+      "passed": 9,
+      "failed": 1,
+      "submit_calls": 1
+    },
+    "after": {
+      "passed": 10,
+      "failed": 0,
+      "submit_calls": 0,
+      "state": "NEEDS_USER"
+    }
+  }
+}

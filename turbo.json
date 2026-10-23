@@ -9,7 +9,10 @@
       "dependsOn": ["^build"]
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "env": ["DATABASE_URL", "NODE_ENV", "AGENT_RUNTIME", "ENABLE_DEV_LOGIN"],
+      "cache": false,
+      "passThroughEnv": ["CHROMIUM_EXECUTABLE", "RESUME_STORAGE_DIR", "APPLICATION_STORAGE_DIR"]
     },
     "dev": {
       "cache": false,

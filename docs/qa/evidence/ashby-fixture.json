@@ -1,0 +1,15 @@
+{
+  "observedAt": "2026-10-23T08:33:25.446Z",
+  "scope": "All browser requests intercepted. Real source-backed PDF, form fill, upload and one synthetic confirmation. No Ashby contact or real application.",
+  "state": "CONFIRMED",
+  "receipt": {
+    "kind": "hosted_confirmation",
+    "url": "https://jobs.ashbyhq.com/fixture/role/application",
+    "text": "Application submitted",
+    "acceptedPostStatus": 200,
+    "observedAt": "2026-10-23T08:33:24.805Z"
+  },
+  "postCount": 1,
+  "pdfBytes": 1148,
+  "sourceFactsPreserved": true
+}

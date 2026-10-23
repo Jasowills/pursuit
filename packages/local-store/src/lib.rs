@@ -35,7 +35,7 @@ impl Store {
             "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;",
         )?;
         let version: i64 = connection.query_row("PRAGMA user_version", [], |r| r.get(0))?;
-        if version > 4 {
+        if version > 5 {
             return Err(rusqlite::Error::InvalidQuery);
         }
         if version == 0 {
@@ -74,6 +74,10 @@ impl Store {
         if version == 3 {
             connection.execute_batch("BEGIN IMMEDIATE; CREATE TABLE career_book(id INTEGER PRIMARY KEY CHECK(id=1),body TEXT NOT NULL CHECK(json_valid(body))); PRAGMA user_version=4; COMMIT;")?;
         }
+        let version: i64 = connection.query_row("PRAGMA user_version", [], |r| r.get(0))?;
+        if version == 4 {
+            connection.execute_batch("BEGIN IMMEDIATE; CREATE TABLE career_artifacts(id TEXT PRIMARY KEY,body BLOB NOT NULL CHECK(length(body)<=2500000)); PRAGMA user_version=5; COMMIT;")?;
+        }
         Ok(Self {
             connection,
             path: path.as_ref().to_path_buf(),
@@ -95,7 +99,7 @@ impl Store {
             .collect::<Result<Vec<_>>>()?;
         Ok(Workspace {
             database_path: self.path.to_string_lossy().into_owned(),
-            schema_version: 4,
+            schema_version: 5,
             tasks,
         })
     }
@@ -170,7 +174,7 @@ mod tests {
         let path = dir.path().join("future.sqlite");
         Connection::open(&path)
             .unwrap()
-            .execute_batch("PRAGMA user_version=5;")
+            .execute_batch("PRAGMA user_version=6;")
             .unwrap();
         assert!(Store::open(path).is_err());
     }

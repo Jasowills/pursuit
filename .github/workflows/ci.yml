@@ -66,5 +66,11 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Install fixture browser
+        run: pnpm --filter @pursuit/application exec playwright-core install --with-deps chromium
+
+      - name: Ashby hosted-form fixture
+        run: pnpm --filter @pursuit/application test:browser
+
       - name: Format check
         run: pnpm format:check

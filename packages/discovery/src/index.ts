@@ -8,3 +8,5 @@ export * from './engine.js';
 export * from './ranking.js';
 export * from './feeds.js';
 export * from './verify.js';
+export { canonicalUrl } from './text.js';
+export * from './company.js';

@@ -16,19 +16,27 @@ pnpm discovery hunt packages/discovery/examples/profile.json
 
 Replace the synthetic profile first. This CLI and the expanded retained API importer are working code; native harness integration, broad social-platform access and complete international eligibility remain unfinished. See [setup, source coverage and limits](docs/DISCOVERY_ENGINE.md) and the [executed QA report](docs/qa/DISCOVERY_REPORT.md).
 
+## Resume tailoring and application work
+
+The native **Resumes & letters** studio imports text PDFs, DOCX and text; requires extraction review; selects source-backed experience; offers three introduction tones; and saves/exports actual PDFs. No model call is required. The retained API also stores original documents and PDF versions with owner checks. A live Qwen 2.5 7B selection test used 183 input and 24 output tokens.
+
+The first Ashby hosted-form executor and persistent worker are implemented behind operator configuration. The source-to-PDF-to-form fixture passes without contacting an employer; live Ashby qualification and native execution controls remain unfinished. Company research returns published source evidence, and the harness keeps copyable follow-up drafts with a role.
+
+See [setup and exact boundaries](docs/TAILORING_AND_APPLICATION_ENGINE.md), [executed checks](docs/qa/TAILORING_APPLICATION_REPORT.md), and the [fictional PDF example](output/pdf/tailored-resume-example.pdf).
+
 ## What works today
 
-| Capability                                  | Desktop                                                          | Retained web/API                                                |
-| ------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------- |
-| Career facts, preferences and local records | SQLite career book and identity                                  | Tenant-scoped Postgres profile and records                      |
-| Assistant conversation                      | Managed, tool-denied OpenCode with BYOM; Ollama verified locally | Earlier agent adapter/prototype                                 |
-| Job intake                                  | Paste and save a posting                                         | Manual intake; multi-ATS/Himalayas/page importer                |
-| Resume and cover-letter drafting            | Conversational draft; requires review                            | Structured saved drafts using a verified cloud-model connection |
-| Watchers                                    | No watcher executor                                              | Configuration CRUD; no polling executor                         |
-| Scheduled work                              | No background sourcing/application worker                        | Opt-in Greenhouse research/preparation, up to five drafts/run   |
-| Automatic applications                      | **Not implemented**                                              | **Not implemented**; application records are not submissions    |
-| Gmail                                       | Not connected to native workspace                                | Direct Google OAuth or Composio; exact saved-message approval   |
-| Mobile companion                            | No pairing/relay transport                                       | Expo prototype; no released phone companion                     |
+| Capability                                  | Desktop                                                          | Retained web/API                                              |
+| ------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------- |
+| Career facts, preferences and local records | SQLite career book and identity                                  | Tenant-scoped Postgres profile and records                    |
+| Assistant conversation                      | Managed, tool-denied OpenCode with BYOM; Ollama verified locally | Earlier agent adapter/prototype                               |
+| Job intake                                  | Paste and save a posting                                         | Manual intake; multi-ATS/Himalayas/page importer              |
+| Resume and cover-letter drafting            | Reviewed source selection and saved PDF export                   | Source-backed packets, original documents and saved PDFs      |
+| Watchers                                    | No watcher executor                                              | Configuration CRUD; no polling executor                       |
+| Scheduled work                              | No background sourcing/application worker                        | Research/preparation; optional exact-plan Ashby worker        |
+| Automatic applications                      | **Not implemented**                                              | Gated Ashby executor; fixture-qualified, not live-qualified   |
+| Gmail                                       | Not connected to native workspace                                | Direct Google OAuth or Composio; exact saved-message approval |
+| Mobile companion                            | No pairing/relay transport                                       | Expo prototype; no released phone companion                   |
 
 The intended 100-applications/day ceiling, broad global discovery and optional user-hosted always-on worker are design decisions, not current execution guarantees. Indeed/Glassdoor and arbitrary job-board scraping are not implemented. There is no universal applicant-tracking-system submission adapter.
 
@@ -87,9 +95,9 @@ Development sign-in creates a tenant and seven-day session; it is passwordless a
 
 Generate a persistent encryption key with `openssl rand -hex 32` and set `CONNECTION_ENCRYPTION_KEY`. Back it up securely: replacing it makes saved provider credentials and refresh tokens unreadable.
 
-In Settings, connect your own OpenAI, Anthropic, Google AI Studio or OpenRouter/Hermes key; select a returned model and run **Test & select**. Then use Search workflow to import a Greenhouse board or add a job manually, paste a factual resume, and prepare draft material. Resume/cover-letter downloads are plain text. PDF/DOCX parsing and polished document export are not implemented. The retained API model gateway does not currently support Ollama; native Ollama tests do not prove web-workflow integration.
+In Settings, connect your own OpenAI, Anthropic, Google AI Studio or OpenRouter/Hermes key; select a returned model and run **Test & select**. For local Ollama on the API host, set `ENABLE_LOCAL_MODELS=true` and connect with an empty key. Search workflow accepts a saved job and pasted factual resume; its legacy downloads are plain text. The new tailoring API and native studio support reviewed PDF/DOCX import and saved PDF export; see the [engine guide](docs/TAILORING_AND_APPLICATION_ENGINE.md). Hermes model access does not provide a Hermes Agent runtime integration.
 
-Preparation sends the selected career facts, resume and posting to your provider. Review gaps, unsupported claims, recipient and exact message. Editing an approved draft invalidates its approval. Ambiguous email delivery locks the draft for verification and is never automatically retried.
+Legacy preparation sends bounded resume and posting excerpts to your selected provider for advisory match notes. Exported candidate material uses reviewed source wording. The new tailoring studio can prepare without inference or request a bounded selection of existing experience IDs. Review gaps, unsupported claims, recipient and exact message. Editing an approved draft invalidates its approval. Ambiguous email delivery locks the draft for verification and is never automatically retried.
 
 ### Gmail: two connection options
 
@@ -124,7 +132,9 @@ apps/web             Next.js landing page, product tour, retained dashboard
 apps/api             NestJS tenant-scoped workflow and integrations
 apps/mobile          Expo prototype
 packages/local-store Rust SQLite records and migrations
-packages/discovery   Headless sourcing, verification, evidence ranking and local worker
+packages/discovery   Headless sourcing, verification, company research and ranking
+packages/tailoring   Portable source-backed resume engine, imports and PDF rendering
+packages/application Bounded Ashby adapter and durable application queue
 packages/ui          Shared career workspace and visual components
 packages/shared      Zod contracts, matching and transition rules
 packages/agent-core  Runtime boundary and agent contracts

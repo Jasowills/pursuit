@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { researchCompany } from './company.js';
 import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
@@ -18,6 +19,9 @@ const engine = new DiscoveryEngine(store, async (url, options) => {
 const output = (value: unknown) => process.stdout.write(JSON.stringify(value, null, 2) + '\n');
 try {
   switch (command) {
+    case 'company':
+      output(await researchCompany(args[0]!, args[1] ?? new URL(args[0]!).hostname, reader));
+      break;
     case 'add':
       output(store.addSource(JSON.parse(readFileSync(args[0]!, 'utf8'))));
       break;

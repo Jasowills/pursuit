@@ -1,3 +1,4 @@
+import { createReader, researchCompany } from '@pursuit/discovery';
 import { DiscoveryRequest } from './discovery.service';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import type { Request } from 'express';
@@ -54,6 +55,18 @@ export class WorkflowController {
   }
   @Delete('connections/gmail') gmailDisconnect(@Req() r: Request) {
     return this.gmail.disconnect(authOf(r));
+  }
+  @Post('workflow/company-research') companyResearch(
+    @Req() r: Request,
+    @Body(
+      new ZodValidationPipe(
+        z.object({ url: z.string().url().max(2048), company: z.string().min(1).max(300) }).strict(),
+      ),
+    )
+    body: { url: string; company: string },
+  ) {
+    authOf(r);
+    return researchCompany(body.url, body.company, createReader());
   }
   @Post('workflow/discover') discover(
     @Req() r: Request,

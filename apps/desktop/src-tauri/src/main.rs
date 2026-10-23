@@ -89,6 +89,47 @@ fn delete_identity_source(
         .delete_identity_source(&id, &expected_hash)
         .map_err(|e| e.to_string())
 }
+#[tauri::command]
+fn save_resume_pdf(core: tauri::State<Core>, hash: String, bytes: Vec<u8>) -> Result<(), String> {
+    core.0
+        .lock()
+        .map_err(|_| "Workspace is busy".to_string())?
+        .save_resume_pdf(&hash, &bytes)
+        .map_err(|_| "PDF integrity check or storage failed".to_string())
+}
+#[tauri::command]
+fn export_resume_pdf(
+    app: tauri::AppHandle,
+    core: tauri::State<Core>,
+    hash: String,
+) -> Result<String, String> {
+    let bytes = core
+        .0
+        .lock()
+        .map_err(|_| "Workspace is busy".to_string())?
+        .resume_pdf(&hash)
+        .map_err(|_| "Saved PDF not found".to_string())?;
+    let folder = app
+        .path()
+        .document_dir()
+        .map_err(|_| "Documents folder unavailable".to_string())?
+        .join("Pursuit");
+    std::fs::create_dir_all(&folder).map_err(|_| "Cannot create export folder".to_string())?;
+    let path = folder.join(format!("resume-{}.pdf", hash));
+    use std::io::Write;
+    let mut options = std::fs::OpenOptions::new();
+    options.write(true).create(true).truncate(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        options.mode(0o600);
+    }
+    options
+        .open(&path)
+        .and_then(|mut f| f.write_all(&bytes))
+        .map_err(|_| "Cannot export PDF".to_string())?;
+    Ok(path.to_string_lossy().into_owned())
+}
 fn main() {
     tauri::Builder::default()
         .manage(managed::ManagedRuntime::default())
@@ -102,6 +143,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             workspace,
             career_book,
+            save_resume_pdf,
+            export_resume_pdf,
             save_career_book,
             save_task,
             identity,

@@ -110,6 +110,14 @@ function App() {
         sample={tour}
         connected={isTauri()}
         onSave={save}
+        onSavePdf={
+          isTauri()
+            ? (hash, bytes) => invoke('save_resume_pdf', { hash, bytes: Array.from(bytes) })
+            : undefined
+        }
+        onExportPdf={
+          isTauri() ? (hash) => invoke<string>('export_resume_pdf', { hash }) : undefined
+        }
         onAsk={ask}
         onCancel={() => {
           cancelled.current = true;

@@ -219,7 +219,7 @@ mod tests {
         drop(db);
         let s = Store::open(&path).unwrap();
         assert_eq!(s.workspace().unwrap().tasks[0].id, "original");
-        assert_eq!(s.workspace().unwrap().schema_version, 4);
+        assert_eq!(s.workspace().unwrap().schema_version, 5);
         assert!(s.identity().unwrap().sources.is_empty());
     }
     #[test]

@@ -1,0 +1,34 @@
+{
+  "name": "@pursuit/application",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && esbuild src/index.ts --bundle --platform=node --format=cjs --external:playwright-core --outfile=dist/index.cjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:browser": "vitest run --config vitest.browser.config.ts"
+  },
+  "dependencies": {
+    "@pursuit/discovery": "workspace:*",
+    "@pursuit/tailoring": "workspace:*",
+    "playwright-core": "^1.55.0",
+    "zod": "^4.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.0",
+    "tsx": "^4.19.2",
+    "esbuild": "^0.28.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  }
+}

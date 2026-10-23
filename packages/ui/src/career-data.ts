@@ -1,3 +1,4 @@
+import type { TailoringState } from './TailoringStudio';
 export type Opportunity = {
   id: string;
   company: string;
@@ -8,6 +9,7 @@ export type Opportunity = {
   reason: string;
   posting: string;
   confirmation?: string;
+  contacts?: { name: string; role: string; sourceUrl: string; channel: string; message: string }[];
 };
 export type CareerMessage = { id: string; role: 'user' | 'assistant'; text: string };
 export type CareerBook = {
@@ -15,6 +17,7 @@ export type CareerBook = {
   messages: CareerMessage[];
   opportunities: Opportunity[];
   notes: string[];
+  tailoring?: TailoringState;
 };
 export type CareerScreen =
   'assistant' | 'opportunities' | 'applications' | 'outreach' | 'resumes' | 'background';

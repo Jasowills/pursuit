@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-10-23T08:04:28.633Z",
+  "model": "qwen2.5:7b",
+  "scope": "Synthetic resume only; one schema-constrained selection call. No tools, account access or submissions.",
+  "promptCharacters": 509,
+  "promptTokens": 183,
+  "outputTokens": 24,
+  "totalSeconds": 31.314465659,
+  "selectedIds": ["c174495566e32f10:4"],
+  "selectedBulletText": ["- Tested REST APIs with Postman and SQL."],
+  "allResumeTextFromSource": true,
+  "notes": "This verifies a local selection path, not universal model quality or full rewriting."
+}

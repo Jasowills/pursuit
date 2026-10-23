@@ -80,8 +80,55 @@ mod tests {
         {
             let s = Store::open(&p).unwrap();
             assert_eq!(s.career_book().unwrap().unwrap(), body);
-            assert_eq!(s.workspace().unwrap().schema_version, 4);
+            assert_eq!(s.workspace().unwrap().schema_version, 5);
         }
         let _ = std::fs::remove_file(p);
+    }
+}
+
+impl Store {
+    pub fn save_resume_pdf(&mut self, expected_hash: &str, bytes: &[u8]) -> Result<()> {
+        use sha2::{Digest, Sha256};
+        let hash = format!("{:x}", Sha256::digest(bytes));
+        if hash != expected_hash || bytes.len() > 2_500_000 || !bytes.starts_with(b"%PDF-") {
+            return Err(rusqlite::Error::InvalidQuery);
+        }
+        self.connection.execute(
+            "INSERT OR IGNORE INTO career_artifacts(id,body) VALUES(?1,?2)",
+            params![hash, bytes],
+        )?;
+        Ok(())
+    }
+    pub fn resume_pdf(&self, hash: &str) -> Result<Vec<u8>> {
+        if hash.len() != 64 || !hash.bytes().all(|c| c.is_ascii_hexdigit()) {
+            return Err(rusqlite::Error::InvalidQuery);
+        }
+        self.connection.query_row(
+            "SELECT body FROM career_artifacts WHERE id=?1",
+            [hash],
+            |r| r.get(0),
+        )
+    }
+}
+
+#[cfg(test)]
+mod artifact_tests {
+    use super::*;
+    use sha2::{Digest, Sha256};
+    #[test]
+    fn pdf_is_integrity_checked_and_survives_restart() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("resume.sqlite");
+        let bytes = b"%PDF-1.7 fictional fixture";
+        let hash = format!("{:x}", Sha256::digest(bytes));
+        {
+            let mut store = Store::open(&path).unwrap();
+            assert!(store.save_resume_pdf("wrong", bytes).is_err());
+            assert!(store.save_resume_pdf(&hash, b"not a PDF").is_err());
+            store.save_resume_pdf(&hash, bytes).unwrap();
+        }
+        let store = Store::open(&path).unwrap();
+        assert_eq!(store.resume_pdf(&hash).unwrap(), bytes);
+        assert!(store.resume_pdf("../../escape").is_err());
     }
 }

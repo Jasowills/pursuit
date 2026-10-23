@@ -13,3 +13,9 @@ The approved decisions, source-code disposition, phases and acceptance criteria 
 - [Platform access and job-board inventory](discovery-platform-access.md): practical routes for social platforms, boards, feeds and regional sources.
 - [Primary source contracts](discovery-source-foundation.md): ATS APIs, indexed search, freshness and evidence rules.
 - [Implemented engine](../DISCOVERY_ENGINE.md): executable commands, verified coverage, matching baseline and remaining integration work.
+
+## Tailoring and applications — 2026-10-23
+
+- [Document, ATS and local-model contracts](tailoring-document-contracts.md): extraction, grounded templates, Drive export and bounded selection.
+- [Application and contact contracts](application-execution-contracts.md): candidate forms versus employer APIs, receipts and published contact evidence.
+- [Implemented engine and qualification boundaries](../TAILORING_AND_APPLICATION_ENGINE.md).
