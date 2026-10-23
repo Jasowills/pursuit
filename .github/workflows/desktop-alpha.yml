@@ -1,10 +1,11 @@
-name: Desktop foundation
+name: Desktop installers
 on:
   workflow_dispatch:
   pull_request:
     paths:
       - 'apps/desktop/**'
-      - 'packages/local-store/**'
+      - 'packages/**'
+      - 'scripts/release/**'
       - 'pnpm-lock.yaml'
       - '.github/workflows/desktop-alpha.yml'
 permissions:
@@ -14,9 +15,27 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-15, macos-15-intel, windows-latest, ubuntu-22.04]
+        include:
+          - os: macos-15
+            target: aarch64-apple-darwin
+            bundles: dmg
+            formats: dmg
+          - os: macos-15-intel
+            target: x86_64-apple-darwin
+            bundles: dmg
+            formats: dmg
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            bundles: nsis
+            formats: exe
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            bundles: deb,appimage
+            formats: deb,AppImage
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 40
+    timeout-minutes: 50
+    env:
+      pnpm_config_verify_deps_before_run: 'false'
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -27,19 +46,25 @@ jobs:
           node-version: 24
           cache: pnpm
       - uses: dtolnay/rust-toolchain@stable
-      - name: Linux webview dependencies
+        with:
+          targets: ${{ matrix.target }}
+      - name: Linux webview and bundler dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev patchelf xdg-utils
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:local-store
       - run: cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --locked
-      - run: pnpm --filter @pursuit/desktop typecheck
-      - name: Build native executable (internal, unsigned)
-        run: pnpm --filter @pursuit/desktop desktop build --no-bundle
+      - name: Build workspace dependencies
+        run: pnpm --filter '@pursuit/desktop^...' build
+      - name: Build native installers (internal, unsigned)
+        run: pnpm --filter @pursuit/desktop desktop build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
+      - name: Verify architecture, installer files and packaged worker
+        run: node scripts/release/verify-desktop.mjs ${{ matrix.target }} ${{ matrix.formats }}
+      - name: Smoke-test isolated career worker on target OS
+        run: node scripts/qa/native-engine-packaging.mjs
       - uses: actions/upload-artifact@v4
         with:
-          name: pursuit-internal-${{ matrix.os }}
-          path: |
-            apps/desktop/src-tauri/target/release/pursuit-desktop
-            apps/desktop/src-tauri/target/release/pursuit-desktop.exe
+          name: pursuit-${{ matrix.target }}-unsigned
+          path: release-artifacts/${{ matrix.target }}/
           if-no-files-found: error
+          retention-days: 14
