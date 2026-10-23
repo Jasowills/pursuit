@@ -4,6 +4,8 @@
 
 See the [production-hardening follow-up](hardening-followup.md) for subsequent scoped dependency fixes, their consumer checks, the remaining node-forge advisory and another failed real Qwen quality evaluation. Counts below describe the original review baseline.
 
+The subsequent [bounded evidence-selection pass](structured-selection.md) adds a schema-constrained native Ollama path. Qwen passed three small fictional selection cases; Llama 1B failed a relevance case. This does not resolve the freeform-writing or overall production gate.
+
 ## What changed
 
 - Removed Companion advertising from the landing section, navigation, footer, download area and walkthrough link. Dormant source remains for a future version.

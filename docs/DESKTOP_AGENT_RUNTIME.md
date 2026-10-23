@@ -29,6 +29,8 @@ References: [OpenCode API](https://opencode.ai/v2/docs/api), [agents](https://de
 
 The conversational career shell now routes explicit requests into these same native sessions. See [career workspace behavior and tour boundaries](CAREER_WORKSPACE.md).
 
+Resume evidence selection is a separate bounded task: when the desktop's active managed connection is local Ollama, the resume studio calls a native, schema-constrained local inference route instead of opening a freeform session. It returns existing evidence IDs only, with an 8,192-token context, 512-token output cap and one in-flight selection. The original resume text remains authoritative. Other providers retain the session path. See [implementation and actual model qualification](qa/adversary-2026-10-23/structured-selection.md).
+
 ## Local inference budgets, 2026-10-23
 
 Ollama uses bounded 180-second total, 120-second first-header and 45-second inter-chunk budgets. Cloud provider budgets remain 90/30/15 seconds. The assistant UI waits up to 180 polling iterations before directing users to inspect the unresolved session rather than retrying. These larger local bounds accommodate CPU model loading; they do not guarantee a response.

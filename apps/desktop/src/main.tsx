@@ -219,6 +219,30 @@ function App() {
         onEngine={isTauri() && !tour ? engineCall : undefined}
         engineProgress={engineProgress}
         onEngineSetup={() => setSettings('engine')}
+        onSelectEvidence={
+          isTauri() && !tour
+            ? async (prompt, candidateIds) => {
+                try {
+                  const runtime = await invoke<{
+                    running: boolean;
+                    provider: string;
+                    model: string;
+                  }>('managed_status');
+                  if (runtime.running && runtime.provider === 'ollama') {
+                    return await invoke<string>('select_resume_evidence', {
+                      model: runtime.model,
+                      prompt,
+                      candidateIds,
+                    });
+                  }
+                  return await ask(prompt, false, () => {});
+                } catch (error) {
+                  recordDiagnostic('model.failed');
+                  throw error;
+                }
+              }
+            : undefined
+        }
         onSavePdf={
           isTauri()
             ? (hash, bytes) => invoke('save_resume_pdf', { hash, bytes: Array.from(bytes) })

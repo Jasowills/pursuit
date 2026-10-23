@@ -139,6 +139,7 @@ type Props = {
     includeFacts: boolean,
     onPartial: (value: string) => void,
   ) => Promise<string>;
+  onSelectEvidence?: (prompt: string, candidateIds: string[]) => Promise<string>;
   onCancel?: () => void;
   onSettings?: (screen: 'identity' | 'models' | 'agent') => void;
   onExitSample?: () => void;
@@ -196,6 +197,7 @@ export function CareerWorkspace({
   connected = false,
   onSave,
   onAsk,
+  onSelectEvidence,
   onCancel,
   onSettings,
   onExitSample,
@@ -864,7 +866,10 @@ export function CareerWorkspace({
                       ),
                     })
                   }
-                  onModel={onAsk ? (prompt) => onAsk(prompt, false, () => {}) : undefined}
+                  onModel={
+                    onSelectEvidence ??
+                    (onAsk ? (prompt) => onAsk(prompt, false, () => {}) : undefined)
+                  }
                   onSavePdf={onSavePdf}
                   onExportPdf={onExportPdf}
                 />

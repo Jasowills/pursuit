@@ -4,6 +4,7 @@ import {
   tailor,
   Voice,
   selectionPrompt,
+  selectionCandidates,
   parseSelection,
   styleSignals,
   type Resume,
@@ -29,7 +30,7 @@ export function TailoringStudio({
   value?: TailoringState;
   opportunities: Opportunity[];
   onSave: (state: TailoringState) => Promise<boolean>;
-  onModel?: (prompt: string) => Promise<string>;
+  onModel?: (prompt: string, candidateIds: string[]) => Promise<string>;
   onSavePdf?: (hash: string, bytes: Uint8Array) => Promise<void>;
   onExportPdf?: (hash: string) => Promise<string>;
 }) {
@@ -98,7 +99,11 @@ export function TailoringStudio({
       let selectedIds: string[] | undefined;
       if (useModel) {
         if (!onModel) throw new Error('Connect a model first.');
-        selectedIds = parseSelection(await onModel(selectionPrompt(resume, role)));
+        const candidateIds = selectionCandidates(resume, role).map((b) => b.id);
+        selectedIds = parseSelection(
+          await onModel(selectionPrompt(resume, role), candidateIds),
+          candidateIds,
+        );
       }
       const packet = await tailor(resume, role, { voice, template, selectedIds });
       if (!(await onSave({ resume, packet, voice })))

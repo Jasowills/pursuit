@@ -179,7 +179,8 @@ fn main() {
             connections::remove_provider_key,
             connections::provider_models,
             connections::test_provider,
-            models::test_ollama
+            models::test_ollama,
+            models::select_resume_evidence
         ])
         .build(tauri::generate_context!())
         .expect("Pursuit could not start")

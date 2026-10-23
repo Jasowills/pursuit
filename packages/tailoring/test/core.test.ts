@@ -4,6 +4,7 @@ import {
   tailor,
   validatePacket,
   selectionPrompt,
+  selectionCandidates,
   parseSelection,
 } from '../src/core.js';
 import { SOURCE, ROLE, reviewed } from './fixtures.js';
@@ -58,4 +59,24 @@ it('bounds optional model context and accepts only selection JSON', async () => 
   expect(selectionPrompt(r, ROLE).length).toBeLessThan(18000);
   expect(parseSelection('{"selectedIds":["a","a"]}')).toEqual(['a']);
   expect(() => parseSelection('{"selectedIds":[],"resume":"invented"}')).toThrow();
+  expect(() => parseSelection('{"selectedIds":["a"]}', ['b'])).toThrow('unknown_fact_id');
+  expect(() =>
+    parseSelection(
+      JSON.stringify({ selectedIds: Array.from({ length: 13 }, (_, i) => String(i)) }),
+    ),
+  ).toThrow('invalid_selection');
+  for (const output of ['null', '[]', '"text"', '{"selectedIds":"a"}', 'x'.repeat(12001)]) {
+    expect(() => parseSelection(output)).toThrow();
+  }
+});
+it('retrieves relevant evidence after the first twenty bullets before applying the model budget', async () => {
+  const source =
+    'Alex\n\nExperience\nExample | QA | 2022-2025\n' +
+    Array.from({ length: 30 }, (_, i) => `- Coordinated internal meeting ${i}.`).join('\n') +
+    '\n- Tested REST APIs with SQL and Postman.';
+  const resume = await structureResume(source, 'long.txt');
+  const candidates = selectionCandidates(resume, ROLE);
+  expect(candidates).toHaveLength(20);
+  expect(candidates[0]?.text).toContain('Tested REST APIs');
+  expect(selectionPrompt(resume, ROLE)).toContain(candidates[0]!.id);
 });

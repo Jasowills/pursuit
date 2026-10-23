@@ -1,0 +1,8 @@
+{
+  "scope": "Built desktop UI with simulated IPC; actual Ollama request, schema and response validation tested separately in Rust.",
+  "local_selection_route": "pass",
+  "no_freeform_session_for_selection": "pass",
+  "saved_blocks_preserve_source": "pass",
+  "unsupported_selection_cannot_replace_saved_packet": "pass",
+  "browser_errors": []
+}

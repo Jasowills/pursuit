@@ -17,6 +17,7 @@ import {
   validateResume,
   tailor,
   selectionPrompt,
+  selectionCandidates,
   parseSelection,
   digest,
 } from '@pursuit/tailoring';
@@ -217,9 +218,10 @@ export class TailoringService {
         },
       );
       try {
-        selectedIds = parseSelection(result.text);
-        const allowed = new Set(resume.blocks.map((b) => b.id));
-        if (selectedIds.some((id) => !allowed.has(id))) throw new Error();
+        selectedIds = parseSelection(
+          result.text,
+          selectionCandidates(resume, role).map((b) => b.id),
+        );
       } catch {
         throw new BadGatewayException({ error: 'model_selection_invalid_no_packet_saved' });
       }

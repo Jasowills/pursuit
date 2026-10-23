@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-23",
+  "overall_verdict": "NOT_READY",
+  "native_tests": {
+    "passed": 19,
+    "opt_in_ignored": 7
+  },
+  "tailoring_tests": {
+    "passed": 24
+  },
+  "api_tests": {
+    "passed": 59,
+    "suites": 13,
+    "external_providers": "mocked",
+    "database": "disposable migrated PostgreSQL"
+  },
+  "typecheck_tasks": 20,
+  "desktop_frontend_build": "pass",
+  "local_request_policy": {
+    "endpoint": "fixed loopback Ollama /api/chat",
+    "tools": false,
+    "context_tokens": 8192,
+    "max_output_tokens": 512,
+    "max_candidates": 20,
+    "max_selections": 12,
+    "timeout_seconds": 180,
+    "max_concurrent_selections": 1,
+    "redirects": false,
+    "proxy": false
+  },
+  "actual_models": [
+    {
+      "model": "qwen2.5:7b",
+      "cases_passed": 3,
+      "cases_attempted": 3,
+      "seconds": [23.81, 3.26, 3.94],
+      "scope": "Small fictional evidence-selection cases; not freeform writing qualification"
+    },
+    {
+      "model": "llama3.2:1b",
+      "cases_passed": 1,
+      "cases_attempted": 2,
+      "first_case_seconds": 6.99,
+      "total_test_seconds": 8.71,
+      "result": "failed relevance: API evidence selected for a video-editor role; third case not run"
+    }
+  ],
+  "browser_fixture": {
+    "passed_scenarios": 4,
+    "tauri_ipc": "simulated",
+    "actual_inference": "tested separately in native opt-in test"
+  },
+  "limits": [
+    "Freeform writing quality gate remains failed",
+    "Small synthetic model sample, no statistical or cross-hardware qualification",
+    "No paid inference or external employer submissions",
+    "New native binaries require fresh release matrix qualification"
+  ]
+}
