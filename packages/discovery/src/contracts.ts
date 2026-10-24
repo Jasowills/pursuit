@@ -95,7 +95,12 @@ export const SearchProfile = z
   .object({
     roles: z.array(z.string().min(1).max(150)).max(30).default([]),
     skills: z
-      .array(z.object({ name: z.string().min(1), evidence: z.string().min(1) }))
+      .array(
+        z.object({
+          name: z.string().min(1).max(150),
+          evidence: z.string().min(1).max(2000),
+        }),
+      )
       .max(200)
       .default([]),
     residenceCountry: z
@@ -112,9 +117,10 @@ export const SearchProfile = z
           verified: z.boolean(),
         }),
       )
+      .max(50)
       .default([]),
     remoteOnly: z.boolean().default(false),
-    exclusions: z.array(z.string().min(1)).default([]),
+    exclusions: z.array(z.string().min(1).max(200)).max(100).default([]),
     salaryFloor: z
       .object({ amount: z.number().nonnegative(), currency: z.string(), unit: z.string() })
       .nullable()

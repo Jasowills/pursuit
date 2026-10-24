@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { assess, expandRoles } from '../src/matching.js';
+import { SearchProfile } from '../src/contracts.js';
 import { job, profile } from './fixtures.js';
 import { tokens, canonicalUrl } from '../src/text.js';
 describe('evidence and uncertainty', () => {
@@ -64,4 +65,42 @@ it('does not inflate fit by counting duplicate candidate skill names twice', () 
   );
   expect(assessment.fitEvidence).toHaveLength(2);
   expect(assessment.fitScore).toBeLessThanOrEqual(100);
+});
+
+describe('profile input bounds', () => {
+  it('rejects unbounded skill evidence and oversized skill names', () => {
+    const valid = profile();
+    expect(() =>
+      SearchProfile.parse({
+        ...valid,
+        skills: [{ name: 'React', evidence: 'e'.repeat(2001) }],
+      }),
+    ).toThrow();
+    expect(() =>
+      SearchProfile.parse({
+        ...valid,
+        skills: [{ name: 's'.repeat(151), evidence: 'resume#project-1' }],
+      }),
+    ).toThrow();
+  });
+
+  it('caps exclusion count and length before matching scans role text', () => {
+    const valid = profile();
+    expect(() => SearchProfile.parse({ ...valid, exclusions: ['x'.repeat(201)] })).toThrow();
+    expect(() =>
+      SearchProfile.parse({ ...valid, exclusions: Array(101).fill('company') }),
+    ).toThrow();
+  });
+
+  it('caps work-authorization records while retaining the supported maximum', () => {
+    const valid = profile();
+    const record = { country: 'NG', status: 'authorized', verified: true };
+    expect(() =>
+      SearchProfile.parse({ ...valid, workAuthorization: Array(51).fill(record) }),
+    ).toThrow();
+    expect(
+      SearchProfile.parse({ ...valid, workAuthorization: Array(50).fill(record) })
+        .workAuthorization,
+    ).toHaveLength(50);
+  });
 });

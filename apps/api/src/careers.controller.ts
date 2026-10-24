@@ -51,27 +51,28 @@ const watcherPatchSchema = z
 
 const decisionSchema = z.object({ decision: z.enum(['approve', 'reject']) });
 
-const profilePatchSchema = z
+export const profilePatchSchema = z
   .object({
     location: z.string().max(200).nullable().optional(),
     work_authorization: z
       .array(
         z.object({
-          jurisdiction: z.string().min(1),
-          status: z.string().min(1),
+          jurisdiction: z.string().trim().min(1).max(150),
+          status: z.string().trim().min(1).max(150),
           verified: z.boolean(),
         }),
       )
+      .max(50)
       .optional(),
     desired_compensation: z
       .object({ min_amount: z.number().int(), currency: z.string().default('USD') })
       .nullable()
       .optional(),
-    role_families: z.array(z.string()).optional(),
-    seniority: z.array(z.string()).optional(),
-    work_arrangements: z.array(z.string()).optional(),
-    hard_exclusions: z.array(z.string()).optional(),
-    preferences: z.array(z.string()).optional(),
+    role_families: z.array(z.string().trim().min(1).max(150)).max(30).optional(),
+    seniority: z.array(z.string().trim().min(1).max(100)).max(30).optional(),
+    work_arrangements: z.array(z.string().trim().min(1).max(100)).max(30).optional(),
+    hard_exclusions: z.array(z.string().trim().min(1).max(200)).max(100).optional(),
+    preferences: z.array(z.string().trim().min(1).max(500)).max(100).optional(),
   })
   .strict();
 

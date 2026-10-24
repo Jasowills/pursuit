@@ -83,3 +83,9 @@ A production dependency audit found **three high and one moderate workspace advi
 Remaining risks: no durable pagination cursor; limited source inventory; a capped initial English role-alias vocabulary; no labelled cross-career ranking evaluation; unknown work rights/payroll/timezones; no native execution integration; no production source quotas/history retention; retained API batch imports can partially persist on database failure. The [engine guide](../DISCOVERY_ENGINE.md) states these limits and the next integration gates.
 
 The [Adversary skill](/Users/jasonamadi/.agents/skills/adversary/SKILL.md) guided the sandboxed failure/security review. No mutation-testing score, full browser audit or production readiness claim is made.
+
+## Profile input bounds follow-up — 2026-10-24
+
+The shared search-profile contract now bounds candidate skill names to 150 characters, evidence references to 2,000 characters, exclusions to 100 entries of 200 characters, and work-authorization records to 50 entries. The API's saved snake_case profile contract applies corresponding limits to authorization, role, seniority, arrangement, exclusion and preference fields. Regression tests cover both contract surfaces. This prevents oversized profile values from reaching deterministic matching or accumulating in persisted settings.
+
+Current discovery verification: **76 tests pass across 10 files**; package typecheck and build pass. API contract tests pass for documented size limits. The profile limits reduce work after parsing but do not replace HTTP or IPC message-size limits. Source quotas, recall evaluation, broader API request limits and the full-product **NOT_READY** release verdict remain unchanged.

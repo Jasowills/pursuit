@@ -1,1 +1,15 @@
-{ "buildPath": "code" }
+{
+  "buildPath": "code",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "createdAt": "2026-10-24T18:24:48.194Z",
+        "reason": "Design system .impeccable/design.json explicitly reserves Arial for resume-paper content; these selectors render resume previews, not the Pursuit interface."
+      }
+    ]
+  }
+}
